@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AkademikController;
 use App\Http\Controllers\BiodataIndustriController;
+use App\Http\Controllers\LowonganMagangController;
 use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\PembimbingController;
@@ -48,6 +49,17 @@ Route::prefix('tempat-magang')->controller(TempatMagangController::class)->group
 
     Route::middleware('auth:prodi_api')->group(function () {
         Route::get('/', 'index');
+    });
+});
+
+Route::prefix('lowongan-magang')->controller(LowonganMagangController::class)->group(function () {
+    Route::middleware('auth:mahasiswa_api')->group(function () {
+        // Route::post('/', 'store');
+    });
+
+    Route::middleware('auth:prodi_api')->group(function () {
+        Route::post('/', 'store');
+        Route::get('/prodi', 'showByProdi');
     });
 });
 
