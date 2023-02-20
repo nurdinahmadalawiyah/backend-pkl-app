@@ -35,6 +35,7 @@ Route::prefix('pengajuan-magang')->controller(PengajuanMagangController::class)-
     Route::middleware('auth:akademik_api')->group(function () {
         Route::get('/', 'index');
         Route::get('/{id}', 'show');
+        Route::put('approve-pengajuan/{id}', 'setujuiPengajuan');
     });
 });
 

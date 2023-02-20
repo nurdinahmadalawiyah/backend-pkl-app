@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('alamat_perusahaan');
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai');
-            $table->enum('status', ['menunggu', 'diterima', 'ditolak']);
+            $table->enum('status', ['menunggu', 'disetujui', 'ditolak']);
             $table->timestamps();
             
             $table->foreign('id_mahasiswa')->references('id_mahasiswa')->on('mahasiswa');

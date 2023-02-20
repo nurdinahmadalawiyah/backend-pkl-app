@@ -82,6 +82,19 @@ class PengajuanMagangController extends Controller
         ], 200);
     }
 
+    public function setujuiPengajuan($id)
+    {
+        $pengajuan_magang = PengajuanMagang::findOrFail($id);
+        $pengajuan_magang->status = 'disetujui';
+        $pengajuan_magang->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Pengajuan magang berhasil disetujui',
+            'data' => $pengajuan_magang,
+        ]);
+    }
+
     // public function getAllPengajuan()
     // {
     //     try {
