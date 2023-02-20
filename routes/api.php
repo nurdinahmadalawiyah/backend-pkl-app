@@ -54,6 +54,7 @@ Route::prefix('tempat-magang')->controller(TempatMagangController::class)->group
 Route::prefix('biodata-industri')->controller(BiodataIndustriController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api')->group(function () {
         Route::post('/', 'store');
+        Route::post('/{id}', 'update');
     });
 });
 

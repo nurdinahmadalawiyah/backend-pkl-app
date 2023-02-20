@@ -27,8 +27,8 @@ class BiodataIndustriController extends Controller
         }
 
         $pengajuanMagang = PengajuanMagang::where('id_mahasiswa', $request->user()->id_mahasiswa)
-        ->where('status', 'disetujui')
-        ->first();
+            ->where('status', 'disetujui')
+            ->first();
 
         if (!$pengajuanMagang) {
             return response()->json(['message' => 'Pengajuan magang belum disetujui'], 401);
@@ -57,6 +57,27 @@ class BiodataIndustriController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Biodata Industri Berhasil Disimpan',
+            'data' => $biodata_industri
+        ], 200);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $pengajuanMagang = PengajuanMagang::where('id_mahasiswa', $request->user()->id_mahasiswa)
+            ->where('status', 'disetujui')
+            ->first();
+
+        if (!$pengajuanMagang) {
+            return response()->json(['message' => 'Pengajuan magang belum disetujui'], 401);
+        }
+
+        $biodata_industri = BiodataIndustri::findOrFail($id);
+
+        $biodata_industri->update($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Biodata Industri Berhasil Diperbarui',
             'data' => $biodata_industri
         ], 200);
     }
