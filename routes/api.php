@@ -36,6 +36,7 @@ Route::prefix('pengajuan-magang')->controller(PengajuanMagangController::class)-
         Route::get('/', 'index');
         Route::get('/{id}', 'show');
         Route::put('approve-pengajuan/{id}', 'setujuiPengajuan');
+        Route::put('reject-pengajuan/{id}', 'tolakPengajuan');
     });
 });
 

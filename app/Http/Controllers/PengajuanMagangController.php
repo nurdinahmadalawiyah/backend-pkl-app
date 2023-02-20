@@ -95,6 +95,19 @@ class PengajuanMagangController extends Controller
         ]);
     }
 
+    public function tolakPengajuan($id)
+    {
+        $pengajuan_magang = PengajuanMagang::findOrFail($id);
+        $pengajuan_magang->status = 'ditolak';
+        $pengajuan_magang->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Pengajuan magang berhasil ditolak',
+            'data' => $pengajuan_magang,
+        ]);
+    }
+
     // public function getAllPengajuan()
     // {
     //     try {
