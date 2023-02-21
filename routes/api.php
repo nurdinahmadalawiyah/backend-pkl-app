@@ -59,7 +59,9 @@ Route::prefix('lowongan-pkl')->controller(LowonganPKLController::class)->group(f
 
     Route::middleware('auth:prodi_api')->group(function () {
         Route::post('/', 'store');
+        Route::put('/{id}', 'update');
         Route::get('/prodi', 'showByProdi');
+        Route::delete('/{id}', 'destroy');
     });
 });
 

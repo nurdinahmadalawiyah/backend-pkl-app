@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\LowonganPKLResource;
 use App\Models\LowonganPKL;
-use App\Models\Prodi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -70,9 +70,50 @@ class LowonganPKLController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Lowongan pkl Berhasil Disimpan',
-            'data' => $lowongan_pkl
-        ], 200);
+            'message' => 'Data Lowongan PKL',
+            new LowonganPKLResource($lowongan_pkl)
+        ],200);
     }
 
+    public function update(Request $request, $id)
+    {
+        $lowongan_pkl = LowonganPKL::findOrFail($id);
+
+        if ($request->hasFile('gambar')) {
+            $file = $request->file('gambar');
+            $destinationPath = "public\images";
+            $filename = 'lowongan_pkl_' . date("Ymd_his") . '.' . $file->extension();
+            Storage::putFileAs($destinationPath, $file, $filename);
+            Storage::delete('public/images/' . $lowongan_pkl->gambar);
+            $lowongan_pkl->gambar = $filename;
+            $lowongan_pkl->update($request->except('gambar'));
+        } else {
+            $lowongan_pkl->update($request->all());
+        }
+        
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data Lowongan PKL',
+            'data' => new LowonganPKLResource($lowongan_pkl)
+        ],200);
+    }
+
+    public function destroy($id)
+    {
+        $lowongan_pkl = LowonganPKL::findOrFail($id);
+        Storage::delete('public/images/' . $lowongan_pkl->gambar);
+        $lowongan_pkl->delete();
+
+        if ($lowongan_pkl != null) {
+            return response()->json([
+                'message' => 'Lowongan PKL Terhapus',
+                'data' => $lowongan_pkl
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Lowongan PKL Tidak Ditemukan',
+            ], 404);
+        }
+    }
 }
