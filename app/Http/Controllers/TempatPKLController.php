@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TempatMagang;
+use App\Models\TempatPKL;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class TempatMagangController extends Controller
+class TempatPKLController extends Controller
 {
     public function index() 
     {
-        $tempat_magang = TempatMagang::all();
+        $tempat_pkl = TempatPKL::all();
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Semua Data Konfirmasi Mahasiswa Diterima Magang',
-            'data' => $tempat_magang,
+            'message' => 'Semua Data Konfirmasi Mahasiswa Diterima PKL',
+            'data' => $tempat_pkl,
         ], 200);
     }
 
@@ -30,7 +30,7 @@ class TempatMagangController extends Controller
             return response()->json($validator->errors());
         }
 
-        $tempat_magang = TempatMagang::create([
+        $tempat_pkl = TempatPKL::create([
             'id_pengajuan' => $request->id_pengajuan,
             'id_pembimbing' => $request->id_pembimbing,
             'konfirmasi_nama_pembimbing' => $request->konfirmasi_nama_pembimbing,
@@ -39,8 +39,8 @@ class TempatMagangController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Berhasil konfirmasi diterima magang',
-            'data' => $tempat_magang,
+            'message' => 'Berhasil konfirmasi diterima pkl',
+            'data' => $tempat_pkl,
         ], 200);
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BiodataIndustri;
-use App\Models\PengajuanMagang;
+use App\Models\PengajuanPKL;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -51,12 +51,12 @@ class BiodataIndustriController extends Controller
             return response()->json($validator->errors());
         }
 
-        $pengajuanMagang = PengajuanMagang::where('id_mahasiswa', $request->user()->id_mahasiswa)
+        $pengajuan_pkl = PengajuanPKL::where('id_mahasiswa', $request->user()->id_mahasiswa)
             ->where('status', 'disetujui')
             ->first();
 
-        if (!$pengajuanMagang) {
-            return response()->json(['message' => 'Pengajuan magang belum disetujui'], 401);
+        if (!$pengajuan_pkl) {
+            return response()->json(['message' => 'Pengajuan pkl belum disetujui'], 401);
         }
 
         $biodata_industri = BiodataIndustri::create([
@@ -88,12 +88,12 @@ class BiodataIndustriController extends Controller
 
     public function update(Request $request, $id)
     {
-        $pengajuanMagang = PengajuanMagang::where('id_mahasiswa', $request->user()->id_mahasiswa)
+        $pengajuan_pkl = PengajuanPKL::where('id_mahasiswa', $request->user()->id_mahasiswa)
             ->where('status', 'disetujui')
             ->first();
 
-        if (!$pengajuanMagang) {
-            return response()->json(['message' => 'Pengajuan magang belum disetujui'], 401);
+        if (!$pengajuan_pkl) {
+            return response()->json(['message' => 'Pengajuan pkl belum disetujui'], 401);
         }
 
         $biodata_industri = BiodataIndustri::findOrFail($id);

@@ -2,12 +2,12 @@
 
 use App\Http\Controllers\AkademikController;
 use App\Http\Controllers\BiodataIndustriController;
-use App\Http\Controllers\LowonganMagangController;
+use App\Http\Controllers\LowonganPKLController;
 use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\PembimbingController;
-use App\Http\Controllers\PengajuanMagangController;
-use App\Http\Controllers\TempatMagangController;
+use App\Http\Controllers\PengajuanPKLController;
+use App\Http\Controllers\TempatPKLController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,7 +26,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('pengajuan-magang')->controller(PengajuanMagangController::class)->group(function () {
+Route::prefix('pengajuan-pkl')->controller(PengajuanPKLController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api')->group(function () {
         Route::post('/', 'store');
         Route::get('status/', 'showAllByUser');
@@ -42,7 +42,7 @@ Route::prefix('pengajuan-magang')->controller(PengajuanMagangController::class)-
     });
 });
 
-Route::prefix('tempat-magang')->controller(TempatMagangController::class)->group(function () {
+Route::prefix('tempat-pkl')->controller(TempatPKLController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api')->group(function () {
         Route::post('/', 'store');
     });
@@ -52,7 +52,7 @@ Route::prefix('tempat-magang')->controller(TempatMagangController::class)->group
     });
 });
 
-Route::prefix('lowongan-magang')->controller(LowonganMagangController::class)->group(function () {
+Route::prefix('lowongan-pkl')->controller(LowonganPKLController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api')->group(function () {
         Route::get('/', 'index');
     });

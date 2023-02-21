@@ -16,9 +16,9 @@ class Mahasiswa extends Authenticatable implements JWTSubject
     protected $table = 'mahasiswa';
     protected $primaryKey = 'id_mahasiswa';
 
-    public function pengajuan_magang()
+    public function pengajuan_pkl()
     {
-        return $this->hasMany(PengajuanMagang::class, 'foreign_key');
+        return $this->hasMany(PengajuanPKL::class, 'foreign_key');
     }
 
     public function prodi()

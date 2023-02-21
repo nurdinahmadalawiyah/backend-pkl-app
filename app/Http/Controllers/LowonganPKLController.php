@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LowonganMagang;
+use App\Models\LowonganPKL;
 use App\Models\Prodi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-class LowonganMagangController extends Controller
+class LowonganPKLController extends Controller
 {
     public function index()
     {
-        $lowongan_magang = LowonganMagang::all();
+        $lowongan_pkl = LowonganPKL::all();
     
         return response()->json([
             'status' => 'success',
-            'message' => 'Semua Data Lowongan Magang',
-            'data' => $lowongan_magang
+            'message' => 'Semua Data Lowongan PKL',
+            'data' => $lowongan_pkl
         ], 200);
     }
 
@@ -33,12 +33,12 @@ class LowonganMagangController extends Controller
             ], 404);
         }
     
-        $lowongan_magang = LowonganMagang::where('id_prodi', $prodi->id_prodi)->get();
+        $lowongan_pkl = LowonganPKL::where('id_prodi', $prodi->id_prodi)->get();
     
         return response()->json([
             'status' => 'success',
-            'message' => 'Data Lowongan Magang',
-            'data' => $lowongan_magang
+            'message' => 'Data Lowongan PKL',
+            'data' => $lowongan_pkl
         ], 200);
     }
     
@@ -57,8 +57,8 @@ class LowonganMagangController extends Controller
 
         $file = $request->file('gambar');
         $destinationPath = "public\images";
-        $filename = 'lowongan_magang_' . date("Ymd_his") . '.' . $file->extension();
-        $lowongan_magang = LowonganMagang::create([
+        $filename = 'lowongan_pkl_' . date("Ymd_his") . '.' . $file->extension();
+        $lowongan_pkl = LowonganPKL::create([
             'id_prodi' => Auth::id(),
             'posisi' => $request->posisi,
             'nama_perusahaan' => $request->nama_perusahaan,
@@ -70,8 +70,8 @@ class LowonganMagangController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Lowongan Magang Berhasil Disimpan',
-            'data' => $lowongan_magang
+            'message' => 'Lowongan pkl Berhasil Disimpan',
+            'data' => $lowongan_pkl
         ], 200);
     }
 
