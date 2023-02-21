@@ -80,6 +80,7 @@ Route::prefix('biodata-industri')->controller(BiodataIndustriController::class)-
 Route::prefix('upload-laporan')->controller(LaporanPKLController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api')->group(function () {
         Route::post('/', 'uploadLaporan');
+        Route::delete('/{id}', 'cancel');
     });
 });
 

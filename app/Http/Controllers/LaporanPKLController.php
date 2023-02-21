@@ -37,4 +37,22 @@ class LaporanPKLController extends Controller
             'data' => new LaporanPKLResource($laporan_pkl)
         ], 200);
     }
+
+    public function cancel($id)
+    {
+        $laporan_pkl = LaporanPKL::findOrFail($id);
+        Storage::delete('public/laporan/' . $laporan_pkl->file);
+        $laporan_pkl->delete();
+
+        if ($laporan_pkl != null) {
+            return response()->json([
+                'message' => 'Laporan dibatalkan',
+                'data' => $laporan_pkl
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'laporan_pkl PKL Tidak Ditemukan',
+            ], 404);
+        }
+    }
 }
