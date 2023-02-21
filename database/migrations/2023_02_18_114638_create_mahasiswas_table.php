@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('nama', 50);
             $table->string('nim', 30);
             $table->unsignedBigInteger('prodi');
-            $table->enum('semester', ['1 (Satu)', '2 (Dua)', '3 (Tiga)', '4 (Empat)', '5 (Lima)', '6 (Enam)', '7 (Tujuh)', '8 (Delapan)', '9 (Sembilan)', '10 (Sepuluh)', '11 (Sebelas)', '12 (Dua Belas)', '13 (Tiga Belas)', '14 (Empat Belas)']);
+            $table->string('semester', 20);
             $table->string('email', 50)->nullable();
             $table->string('nomor_hp', 20)->nullable();
             $table->string('password', 100);

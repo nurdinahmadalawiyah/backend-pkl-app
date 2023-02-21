@@ -54,7 +54,7 @@ Route::prefix('tempat-magang')->controller(TempatMagangController::class)->group
 
 Route::prefix('lowongan-magang')->controller(LowonganMagangController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api')->group(function () {
-        // Route::post('/', 'store');
+        Route::get('/', 'index');
     });
 
     Route::middleware('auth:prodi_api')->group(function () {
@@ -66,7 +66,10 @@ Route::prefix('lowongan-magang')->controller(LowonganMagangController::class)->g
 Route::prefix('biodata-industri')->controller(BiodataIndustriController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api')->group(function () {
         Route::post('/', 'store');
+        Route::get('/', 'index');
         Route::post('/{id}', 'update');
+        Route::get('/{id}', 'show');
+        Route::delete('/{id}', 'destroy');
     });
 });
 

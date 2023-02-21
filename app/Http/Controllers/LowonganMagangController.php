@@ -11,6 +11,17 @@ use Illuminate\Support\Facades\Validator;
 
 class LowonganMagangController extends Controller
 {
+    public function index()
+    {
+        $lowongan_magang = LowonganMagang::all();
+    
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Semua Data Lowongan Magang',
+            'data' => $lowongan_magang
+        ], 200);
+    }
+
     public function showByProdi()
     {
         $prodi = Auth::user();
@@ -31,7 +42,6 @@ class LowonganMagangController extends Controller
         ], 200);
     }
     
-
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [

@@ -10,6 +10,31 @@ use Illuminate\Support\Facades\Validator;
 
 class BiodataIndustriController extends Controller
 {
+    public function index()
+    {
+        $biodata_industri = BiodataIndustri::all();
+    
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Biodata Industri',
+            'data' => $biodata_industri
+        ], 200);
+    }
+
+    public function show($id)
+    {
+        $biodata_industri = BiodataIndustri::find($id);
+        if (is_null($biodata_industri)) {
+            return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Detail Biodata Industri',
+            'data' => $biodata_industri,
+        ], 200);
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -80,5 +105,22 @@ class BiodataIndustriController extends Controller
             'message' => 'Biodata Industri Berhasil Diperbarui',
             'data' => $biodata_industri
         ], 200);
+    }
+
+    public function destroy($id)
+    {
+        $biodata_industri = BiodataIndustri::findOrFail($id);
+        $biodata_industri->delete();
+
+        if ($biodata_industri != null) {
+            return response()->json([
+                'message' => 'Biodata Industri Dihapus',
+                'data' => $biodata_industri
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Biodata Industri',
+            ], 404);
+        }
     }
 }
