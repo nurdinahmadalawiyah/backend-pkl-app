@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id('id_mahasiswa');
             $table->string('username', 30)->unique();
             $table->string('nama', 50);
-            $table->string('nim', 30);
+            $table->string('nim', 30)->unique();
             $table->unsignedBigInteger('prodi');
             $table->string('semester', 20);
             $table->string('email', 50)->nullable();
