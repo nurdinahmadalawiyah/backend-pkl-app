@@ -55,6 +55,7 @@ Route::prefix('tempat-pkl')->controller(TempatPKLController::class)->group(funct
 Route::prefix('lowongan-pkl')->controller(LowonganPKLController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api')->group(function () {
         Route::get('/', 'index');
+        Route::get('/search/{keyword}', 'searchByKeyword');
     });
 
     Route::middleware('auth:prodi_api')->group(function () {

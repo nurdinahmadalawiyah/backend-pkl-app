@@ -18,7 +18,7 @@ class LowonganPKLController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Semua Data Lowongan PKL',
-            'data' => $lowongan_pkl
+            'data' => LowonganPKLResource::collection($lowongan_pkl)
         ], 200);
     }
 
@@ -38,10 +38,23 @@ class LowonganPKLController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Data Lowongan PKL',
-            'data' => $lowongan_pkl
+            'data' => new LowonganPKLResource($lowongan_pkl)
         ], 200);
     }
-    
+
+    public function searchByKeyword($keyword)
+    {
+        $lowongan_pkl = LowonganPKL::where('posisi', 'like', '%' . $keyword . '%')
+            ->orWhere('nama_perusahaan', 'like', '%' . $keyword . '%')
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Hasil Pencarian',
+            'data' => LowonganPKLResource::collection($lowongan_pkl)
+        ], 200);
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -71,8 +84,8 @@ class LowonganPKLController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Data Lowongan PKL',
-            new LowonganPKLResource($lowongan_pkl)
-        ],200);
+            'data' => new LowonganPKLResource($lowongan_pkl)
+        ], 200);
     }
 
     public function update(Request $request, $id)
@@ -96,7 +109,7 @@ class LowonganPKLController extends Controller
             'status' => 'success',
             'message' => 'Data Lowongan PKL',
             'data' => new LowonganPKLResource($lowongan_pkl)
-        ],200);
+        ], 200);
     }
 
     public function destroy($id)
