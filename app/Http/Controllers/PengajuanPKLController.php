@@ -47,7 +47,16 @@ class PengajuanPKLController extends Controller
 
     public function show($id)
     {
-        $pengajuan_pkl = PengajuanPKL::find($id);
+        // $pengajuan_pkl = PengajuanPKL::find($id);
+
+        $pengajuan_pkl = DB::table('pengajuan_pkl')
+            ->join('mahasiswa', 'pengajuan_pkl.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+            ->where('pengajuan_pkl.id_pengajuan', '=', $id)
+            ->select('pengajuan_pkl.*', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi')
+            ->first();
+
+
         if (is_null($pengajuan_pkl)) {
             return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
         }
