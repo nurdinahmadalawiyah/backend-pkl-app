@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AkademikController;
 use App\Http\Controllers\BiodataIndustriController;
+use App\Http\Controllers\JurnalKegiatanController;
 use App\Http\Controllers\LaporanPKLController;
 use App\Http\Controllers\LowonganPKLController;
 use App\Http\Controllers\ProdiController;
@@ -77,6 +78,16 @@ Route::prefix('biodata-industri')->controller(BiodataIndustriController::class)-
     });
 });
 
+Route::prefix('jurnal-kegiatan')->controller(JurnalKegiatanController::class)->group(function () {
+    Route::middleware('auth:mahasiswa_api')->group(function () {
+        Route::post('/', 'store');
+        // Route::get('/', 'index');
+        Route::put('/{id}', 'update');
+        // Route::get('/{id}', 'show');
+        Route::delete('/{id}', 'destroy');
+    });
+});
+
 Route::prefix('upload-laporan')->controller(LaporanPKLController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api')->group(function () {
         Route::post('/', 'uploadLaporan');
@@ -90,7 +101,6 @@ Route::prefix('upload-laporan')->controller(LaporanPKLController::class)->group(
 
 Route::prefix('akademik')->controller(AkademikController::class)->group(function () {
     Route::post('login', 'login');
-    // Route::post('register', 'register');
     Route::middleware('auth:akademik_api')->group(function () {
         Route::post('logout', 'logout');
         Route::get('me', 'me');
@@ -99,7 +109,6 @@ Route::prefix('akademik')->controller(AkademikController::class)->group(function
 
 Route::prefix('prodi')->controller(ProdiController::class)->group(function () {
     Route::post('login', 'login');
-    // Route::post('register', 'register');
     Route::middleware('auth:prodi_api')->group(function () {
         Route::post('logout', 'logout');
         Route::get('me', 'me');

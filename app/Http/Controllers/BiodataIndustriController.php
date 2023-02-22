@@ -24,6 +24,7 @@ class BiodataIndustriController extends Controller
     public function show($id)
     {
         $biodata_industri = BiodataIndustri::find($id);
+        
         if (is_null($biodata_industri)) {
             return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
         }
@@ -93,7 +94,7 @@ class BiodataIndustriController extends Controller
             ->first();
 
         if (!$pengajuan_pkl) {
-            return response()->json(['message' => 'Pengajuan pkl belum disetujui'], 401);
+            return response()->json(['message' => 'Pengajuan PKL belum disetujui'], 401);
         }
 
         $biodata_industri = BiodataIndustri::findOrFail($id);
