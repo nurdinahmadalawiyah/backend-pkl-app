@@ -11,6 +11,16 @@ use Illuminate\Support\Facades\Validator;
 
 class LaporanPKLController extends Controller
 {
+    public function index() {
+        $laporan_pkl = LaporanPKL::all();
+    
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Semua Data Laporan PKL',
+            'data' => $laporan_pkl,
+        ], 200);
+    }
+
     public function uploadLaporan(Request $request)
     {
         $validator = Validator::make($request->all(), [

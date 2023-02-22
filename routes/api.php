@@ -82,6 +82,10 @@ Route::prefix('upload-laporan')->controller(LaporanPKLController::class)->group(
         Route::post('/', 'uploadLaporan');
         Route::delete('/{id}', 'cancel');
     });
+    
+    Route::middleware('auth:prodi_api')->group(function () {
+        Route::get('/', 'index');
+    });
 });
 
 Route::prefix('akademik')->controller(AkademikController::class)->group(function () {
