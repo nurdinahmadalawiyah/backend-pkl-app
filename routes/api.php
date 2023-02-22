@@ -108,7 +108,6 @@ Route::prefix('prodi')->controller(ProdiController::class)->group(function () {
 
 Route::prefix('mahasiswa')->controller(MahasiswaController::class)->group(function () {
     Route::post('login', 'login');
-    // Route::post('register', 'register');
     Route::middleware('auth:mahasiswa_api')->group(function () {
         Route::post('logout', 'logout');
         Route::get('me', 'me');
@@ -125,9 +124,14 @@ Route::prefix('mahasiswa')->controller(MahasiswaController::class)->group(functi
 
 Route::prefix('pembimbing')->controller(PembimbingController::class)->group(function () {
     Route::post('login', 'login');
-    // Route::post('register', 'register');
     Route::middleware('auth:pembimbing_api')->group(function () {
         Route::post('logout', 'logout');
         Route::get('me', 'me');
+    });
+
+    Route::middleware('auth:akademik_api')->group(function () {
+        Route::post('add', 'register');
+        Route::put('update/{id}', 'update');
+        Route::delete('delete/{id}', 'destroy');
     });
 });

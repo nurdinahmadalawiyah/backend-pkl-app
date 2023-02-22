@@ -23,6 +23,8 @@ class Pembimbing extends Authenticatable implements JWTSubject
      */
     protected $fillable = [
         'username',
+        'nama',
+        'nik',
         'password',
     ];
 

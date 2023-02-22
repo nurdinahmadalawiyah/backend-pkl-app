@@ -64,30 +64,63 @@ class PembimbingController extends Controller
         ], 200);
     }
 
-    // public function register(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'username' => 'required|string',
-    //         'password' => 'required|string|min:8',
-    //     ]);
+    public function register(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|string',
+            'nama' => 'required|string',
+            'nik' => 'required|string',
+            'password' => 'required|string|min:8',
+        ]);
 
-    //     if ($validator->fails()) {
-    //         return response()->json([
-    //             'status' => 'false',
-    //             'message' => 'Invalid Inputs',
-    //             'errors' => $validator->errors()
-    //         ], 401);
-    //     }
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'false',
+                'message' => 'Invalid Inputs',
+                'errors' => $validator->errors()
+            ], 401);
+        }
 
-    //     $pembimbing = Pembimbing::create(array_merge(
-    //         $validator->validated(),
-    //         ['password' => bcrypt($request->password)]
-    //     ));
+        $pembimbing = Pembimbing::create(array_merge(
+            $validator->validated(),
+            ['password' => bcrypt($request->password)]
+        ));
 
-    //     return response()->json([
-    //         'status' => true,
-    //         'message' => 'Pembimbing successfully registered',
-    //         'user' => $pembimbing
-    //     ], 201);
-    // }
+        return response()->json([
+            'status' => true,
+            'message' => 'Berhasil Menambah Data Pembimbing',
+            'user' => $pembimbing
+        ], 201);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $pembimbing = Pembimbing::findOrFail($id);
+
+        $pembimbing->update($request->all());
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Berhasil Memperbarui Data Pembimbing',
+            'user' => $pembimbing
+        ], 201);
+    }
+
+    public function destroy($id)
+    {
+        $pembimbing = Pembimbing::findOrFail($id);
+        $pembimbing->delete();
+
+
+        if ($pembimbing != null) {
+            return response()->json([
+                'message' => 'Data Pembimbing Dihapus',
+                'data' => $pembimbing
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Data Pembimbing',
+            ], 404);
+        }
+    }
 }
