@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PengajuanPKL;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class PengajuanPKLController extends Controller
@@ -29,8 +30,13 @@ class PengajuanPKLController extends Controller
         ], 200);
     }
 
-    public function index() {
-        $pengajuan_pkl = PengajuanPKL::all();
+    public function index()
+    {
+        $pengajuan_pkl = DB::table('pengajuan_pkl')
+            ->join('mahasiswa', 'pengajuan_pkl.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+            ->select('pengajuan_pkl.*', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi')
+            ->get();
 
         return response()->json([
             'status' => 'success',
