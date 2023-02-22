@@ -128,30 +128,67 @@ class MahasiswaController extends Controller
         ]);
     }
 
-    // public function register(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'username' => 'required|string',
-    //         'password' => 'required|string|min:8',
-    //     ]);
+    public function register(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|string',
+            'nama' => 'required',
+            'nim' => 'required|string',
+            'prodi' => 'required',
+            'semester' => 'required|string',
+            'email' => 'nullable|string',
+            'nomor_hp' => 'nullable',
+            'password' => 'required|string|min:8',
+        ]);
 
-    //     if ($validator->fails()) {
-    //         return response()->json([
-    //             'status' => 'false',
-    //             'message' => 'Invalid Inputs',
-    //             'errors' => $validator->errors()
-    //         ], 401);
-    //     }
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'false',
+                'message' => 'Invalid Inputs',
+                'errors' => $validator->errors()
+            ], 401);
+        }
 
-    //     $mahasiswa = Mahasiswa::create(array_merge(
-    //         $validator->validated(),
-    //         ['password' => bcrypt($request->password)]
-    //     ));
+        $mahasiswa = Mahasiswa::create(array_merge(
+            $validator->validated(),
+            ['password' => bcrypt($request->password)]
+        ));
 
-    //     return response()->json([
-    //         'status' => true,
-    //         'message' => 'Mahasiswa successfully registered',
-    //         'user' => $mahasiswa
-    //     ], 201);
-    // }
+        return response()->json([
+            'status' => true,
+            'message' => 'Berhasil Menambah Data Mahasiswa',
+            'user' => $mahasiswa
+        ], 201);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $mahasiswa = Mahasiswa::findOrFail($id);
+
+        $mahasiswa->update($request->all());
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Berhasil Memperbarui Data Mahasiswa',
+            'user' => $mahasiswa
+        ], 201);
+    }
+
+    public function destroy($id)
+    {
+        $mahasiswa = Mahasiswa::findOrFail($id);
+        $mahasiswa->delete();
+
+
+        if ($mahasiswa != null) {
+            return response()->json([
+                'message' => 'Data Mahasiswa Dihapus',
+                'data' => $mahasiswa
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Data Mahasiswa',
+            ], 404);
+        }
+    }
 }

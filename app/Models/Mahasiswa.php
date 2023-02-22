@@ -33,7 +33,13 @@ class Mahasiswa extends Authenticatable implements JWTSubject
      */
     protected $fillable = [
         'username',
-        'password',
+        'nama',
+        'nim',
+        'prodi',
+        'semester',
+        'email',
+        'nomor_hp',
+        'password'
     ];
 
     /**

@@ -116,7 +116,7 @@ class BiodataIndustriController extends Controller
             return response()->json([
                 'message' => 'Biodata Industri Dihapus',
                 'data' => $biodata_industri
-            ]);
+            ], 200);
         } else {
             return response()->json([
                 'message' => 'Biodata Industri',

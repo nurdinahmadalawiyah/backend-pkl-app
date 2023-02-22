@@ -115,6 +115,12 @@ Route::prefix('mahasiswa')->controller(MahasiswaController::class)->group(functi
         Route::put('update-password', 'updatePassword');
         Route::put('update-profile', 'updateProfile');
     });
+
+    Route::middleware('auth:akademik_api')->group(function () {
+        Route::post('add', 'register');
+        Route::put('update/{id}', 'update');
+        Route::delete('delete/{id}', 'destroy');
+    });
 });
 
 Route::prefix('pembimbing')->controller(PembimbingController::class)->group(function () {
