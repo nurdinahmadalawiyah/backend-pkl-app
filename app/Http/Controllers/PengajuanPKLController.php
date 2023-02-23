@@ -12,20 +12,25 @@ class PengajuanPKLController extends Controller
 {
     public function showAllByUser()
     {
+        $prodi = DB::table('mahasiswa')
+            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+            ->select('mahasiswa.nama', 'prodi.nama_prodi', 'mahasiswa.nim')
+            ->first();
+
         $mahasiswa = Auth::user();
 
-        $filterDataMahasiswa = ([
-            'nama' => $mahasiswa->nama,
-            'nim' => $mahasiswa->nim,
-            'prodi' => $mahasiswa->prodi,
-        ]);
+        // $filterDataMahasiswa = ([
+        //     'nama' => $mahasiswa->nama,
+        //     'nim' => $mahasiswa->nim,
+        //     'prodi' => $mahasiswa->prodi,
+        // ]);
 
         $pengajuan = PengajuanPKL::where('id_mahasiswa', $mahasiswa->id_mahasiswa)->get();
 
         return response()->json([
             'status' => 'success',
             'message' => 'Status Pengajuan PKL',
-            'user' => $filterDataMahasiswa,
+            'user' => $prodi,
             'data' => $pengajuan
         ], 200);
     }
