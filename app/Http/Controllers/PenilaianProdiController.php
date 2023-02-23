@@ -27,9 +27,29 @@ class PenilaianProdiController extends Controller
     public function show($id)
     {
         $penilaian = DB::table('penilaian_prodi')
+            ->leftJoin('penilaian_pembimbing', 'penilaian_prodi.id_mahasiswa', '=', 'penilaian_pembimbing.id_mahasiswa')
             ->join('mahasiswa', 'penilaian_prodi.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->select('penilaian_prodi.*', 'mahasiswa.nama', 'prodi.nama_prodi', 'mahasiswa.nim')
+            ->select(
+                'mahasiswa.nama', 
+                'prodi.nama_prodi', 
+                'mahasiswa.nim',
+                'penilaian_prodi.id_penilaian_prodi', 
+                'penilaian_prodi.presentasi',
+                'penilaian_prodi.dokumen', 
+                'penilaian_pembimbing.*', 
+                DB::raw('(penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2 AS nilai_akhir'),
+                    DB::raw('CASE 
+                    WHEN ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) >= 85 THEN "A" 
+                    WHEN ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) >= 80 AND ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) < 85 THEN "AB" 
+                    WHEN ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) >= 75 AND ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) < 80 THEN "B" 
+                    WHEN ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) >= 70 AND ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) < 75 THEN "BC" 
+                    WHEN ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) >= 60 AND ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) < 70 THEN "D" 
+                    WHEN ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) >= 50 AND ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) < 60 THEN "CD" 
+                    WHEN ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) >= 40 AND ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) < 50 THEN "D" 
+                    ELSE "E" 
+                END AS nilai_huruf')
+                )
             ->where('penilaian_prodi.id_penilaian_prodi', '=', $id)
             ->first();
         

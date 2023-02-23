@@ -6,13 +6,46 @@ use App\Models\BiodataIndustri;
 use App\Models\PengajuanPKL;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class BiodataIndustriController extends Controller
 {
     public function index()
     {
-        $biodata_industri = BiodataIndustri::all();
+        $biodata_industri = DB::table('biodata_industri')
+            ->join('mahasiswa', 'biodata_industri.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+            ->select('biodata_industri.*', 'mahasiswa.nama', 'mahasiswa.nim')
+            ->get();
+    
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Biodata Industri',
+            'data' => $biodata_industri
+        ], 200);
+    }
+
+    public function showByPembimbing()
+    {
+        $biodata_industri = DB::table('biodata_industri')
+            ->join('mahasiswa', 'biodata_industri.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+            ->select('biodata_industri.*', 'mahasiswa.nama', 'mahasiswa.nim')
+            ->get();
+    
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Biodata Industri',
+            'data' => $biodata_industri
+        ], 200);
+    }
+
+    public function detailByPembimbing($id)
+    {
+        $biodata_industri = DB::table('biodata_industri')
+            ->join('mahasiswa', 'biodata_industri.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+            ->select('biodata_industri.*', 'mahasiswa.nama', 'mahasiswa.nim')
+            ->where('biodata_industri.id_biodata_industri', '=', $id)
+            ->first();
     
         return response()->json([
             'status' => 'success',

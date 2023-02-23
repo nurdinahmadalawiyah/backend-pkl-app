@@ -79,6 +79,10 @@ Route::prefix('biodata-industri')->controller(BiodataIndustriController::class)-
         Route::get('/{id}', 'show');
         Route::delete('/{id}', 'destroy');
     });
+
+    Route::middleware('auth:pembimbing_api')->group(function () {
+        Route::get('/', 'showByPembimbing');
+    });
 });
 
 Route::prefix('jurnal-kegiatan')->controller(JurnalKegiatanController::class)->group(function () {
