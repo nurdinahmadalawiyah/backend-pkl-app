@@ -93,7 +93,7 @@ class JurnalKegiatanController extends Controller
             ], 200);
         } else {
             return response()->json([
-                'message' => 'Jurnal Kegiatan',
+                'message' => 'Jurnal Gagal Kegiatan',
             ], 404);
         } 
     }

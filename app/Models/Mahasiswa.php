@@ -26,6 +26,16 @@ class Mahasiswa extends Authenticatable implements JWTSubject
         return $this->belongsTo(Prodi::class);
     }
 
+    public function penilaianProdi()
+    {
+        return $this->hasOne(PenilaianProdi::class, 'id_mahasiswa', 'id_mahasiswa');
+    }
+
+    public function penilaianPembimbing()
+    {
+        return $this->hasOne(PenilaianPembimbing::class, 'id_mahasiswa', 'id_mahasiswa');
+    }
+
     /**
      * The attributes that are mass assignable.
      *

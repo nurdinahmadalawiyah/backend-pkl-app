@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\LowonganPKLResource;
 use App\Models\LowonganPKL;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -34,11 +35,11 @@ class LowonganPKLController extends Controller
         }
     
         $lowongan_pkl = LowonganPKL::where('id_prodi', $prodi->id_prodi)->get();
-    
+
         return response()->json([
             'status' => 'success',
             'message' => 'Data Lowongan PKL',
-            'data' => new LowonganPKLResource($lowongan_pkl)
+            'data' => LowonganPKLResource::Collection($lowongan_pkl)
         ], 200);
     }
 
