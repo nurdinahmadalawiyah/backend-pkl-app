@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AkademikController;
 use App\Http\Controllers\BiodataIndustriController;
+use App\Http\Controllers\DaftarHadirController;
 use App\Http\Controllers\JurnalKegiatanController;
 use App\Http\Controllers\LaporanPKLController;
 use App\Http\Controllers\LowonganPKLController;
@@ -81,7 +82,17 @@ Route::prefix('biodata-industri')->controller(BiodataIndustriController::class)-
 Route::prefix('jurnal-kegiatan')->controller(JurnalKegiatanController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api')->group(function () {
         Route::post('/', 'store');
-        // Route::get('/', 'index');
+        Route::get('/', 'index');
+        Route::put('/{id}', 'update');
+        // Route::get('/{id}', 'show');
+        Route::delete('/{id}', 'destroy');
+    });
+});
+
+Route::prefix('daftar-hadir')->controller(DaftarHadirController::class)->group(function () {
+    Route::middleware('auth:mahasiswa_api')->group(function () {
+        Route::post('/', 'store');
+        Route::get('/', 'index');
         Route::put('/{id}', 'update');
         // Route::get('/{id}', 'show');
         Route::delete('/{id}', 'destroy');

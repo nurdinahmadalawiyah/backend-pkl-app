@@ -17,7 +17,7 @@ class LaporanPKLController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Semua Data Laporan PKL',
-            'data' => $laporan_pkl,
+            'data' => new LaporanPKLResource($laporan_pkl)
         ], 200);
     }
 

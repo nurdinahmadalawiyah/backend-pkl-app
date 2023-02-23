@@ -10,6 +10,20 @@ use Illuminate\Support\Facades\Validator;
 
 class JurnalKegiatanController extends Controller
 {
+    public function index(Request $request)
+    {
+        $jurnal_kegiatan = JurnalKegiatan::where('id_mahasiswa', $request->user()->id_mahasiswa)
+            ->orderBy('minggu')
+            ->get()
+            ->groupBy('minggu');
+        
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Jurnal Kegiatan ' . $request->user()->nama,
+            'data' => $jurnal_kegiatan
+        ], 200);
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -41,7 +55,7 @@ class JurnalKegiatanController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Jurnal Kegiatan Berhasil Dihapus',
+            'message' => 'Jurnal Kegiatan Berhasil Ditambahkan',
             'data' => $jurnal_kegiatan
         ], 200);
     }
