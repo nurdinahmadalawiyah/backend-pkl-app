@@ -43,8 +43,10 @@ class LowonganPKLController extends Controller
         ], 200);
     }
 
-    public function searchByKeyword($keyword)
+    public function searchByKeyword(Request $request)
     {
+        $keyword = $request->query('q');
+
         $lowongan_pkl = LowonganPKL::where('posisi', 'like', '%' . $keyword . '%')
             ->orWhere('nama_perusahaan', 'like', '%' . $keyword . '%')
             ->get();
