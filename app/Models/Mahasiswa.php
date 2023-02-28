@@ -23,7 +23,7 @@ class Mahasiswa extends Authenticatable implements JWTSubject
 
     public function prodi()
     {
-        return $this->belongsTo(Prodi::class);
+        return $this->belongsTo(Prodi::class, 'id_prodi');
     }
 
     public function penilaianProdi()

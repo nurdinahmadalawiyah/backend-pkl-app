@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 
@@ -25,7 +26,7 @@ class MahasiswaController extends Controller
             ], 422);
         }
 
-        if (! $token = auth()->guard('mahasiswa_api')->attempt($validator->validated())) {
+        if (!$token = auth()->guard('mahasiswa_api')->attempt($validator->validated())) {
             return response()->json([
                 'status' => false,
                 'message' => 'Username atau Password Salah',
@@ -37,8 +38,19 @@ class MahasiswaController extends Controller
 
     public function me()
     {
-        return response()->json(auth('mahasiswa_api')->user());
+        $mahasiswa = Mahasiswa::join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+            ->select('mahasiswa.*', 'prodi.nama_prodi')
+            ->where('mahasiswa.id_mahasiswa', auth('mahasiswa_api')->user()->id_mahasiswa)
+            ->first();
+
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Profile',
+            'data' => $mahasiswa
+        ], 200);
     }
+
 
     public function logout()
     {
@@ -86,7 +98,7 @@ class MahasiswaController extends Controller
 
         return response()->json([
             'message' => 'Password berhasil diubah'
-        ]);
+        ], 200);
     }
 
     public function updateProfile(Request $request)
@@ -94,8 +106,8 @@ class MahasiswaController extends Controller
         $mahasiswa = auth('mahasiswa_api')->user();
 
         $validator = Validator::make($request->all(), [
-            'email' => 'nullable|email|unique:mahasiswa,email,'.$mahasiswa->id_mahasiswa.',id_mahasiswa',
-            'username' => 'nullable|unique:mahasiswa,username,'.$mahasiswa->id_mahasiswa.',id_mahasiswa',
+            'email' => 'nullable|email|unique:mahasiswa,email,' . $mahasiswa->id_mahasiswa . ',id_mahasiswa',
+            'username' => 'nullable|unique:mahasiswa,username,' . $mahasiswa->id_mahasiswa . ',id_mahasiswa',
             'semester' => 'nullable',
             'nomor_hp' => 'nullable|numeric',
         ]);
@@ -121,7 +133,7 @@ class MahasiswaController extends Controller
         }
 
         $mahasiswa->save();
-        
+
         return response()->json([
             'message' => 'Profile updated successfully.',
             'data' => auth('mahasiswa_api')->user()
