@@ -12,12 +12,13 @@ class PengajuanPKLController extends Controller
 {
     public function showAllByUser()
     {
+        $mahasiswa = Auth::user();
+
         $prodi = DB::table('mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+            ->where('mahasiswa.id_mahasiswa', '=', $mahasiswa->id_mahasiswa)
             ->select('mahasiswa.nama', 'prodi.nama_prodi', 'mahasiswa.nim')
             ->first();
-
-        $mahasiswa = Auth::user();
 
         // $filterDataMahasiswa = ([
         //     'nama' => $mahasiswa->nama,
@@ -65,10 +66,10 @@ class PengajuanPKLController extends Controller
         if (is_null($pengajuan_pkl)) {
             return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
         }
-        
+
         return response()->json([
             'status' => 'success',
-            'message' => 'Detail Pengajuan PKL id '. $id,
+            'message' => 'Detail Pengajuan PKL id ' . $id,
             'data' => $pengajuan_pkl,
         ], 200);
     }
