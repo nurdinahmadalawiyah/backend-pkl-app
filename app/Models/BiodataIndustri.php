@@ -27,6 +27,7 @@ class BiodataIndustri extends Model
         'bidang_usaha_jasa',
         'spesialisasi_produksi_jasa',
         'kapasitas_produksi',
+        'jangkauan_pemasaran',
         'jumlah_tenaga_kerja_sd',
         'jumlah_tenaga_kerja_sltp',
         'jumlah_tenaga_kerja_slta',

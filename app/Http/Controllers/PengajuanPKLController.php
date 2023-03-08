@@ -20,13 +20,7 @@ class PengajuanPKLController extends Controller
             ->select('mahasiswa.nama', 'prodi.nama_prodi', 'mahasiswa.nim')
             ->first();
 
-        // $filterDataMahasiswa = ([
-        //     'nama' => $mahasiswa->nama,
-        //     'nim' => $mahasiswa->nim,
-        //     'prodi' => $mahasiswa->prodi,
-        // ]);
-
-        $pengajuan = PengajuanPKL::where('id_mahasiswa', $mahasiswa->id_mahasiswa)->get();
+        $pengajuan = PengajuanPKL::where('id_mahasiswa', $mahasiswa->id_mahasiswa)->orderByDesc('created_at')->get();
 
         return response()->json([
             'status' => 'success',

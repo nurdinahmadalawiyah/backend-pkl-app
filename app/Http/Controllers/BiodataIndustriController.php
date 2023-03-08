@@ -17,7 +17,7 @@ class BiodataIndustriController extends Controller
             ->join('mahasiswa', 'biodata_industri.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
             ->select('biodata_industri.*', 'mahasiswa.nama', 'mahasiswa.nim')
             ->get();
-    
+
         return response()->json([
             'status' => 'success',
             'message' => 'Biodata Industri',
@@ -31,7 +31,7 @@ class BiodataIndustriController extends Controller
             ->join('mahasiswa', 'biodata_industri.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
             ->select('biodata_industri.*', 'mahasiswa.nama', 'mahasiswa.nim')
             ->get();
-    
+
         return response()->json([
             'status' => 'success',
             'message' => 'Biodata Industri',
@@ -46,7 +46,7 @@ class BiodataIndustriController extends Controller
             ->select('biodata_industri.*', 'mahasiswa.nama', 'mahasiswa.nim')
             ->where('biodata_industri.id_biodata_industri', '=', $id)
             ->first();
-    
+
         return response()->json([
             'status' => 'success',
             'message' => 'Biodata Industri',
@@ -57,7 +57,7 @@ class BiodataIndustriController extends Controller
     public function show($id)
     {
         $biodata_industri = BiodataIndustri::find($id);
-        
+
         if (is_null($biodata_industri)) {
             return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
         }
@@ -82,9 +82,10 @@ class BiodataIndustriController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors());
+            return response()->json($validator->errors(), 400);
         }
 
+        // Cek apakah pengajuan mahasiswa sudah disetujui
         $pengajuan_pkl = PengajuanPKL::where('id_mahasiswa', $request->user()->id_mahasiswa)
             ->where('status', 'disetujui')
             ->first();
@@ -93,25 +94,51 @@ class BiodataIndustriController extends Controller
             return response()->json(['message' => 'Pengajuan pkl belum disetujui'], 401);
         }
 
-        $biodata_industri = BiodataIndustri::create([
-            'id_mahasiswa' => Auth::id(),
-            'nama_industri' => $request->nama_industri,
-            'nama_pimpinan' => $request->nama_pimpinan,
-            'alamat_kantor' => $request->alamat_kantor,
-            'no_telp_fax' => $request->no_telp_fax,
-            'contact_person' => $request->contact_person,
-            'bidang_usaha_jasa' => $request->bidang_usaha_jasa,
-            'spesialisasi_produksi_jasa' => $request->spesialisasi_produksi_jasa,
-            'kapasitas_produksi' => $request->kapasitas_produksi,
-            'jangkauan_pemasaran' => $request->jangkauan_pemasaran,
-            'jumlah_tenaga_kerja_sd' => $request->jumlah_tenaga_kerja_sd,
-            'jumlah_tenaga_kerja_sltp' => $request->jumlah_tenaga_kerja_sltp,
-            'jumlah_tenaga_kerja_slta' => $request->jumlah_tenaga_kerja_slta,
-            'jumlah_tenaga_kerja_smk' => $request->jumlah_tenaga_kerja_smk,
-            'jumlah_tenaga_kerja_sarjana_muda' => $request->jumlah_tenaga_kerja_sarjana_muda,
-            'jumlah_tenaga_kerja_sarjana_magister' => $request->jumlah_tenaga_kerja_sarjana_magister,
-            'jumlah_tenaga_kerja_sarjana_doktor' => $request->jumlah_tenaga_kerja_sarjana_doktor,
-        ]);
+        // Cek apakah mahasiswa sudah memiliki biodata industri
+        $biodata_industri = BiodataIndustri::where('id_mahasiswa', Auth::user()->id_mahasiswa)->first();
+
+        if ($biodata_industri) {
+            // Jika sudah ada, maka update data biodata industri yang sudah ada
+            $biodata_industri->update([
+                'nama_industri' => $request->nama_industri,
+                'nama_pimpinan' => $request->nama_pimpinan,
+                'alamat_kantor' => $request->alamat_kantor,
+                'no_telp_fax' => $request->no_telp_fax,
+                'contact_person' => $request->contact_person,
+                'bidang_usaha_jasa' => $request->bidang_usaha_jasa,
+                'spesialisasi_produksi_jasa' => $request->spesialisasi_produksi_jasa,
+                'kapasitas_produksi' => $request->kapasitas_produksi,
+                'jangkauan_pemasaran' => $request->jangkauan_pemasaran,
+                'jumlah_tenaga_kerja_sd' => $request->jumlah_tenaga_kerja_sd,
+                'jumlah_tenaga_kerja_sltp' => $request->jumlah_tenaga_kerja_sltp,
+                'jumlah_tenaga_kerja_slta' => $request->jumlah_tenaga_kerja_slta,
+                'jumlah_tenaga_kerja_smk' => $request->jumlah_tenaga_kerja_smk,
+                'jumlah_tenaga_kerja_sarjana_muda' => $request->jumlah_tenaga_kerja_sarjana_muda,
+                'jumlah_tenaga_kerja_sarjana_magister' => $request->jumlah_tenaga_kerja_sarjana_magister,
+                'jumlah_tenaga_kerja_sarjana_doktor' => $request->jumlah_tenaga_kerja_sarjana_doktor,
+            ]);
+        } else {
+            // Jika belum ada, maka buat data biodata industri baru
+            $biodata_industri = BiodataIndustri::create([
+                'id_mahasiswa' => Auth::id(),
+                'nama_industri' => $request->nama_industri,
+                'nama_pimpinan' => $request->nama_pimpinan,
+                'alamat_kantor' => $request->alamat_kantor,
+                'no_telp_fax' => $request->no_telp_fax,
+                'contact_person' => $request->contact_person,
+                'bidang_usaha_jasa' => $request->bidang_usaha_jasa,
+                'spesialisasi_produksi_jasa' => $request->spesialisasi_produksi_jasa,
+                'kapasitas_produksi' => $request->kapasitas_produksi,
+                'jangkauan_pemasaran' => $request->jangkauan_pemasaran,
+                'jumlah_tenaga_kerja_sd' => $request->jumlah_tenaga_kerja_sd,
+                'jumlah_tenaga_kerja_sltp' => $request->jumlah_tenaga_kerja_sltp,
+                'jumlah_tenaga_kerja_slta' => $request->jumlah_tenaga_kerja_slta,
+                'jumlah_tenaga_kerja_smk' => $request->jumlah_tenaga_kerja_smk,
+                'jumlah_tenaga_kerja_sarjana_muda' => $request->jumlah_tenaga_kerja_sarjana_muda,
+                'jumlah_tenaga_kerja_sarjana_magister' => $request->jumlah_tenaga_kerja_sarjana_magister,
+                'jumlah_tenaga_kerja_sarjana_doktor' => $request->jumlah_tenaga_kerja_sarjana_doktor,
+            ]);
+        }
 
         return response()->json([
             'status' => 'success',

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('contact_person', 100);
             $table->string('bidang_usaha_jasa', 50);
             $table->string('spesialisasi_produksi_jasa', 50);
+            $table->string('jangkauan_pemasaran', 50);
             $table->unsignedInteger('kapasitas_produksi')->nullable();
             $table->unsignedInteger('jumlah_tenaga_kerja_sd')->nullable();
             $table->unsignedInteger('jumlah_tenaga_kerja_sltp')->nullable();
