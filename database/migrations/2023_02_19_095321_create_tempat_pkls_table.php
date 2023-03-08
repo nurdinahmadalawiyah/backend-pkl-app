@@ -22,6 +22,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('id_pembimbing')->references('id_pembimbing')->on('pembimbing');
+            $table->foreign('id_pengajuan')->references('id_pengajuan')->on('pengajuan_pkl');
         });
     }
 
