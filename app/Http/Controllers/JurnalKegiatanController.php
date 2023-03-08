@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 class JurnalKegiatanController extends Controller
 {
-    public function index(Request $request)
+    public function indexByUser(Request $request)
     {
         $jurnal_kegiatan = JurnalKegiatan::where('id_mahasiswa', $request->user()->id_mahasiswa)
             ->orderBy('minggu')

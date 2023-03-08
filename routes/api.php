@@ -89,9 +89,8 @@ Route::prefix('biodata-industri')->controller(BiodataIndustriController::class)-
 Route::prefix('jurnal-kegiatan')->controller(JurnalKegiatanController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api', 'throttle:60,1')->group(function () {
         Route::post('/', 'store');
-        Route::get('/', 'index');
+        Route::get('/index-user', 'indexByUser');
         Route::put('/{id}', 'update');
-        // Route::get('/{id}', 'show');
         Route::delete('/{id}', 'destroy');
     });
 });
