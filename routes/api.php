@@ -10,6 +10,7 @@ use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\PembimbingController;
 use App\Http\Controllers\PengajuanPKLController;
+use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\PenilaianPembimbingController;
 use App\Http\Controllers\PenilaianProdiController;
 use App\Http\Controllers\TempatPKLController;
@@ -111,6 +112,16 @@ Route::prefix('penilaian-prodi')->controller(PenilaianProdiController::class)->g
         Route::get('/', 'index');
         Route::get('/{id}', 'show');
         Route::delete('/{id}', 'destroy');
+    });
+
+    Route::middleware('auth:mahasiswa_api', 'throttle:60,1')->group(function () {
+        Route::get('/show-user', 'showByUser');
+    });
+});
+
+Route::prefix('penilaian')->controller(PenilaianController::class)->group(function () {
+    Route::middleware('auth:mahasiswa_api', 'throttle:60,1')->group(function () {
+        Route::get('/', 'index');
     });
 });
 
