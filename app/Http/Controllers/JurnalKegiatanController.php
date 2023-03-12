@@ -14,13 +14,28 @@ class JurnalKegiatanController extends Controller
     {
         $jurnal_kegiatan = JurnalKegiatan::where('id_mahasiswa', $request->user()->id_mahasiswa)
             ->orderBy('minggu')
-            ->get()
-            ->groupBy('minggu');
+            ->get();
+    
+        $grouped = $jurnal_kegiatan->groupBy('minggu')->map(function ($item) {
+            return [
+                'minggu' => $item[0]->minggu,
+                'data_kegiatan' => $item->map(function ($subitem) {
+                    return [
+                        'id_jurnal_kegiatan' => $subitem->id_jurnal_kegiatan,
+                        'id_mahasiswa' => $subitem->id_mahasiswa,
+                        'tanggal' => $subitem->tanggal,
+                        'minggu' => $subitem->minggu,
+                        'bidang_pekerjaan' => $subitem->bidang_pekerjaan,
+                        'keterangan' => $subitem->keterangan,
+                    ];
+                }),
+            ];
+        });
         
         return response()->json([
             'status' => 'success',
             'message' => 'Jurnal Kegiatan ' . $request->user()->nama,
-            'data' => $jurnal_kegiatan
+            'data' => $grouped->values(),
         ], 200);
     }
 
@@ -38,8 +53,8 @@ class JurnalKegiatanController extends Controller
         }
 
         $pengajuan_pkl = PengajuanPKL::where('id_mahasiswa', $request->user()->id_mahasiswa)
-        ->where('status', 'disetujui')
-        ->first();
+            ->where('status', 'disetujui')
+            ->first();
 
         if (!$pengajuan_pkl) {
             return response()->json(['message' => 'Pengajuan pkl belum disetujui'], 401);
@@ -95,6 +110,6 @@ class JurnalKegiatanController extends Controller
             return response()->json([
                 'message' => 'Jurnal Gagal Kegiatan',
             ], 404);
-        } 
+        }
     }
 }

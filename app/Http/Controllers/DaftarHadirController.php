@@ -15,17 +15,27 @@ class DaftarHadirController extends Controller
     {
         $daftar_hadir = DaftarHadir::where('id_mahasiswa', $request->user()->id_mahasiswa)
             ->orderBy('minggu')
-            ->get()
-            ->groupBy('minggu');
+            ->get();
 
-        $transformed_daftar_hadir = $daftar_hadir->map(function ($items) {
-            return DaftarHadirResource::collection($items);
+        $grouped = $daftar_hadir->groupBy('minggu')->map(function ($item) {
+            return [
+                'minggu' => $item[0]->minggu,
+                'data_kehadiran' => $item->map(function ($subitem) {
+                    return [
+                        'id_daftar_hadir' => $subitem->id_daftar_hadir,
+                        'id_mahasiswa' => $subitem->id_mahasiswa,
+                        'hari_tanggal' => $subitem->hari_tanggal,
+                        'minggu' => $subitem->minggu,
+                        'tanda-tangan' => asset('/storage/tanda-tangan/' . $subitem->tanda_tangan),
+                    ];
+                }),
+            ];
         });
 
         return response()->json([
             'status' => 'success',
             'message' => 'Daftar Hadir '  . $request->user()->nama,
-            'data' => $transformed_daftar_hadir
+            'data' => $grouped->values(),
         ], 200);
     }
 
