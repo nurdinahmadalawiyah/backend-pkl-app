@@ -171,6 +171,7 @@ Route::prefix('mahasiswa')->controller(MahasiswaController::class)->group(functi
     });
 
     Route::middleware('auth:akademik_api', 'throttle:60,1')->group(function () {
+        Route::get('/list', 'index');
         Route::post('add', 'register');
         Route::put('update/{id}', 'update');
         Route::delete('delete/{id}', 'destroy');
@@ -185,6 +186,7 @@ Route::prefix('pembimbing')->controller(PembimbingController::class)->group(func
     });
 
     Route::middleware('auth:akademik_api', 'throttle:60,1')->group(function () {
+        Route::get('/list', 'index');
         Route::post('add', 'register');
         Route::put('update/{id}', 'update');
         Route::delete('delete/{id}', 'destroy');

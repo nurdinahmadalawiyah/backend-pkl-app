@@ -23,7 +23,7 @@ class ProdiController extends Controller
             ], 422);
         }
 
-        if (! $token = auth()->guard('prodi_api')->attempt($validator->validated())) {
+        if (!$token = auth()->guard('prodi_api')->attempt($validator->validated())) {
             return response()->json([
                 'status' => false,
                 'message' => 'Username atau Password Salah',

@@ -11,6 +11,20 @@ use Illuminate\Support\Facades\Hash;
 
 class MahasiswaController extends Controller
 {
+    public function index()
+    {
+        $mahasiswa = DB::table('mahasiswa')
+        ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+        ->select('id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.semester', 'mahasiswa.email', 'mahasiswa.username', 'mahasiswa.nomor_hp')
+        ->get();
+    
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Semua Data Mahasiswa Politeknik TEDC Bandung',
+            'data' => $mahasiswa
+        ], 200);
+    }
+
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [

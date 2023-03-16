@@ -8,6 +8,17 @@ use Illuminate\Support\Facades\Validator;
 
 class PembimbingController extends Controller
 {
+    public function index()
+    {
+        $pembimbing = Pembimbing::all();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Semua Data Pembimbing PKL',
+            'data' => $pembimbing
+        ], 200);
+    }
+
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
