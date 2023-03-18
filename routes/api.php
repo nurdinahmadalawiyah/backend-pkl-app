@@ -69,6 +69,9 @@ Route::prefix('lowongan-pkl')->controller(LowonganPKLController::class)->group(f
         Route::put('/{id}', 'update');
         Route::get('/prodi', 'showByProdi');
         Route::delete('/{id}', 'destroy');
+        Route::get('/prosple', 'prosple');
+        Route::get('/save-prosple', 'prospleStoreDb');
+        Route::get('/glints', 'glints');
     });
 });
 

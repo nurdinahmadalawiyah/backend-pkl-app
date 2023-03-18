@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\LowonganPKLResource;
 use App\Models\LowonganPKL;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Str;
+use Goutte\Client;
+use Symfony\Component\HttpClient\HttpClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -58,6 +60,61 @@ class LowonganPKLController extends Controller
         ], 200);
     }
 
+    public function prosple()
+    {
+        $url = 'https://id.prosple.com/search-jobs?opportunity_types=2&locations=9714%2C9714%7C24768&defaults_applied=1&study_fields=502';
+
+        $goutteClient = new Client(HttpClient::create(['timeout' => 60, 'verify_peer' => base_path('prosple-cert.crt')]));
+
+        $crawler = $goutteClient->request('GET', $url);
+        $data = $crawler->filter("li[class='SearchResultsstyle__SearchResult-sc-c560t5-1 hlOmzw']")->each(function ($node) {
+            return [
+                'posisi' => $node->filter("a[class='JobTeaserstyle__JobTeaserTitleLink-sc-1p2iccb-2 eiICbF']")->text(),
+                'nama_perusahaan' => $node->filter("header[class='Teaser__TeaserHeader-sc-129e2mv-1 JobTeaserstyle__JobTeaserHeader-sc-1p2iccb-1 iBnwQU bycdHT']")->text(),
+                'alamat_perusahaan' => $node->filter("div[class='sc-gsTCUz JobTeaserstyle__JobLocation-sc-1p2iccb-8 hAURsc jOLgFK']")->text(),
+                'gambar' => $node->filter("img[src]")->attr('src'),
+                'url' => 'https://id.prosple.com'.$node->filter("a[href]")->attr('href'),
+                'sumber' => 'Prosple'
+            ];
+        });
+
+        return response()->json([
+            "message" => "Scraping data dari prosple",
+            "status" => "Success",
+            "data" => $data
+        ]);
+    }
+
+    public function prospleStoreDb()
+    {
+        $url = 'https://id.prosple.com/search-jobs?opportunity_types=2&locations=9714%2C9714%7C24768&defaults_applied=1&study_fields=502';
+
+        $goutteClient = new Client(HttpClient::create(['timeout' => 60, 'verify_peer' => base_path('prosple-cert.crt')]));
+
+        $crawler = $goutteClient->request('GET', $url);
+        $data = $crawler->filter("li[class='SearchResultsstyle__SearchResult-sc-c560t5-1 hlOmzw']")->each(function ($node) {
+            return [
+                'id_prodi' => Auth::id(),
+                'posisi' => $node->filter("a[class='JobTeaserstyle__JobTeaserTitleLink-sc-1p2iccb-2 eiICbF']")->text(),
+                'nama_perusahaan' => $node->filter("header[class='Teaser__TeaserHeader-sc-129e2mv-1 JobTeaserstyle__JobTeaserHeader-sc-1p2iccb-1 iBnwQU bycdHT']")->text(),
+                'alamat_perusahaan' => $node->filter("div[class='sc-gsTCUz JobTeaserstyle__JobLocation-sc-1p2iccb-8 hAURsc jOLgFK']")->text(),
+                'gambar' => $node->filter("img[src]")->attr('src'),
+                'url' => 'https://id.prosple.com'.$node->filter("a[href]")->attr('href'),
+                'sumber' => 'Prosple'
+            ];
+        });
+
+        foreach($data as $data)
+        {
+            LowonganPKL::create($data);
+        }
+
+        return response()->json([
+            "message" => "Simpan data lowongan dari prosple ke database",
+            "status" => "Success",
+        ]);
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -81,6 +138,7 @@ class LowonganPKLController extends Controller
             'alamat_perusahaan' => $request->alamat_perusahaan,
             'gambar' => $filename,
             'url' => $request->url,
+            'sumber' => 'Politeknik TEDC Bandung'
         ]);
         Storage::putFileAs($destinationPath, $file, $filename);
 

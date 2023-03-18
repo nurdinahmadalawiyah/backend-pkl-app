@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('alamat_perusahaan');
             $table->string('gambar');
             $table->string('url')->nullable();
+            $table->string('sumber');
             $table->timestamps();
 
             $table->foreign('id_prodi')->references('id_prodi')->on('prodi');

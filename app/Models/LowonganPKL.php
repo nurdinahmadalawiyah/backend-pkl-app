@@ -19,5 +19,6 @@ class LowonganPKL extends Model
         'alamat_perusahaan',
         'gambar',
         'url',
+        'sumber'
     ];
 }
