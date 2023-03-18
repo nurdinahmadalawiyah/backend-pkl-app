@@ -14,14 +14,17 @@ class LowonganPKLResource extends JsonResource
      */
     public function toArray($request)
     {
+        $gambar = ($this->sumber == 'Politeknik TEDC Bandung') ? asset('/storage/images/' . $this->gambar) : $this->gambar;
+
         return [
             'id_lowongan' => $this->id_lowongan,
             'id_prodi' => $this->id_prodi,
             'posisi' => $this->posisi,
             'nama_perusahaan' => $this->nama_perusahaan,
             'alamat_perusahaan' => $this->alamat_perusahaan,
-            'gambar' => asset('/storage/images/' . $this->gambar),
+            'gambar' => $gambar,
             'url' => $this->url,
+            'sumber' => $this->sumber,
         ];
     }
 }

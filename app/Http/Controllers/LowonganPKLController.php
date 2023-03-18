@@ -16,7 +16,7 @@ class LowonganPKLController extends Controller
 {
     public function index()
     {
-        $lowongan_pkl = LowonganPKL::all();
+        $lowongan_pkl = LowonganPKL::orderBy('created_at', 'desc')->get();
     
         return response()->json([
             'status' => 'success',
