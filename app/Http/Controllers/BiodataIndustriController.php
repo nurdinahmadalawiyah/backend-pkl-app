@@ -50,7 +50,7 @@ class BiodataIndustriController extends Controller
         $biodata_industri = DB::table('biodata_industri')
             ->join('mahasiswa', 'biodata_industri.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->select('mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
+            ->select('biodata_industri.id_biodata_industri' ,'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
             ->where('mahasiswa.prodi', $id_prodi)
             ->get();
 
@@ -61,6 +61,25 @@ class BiodataIndustriController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Biodata Industri Mahasiswa ' . auth()->user()->nama_prodi,
+            'data' => $biodata_industri
+        ], 200);
+    }
+
+    public function detailByProdi($id)
+    {
+        $biodata_industri = DB::table('biodata_industri')
+            ->join('mahasiswa', 'biodata_industri.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+            ->select('biodata_industri.*', 'mahasiswa.nama', 'mahasiswa.nim')
+            ->where('biodata_industri.id_biodata_industri', '=', $id)
+            ->first();
+
+        if (is_null($biodata_industri)) {
+            return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Biodata Industri',
             'data' => $biodata_industri
         ], 200);
     }
