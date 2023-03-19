@@ -103,6 +103,10 @@ Route::prefix('jurnal-kegiatan')->controller(JurnalKegiatanController::class)->g
         Route::put('/{id}', 'update');
         Route::delete('/{id}', 'destroy');
     });
+
+    Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
+        Route::get('/', 'showByProdi');
+    });
 });
 
 Route::prefix('daftar-hadir')->controller(DaftarHadirController::class)->group(function () {

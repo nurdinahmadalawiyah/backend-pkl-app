@@ -6,6 +6,7 @@ use App\Models\JurnalKegiatan;
 use App\Models\PengajuanPKL;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class JurnalKegiatanController extends Controller
@@ -36,6 +37,28 @@ class JurnalKegiatanController extends Controller
             'status' => 'success',
             'message' => 'Jurnal Kegiatan ' . $request->user()->nama,
             'data' => $grouped->values(),
+        ], 200);
+    }
+
+    public function showByProdi()
+    {
+        $id_prodi = auth()->user()->id_prodi;
+
+        $jurnal_kegiatan = DB::table('jurnal_kegiatan')
+            ->join('mahasiswa', 'jurnal_kegiatan.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+            ->select('jurnal_kegiatan.id_jurnal_kegiatan' ,'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
+            ->where('mahasiswa.prodi', $id_prodi)
+            ->get();
+
+        if (is_null($jurnal_kegiatan)) {
+            return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Jurnal Kegiatan Mahasiswa ' . auth()->user()->nama_prodi,
+            'data' => $jurnal_kegiatan
         ], 200);
     }
 
