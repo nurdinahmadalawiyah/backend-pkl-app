@@ -88,6 +88,10 @@ Route::prefix('biodata-industri')->controller(BiodataIndustriController::class)-
     Route::middleware('auth:pembimbing_api', 'throttle:60,1')->group(function () {
         Route::get('/', 'showByPembimbing');
     });
+
+    Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
+        Route::get('/', 'showByProdi');
+    });
 });
 
 Route::prefix('jurnal-kegiatan')->controller(JurnalKegiatanController::class)->group(function () {
