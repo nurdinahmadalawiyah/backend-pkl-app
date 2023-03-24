@@ -20,6 +20,8 @@ return new class extends Migration
             $table->float('dokumen');
             $table->float('total_nilai');
             $table->timestamps();
+
+            $table->foreign('id_mahasiswa')->references('id_mahasiswa')->on('mahasiswa');
         });
     }
 
