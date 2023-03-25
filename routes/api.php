@@ -55,6 +55,7 @@ Route::prefix('tempat-pkl')->controller(TempatPKLController::class)->group(funct
 
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
         Route::get('/', 'index');
+        Route::post('/{id}', 'selectMentor');
     });
 });
 

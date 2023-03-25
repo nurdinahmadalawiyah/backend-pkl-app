@@ -19,6 +19,19 @@ class TempatPKLController extends Controller
         ], 200);
     }
 
+    public function selectMentor(Request $request, $id)
+    {
+        $tempat_pkl = TempatPKL::findOrFail($id);
+        $tempat_pkl->id_pembimbing = $request->id_pembimbing;
+        $tempat_pkl->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Berhasil Memilih Pembimbing',
+            'data' => $tempat_pkl,
+        ], 200);
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
