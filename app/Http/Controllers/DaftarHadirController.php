@@ -6,6 +6,7 @@ use App\Http\Resources\DaftarHadirResource;
 use App\Models\DaftarHadir;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -39,6 +40,56 @@ class DaftarHadirController extends Controller
         ], 200);
     }
 
+    public function indexByProdi()
+    {
+        $id_prodi = auth()->user()->id_prodi;
+
+        $daftar_hadir = DB::table('daftar_hadir')
+            ->join('mahasiswa', 'daftar_hadir.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+            ->select('daftar_hadir.id_daftar_hadir', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
+            ->where('mahasiswa.prodi', $id_prodi)
+            ->get();
+
+        if (is_null($daftar_hadir)) {
+            return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Daftar Hadir Mahasiswa ' . auth()->user()->nama_prodi,
+            'data' => $daftar_hadir
+        ], 200);
+    }
+
+    public function showByProdi($id)
+    {
+        $daftar_hadir = DaftarHadir::where('id_mahasiswa', $id)
+            ->orderBy('minggu')
+            ->get();
+
+        $grouped = $daftar_hadir->groupBy('minggu')->map(function ($item) {
+            return [
+                'minggu' => $item[0]->minggu,
+                'data_kehadiran' => $item->map(function ($subitem) {
+                    return [
+                        'id_daftar_hadir' => $subitem->id_daftar_hadir,
+                        'id_mahasiswa' => $subitem->id_mahasiswa,
+                        'hari_tanggal' => $subitem->hari_tanggal,
+                        'minggu' => $subitem->minggu,
+                        'tanda_tangan' => asset('/storage/tanda-tangan/' . $subitem->tanda_tangan),
+                    ];
+                }),
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Daftar Hadir',
+            'data' => $grouped->values(),
+        ], 200);
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -64,7 +115,7 @@ class DaftarHadirController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Jurnal Kegiatan Berhasil Ditambahkan',
+            'message' => 'Daftar Hadir Berhasil Ditambahkan',
             'data' => new DaftarHadirResource($daftar_hadir)
         ], 200);
     }
@@ -87,7 +138,7 @@ class DaftarHadirController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Jurnal Kegiatan Berhasil Diperbarui',
+            'message' => 'Daftar Hadir Berhasil Diperbarui',
             'data' => new DaftarHadirResource($daftar_hadir)
         ], 200);
     }

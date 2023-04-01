@@ -116,8 +116,12 @@ Route::prefix('daftar-hadir')->controller(DaftarHadirController::class)->group(f
         Route::post('/', 'store');
         Route::get('/', 'index');
         Route::put('/{id}', 'update');
-        // Route::get('/{id}', 'show');
         Route::delete('/{id}', 'destroy');
+    });
+
+    Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
+        Route::get('/prodi', 'indexByProdi');
+        Route::get('/prodi/{id}', 'showByProdi');
     });
 });
 
