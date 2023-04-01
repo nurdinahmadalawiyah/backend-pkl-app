@@ -6,18 +6,28 @@ use App\Http\Resources\LaporanPKLResource;
 use App\Models\LaporanPKL;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class LaporanPKLController extends Controller
 {
-    public function index() {
-        $laporan_pkl = LaporanPKL::all();
-    
+    public function index()
+    {
+        $laporan_pkl = DB::table('laporan_pkl')
+            ->join('mahasiswa', 'laporan_pkl.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+            ->select('laporan_pkl.id_laporan', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'laporan_pkl.file', 'laporan_pkl.tanggal_upload')
+            ->get();
+
+        $laporan_pkl_resource = $laporan_pkl->map(function ($laporan) {
+            return new LaporanPKLResource($laporan);
+        });
+
         return response()->json([
             'status' => 'success',
             'message' => 'Semua Data Laporan PKL',
-            'data' => new LaporanPKLResource($laporan_pkl)
+            'data' => $laporan_pkl_resource
         ], 200);
     }
 
@@ -33,7 +43,7 @@ class LaporanPKLController extends Controller
 
         $file = $request->file('file');
         $destinationPath = "public\laporan";
-        $filename = 'laporan_' . date("Ymd_his") . '_'. Auth::user()->nim . '.' . $file->extension();
+        $filename = 'laporan_' . date("Ymd_his") . '_' . Auth::user()->nim . '.' . $file->extension();
         $laporan_pkl = LaporanPKL::create([
             'id_mahasiswa' => Auth::id(),
             'file' => $filename,
