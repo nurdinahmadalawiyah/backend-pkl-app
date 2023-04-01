@@ -16,7 +16,7 @@ class JurnalKegiatanController extends Controller
         $jurnal_kegiatan = JurnalKegiatan::where('id_mahasiswa', $request->user()->id_mahasiswa)
             ->orderBy('minggu')
             ->get();
-    
+
         $grouped = $jurnal_kegiatan->groupBy('minggu')->map(function ($item) {
             return [
                 'minggu' => $item[0]->minggu,
@@ -32,10 +32,39 @@ class JurnalKegiatanController extends Controller
                 }),
             ];
         });
-        
+
         return response()->json([
             'status' => 'success',
             'message' => 'Jurnal Kegiatan ' . $request->user()->nama,
+            'data' => $grouped->values(),
+        ], 200);
+    }
+
+    public function indexByProdi($id)
+    {
+        $jurnal_kegiatan = JurnalKegiatan::where('id_mahasiswa', $id)
+            ->orderBy('minggu')
+            ->get();
+
+        $grouped = $jurnal_kegiatan->groupBy('minggu')->map(function ($item) {
+            return [
+                'minggu' => $item[0]->minggu,
+                'data_kegiatan' => $item->map(function ($subitem) {
+                    return [
+                        'id_jurnal_kegiatan' => $subitem->id_jurnal_kegiatan,
+                        'id_mahasiswa' => $subitem->id_mahasiswa,
+                        'tanggal' => $subitem->tanggal,
+                        'minggu' => $subitem->minggu,
+                        'bidang_pekerjaan' => $subitem->bidang_pekerjaan,
+                        'keterangan' => $subitem->keterangan,
+                    ];
+                }),
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Jurnal Kegiatan',
             'data' => $grouped->values(),
         ], 200);
     }
@@ -47,7 +76,7 @@ class JurnalKegiatanController extends Controller
         $jurnal_kegiatan = DB::table('jurnal_kegiatan')
             ->join('mahasiswa', 'jurnal_kegiatan.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->select('jurnal_kegiatan.id_jurnal_kegiatan' ,'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
+            ->select('jurnal_kegiatan.id_jurnal_kegiatan', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
             ->where('mahasiswa.prodi', $id_prodi)
             ->get();
 
