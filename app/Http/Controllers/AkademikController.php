@@ -58,6 +58,7 @@ class AkademikController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Login berhasil',
+            'role' => 'Akademik',
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_at' => $expires_at

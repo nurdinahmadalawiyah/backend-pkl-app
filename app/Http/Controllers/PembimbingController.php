@@ -69,6 +69,7 @@ class PembimbingController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Login berhasil',
+            'role' => 'Pembimbing',
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_at' => $expires_at

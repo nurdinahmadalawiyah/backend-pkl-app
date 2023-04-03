@@ -58,6 +58,7 @@ class ProdiController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Login berhasil',
+            'role' => 'Prodi',
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_at' => $expires_at
