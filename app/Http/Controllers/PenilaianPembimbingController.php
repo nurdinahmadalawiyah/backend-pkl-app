@@ -29,9 +29,11 @@ class PenilaianPembimbingController extends Controller
         ], 200);
     }
 
-    public function show($id)
+    public function show($id_mahasiswa)
     {
-        $penilaian = PenilaianPembimbing::find($id);
+        $penilaian = DB::table('penilaian_pembimbing')
+        ->where('id_mahasiswa', $id_mahasiswa)
+        ->first();
 
         if (is_null($penilaian)) {
             return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
