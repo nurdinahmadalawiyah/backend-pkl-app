@@ -11,11 +11,16 @@ class PenilaianPembimbingController extends Controller
 {
     public function index()
     {
-        $penilaian = DB::table('penilaian_pembimbing')
-            ->join('mahasiswa', 'penilaian_pembimbing.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
-            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->select('penilaian_pembimbing.*', 'mahasiswa.nama', 'prodi.nama_prodi', 'mahasiswa.nim')
-            ->get();
+        $id_pembimbing = auth()->user()->id_pembimbing;
+
+        $penilaian = DB::table('tempat_pkl')
+        ->join('pengajuan_pkl', 'tempat_pkl.id_pengajuan', '=', 'pengajuan_pkl.id_pengajuan')
+        ->join('mahasiswa', 'pengajuan_pkl.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+        ->leftJoin('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
+        ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+        ->select('tempat_pkl.id_tempat_pkl', 'mahasiswa.id_mahasiswa', 'mahasiswa.nama as nama_mahasiswa', 'prodi.nama_prodi', 'mahasiswa.nim', 'pembimbing.nama as nama_pembimbing', 'pembimbing.nik',)
+        ->where('tempat_pkl.id_pembimbing', $id_pembimbing)
+        ->get();
 
         return response()->json([
             'status' => 'success',
@@ -27,7 +32,7 @@ class PenilaianPembimbingController extends Controller
     public function show($id)
     {
         $penilaian = PenilaianPembimbing::find($id);
-        
+
         if (is_null($penilaian)) {
             return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
         }
@@ -56,15 +61,14 @@ class PenilaianPembimbingController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        $total_nilai = min((
-            $request->integritas +
+        $total_nilai = min(($request->integritas +
             $request->profesionalitas +
             $request->bahasa_inggris +
             $request->teknologi_informasi +
             $request->komunikasi +
             $request->kerja_sama +
             $request->organisasi
-            ) / 7, 100);
+        ) / 7, 100);
 
         // Cek apakah mahasiswa sudah memiliki data penilaian
         $penilaian = PenilaianPembimbing::where('id_mahasiswa', $request->id_mahasiswa)->first();
@@ -108,7 +112,7 @@ class PenilaianPembimbingController extends Controller
         $penilaian = PenilaianPembimbing::findOrFail($id);
         $penilaian->delete();
 
-        if($penilaian != null) {
+        if ($penilaian != null) {
             return response()->json([
                 'message' => 'Nilai Dihapus',
                 'data' => $penilaian
@@ -117,6 +121,6 @@ class PenilaianPembimbingController extends Controller
             return response()->json([
                 'message' => 'Nilai Gagal Dihapus',
             ], 404);
-        } 
+        }
     }
 }
