@@ -93,7 +93,7 @@ Route::prefix('biodata-industri')->controller(BiodataIndustriController::class)-
 
     Route::middleware('auth:pembimbing_api', 'throttle:60,1')->group(function () {
         Route::get('/', 'showByPembimbing');
-        Route::get('/detail/{id}', 'detailByPembimbing');
+        Route::get('/{id}', 'detailByPembimbing');
     });
 });
 

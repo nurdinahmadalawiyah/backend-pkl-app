@@ -56,7 +56,7 @@ class BiodataIndustriController extends Controller
         $biodata_industri = DB::table('biodata_industri')
             ->join('mahasiswa', 'biodata_industri.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->select('biodata_industri.id_biodata_industri' ,'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
+            ->select('biodata_industri.id_biodata_industri', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
             ->where('mahasiswa.prodi', $id_prodi)
             ->get();
 
@@ -90,12 +90,10 @@ class BiodataIndustriController extends Controller
         ], 200);
     }
 
-    public function detailByPembimbing($id)
+    public function detailByPembimbing($id_mahasiswa)
     {
         $biodata_industri = DB::table('biodata_industri')
-            ->join('mahasiswa', 'biodata_industri.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
-            ->select('biodata_industri.*', 'mahasiswa.nama', 'mahasiswa.nim')
-            ->where('biodata_industri.id_biodata_industri', '=', $id)
+            ->where('id_mahasiswa', $id_mahasiswa)
             ->first();
 
         if (is_null($biodata_industri)) {

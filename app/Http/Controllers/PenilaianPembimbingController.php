@@ -14,13 +14,13 @@ class PenilaianPembimbingController extends Controller
         $id_pembimbing = auth()->user()->id_pembimbing;
 
         $penilaian = DB::table('tempat_pkl')
-        ->join('pengajuan_pkl', 'tempat_pkl.id_pengajuan', '=', 'pengajuan_pkl.id_pengajuan')
-        ->join('mahasiswa', 'pengajuan_pkl.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
-        ->leftJoin('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
-        ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-        ->select('tempat_pkl.id_tempat_pkl', 'mahasiswa.id_mahasiswa', 'mahasiswa.nama as nama_mahasiswa', 'prodi.nama_prodi', 'mahasiswa.nim', 'pembimbing.nama as nama_pembimbing', 'pembimbing.nik',)
-        ->where('tempat_pkl.id_pembimbing', $id_pembimbing)
-        ->get();
+            ->join('pengajuan_pkl', 'tempat_pkl.id_pengajuan', '=', 'pengajuan_pkl.id_pengajuan')
+            ->join('mahasiswa', 'pengajuan_pkl.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+            ->leftJoin('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
+            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+            ->select('tempat_pkl.id_tempat_pkl', 'mahasiswa.id_mahasiswa', 'mahasiswa.nama as nama_mahasiswa', 'prodi.nama_prodi', 'mahasiswa.nim', 'pembimbing.nama as nama_pembimbing', 'pembimbing.nik',)
+            ->where('tempat_pkl.id_pembimbing', $id_pembimbing)
+            ->get();
 
         return response()->json([
             'status' => 'success',
@@ -32,8 +32,8 @@ class PenilaianPembimbingController extends Controller
     public function show($id_mahasiswa)
     {
         $penilaian = DB::table('penilaian_pembimbing')
-        ->where('id_mahasiswa', $id_mahasiswa)
-        ->first();
+            ->where('id_mahasiswa', $id_mahasiswa)
+            ->first();
 
         if (is_null($penilaian)) {
             return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
