@@ -112,6 +112,7 @@ Route::prefix('jurnal-kegiatan')->controller(JurnalKegiatanController::class)->g
 
     Route::middleware('auth:pembimbing_api', 'throttle:60,1')->group(function () {
         Route::get('/', 'indexByPembimbing');
+        Route::get('/{id}', 'showByPembimbing');
     });
 });
 

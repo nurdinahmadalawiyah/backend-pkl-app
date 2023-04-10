@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\JurnalKegiatan;
+use App\Models\Mahasiswa;
 use App\Models\PengajuanPKL;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -90,6 +91,35 @@ class JurnalKegiatanController extends Controller
             'status' => 'success',
             'message' => 'Jurnal Kegiatan',
             'data' => $jurnal_kegiatan,
+        ], 200);
+    }
+
+    public function showByPembimbing($id)
+    {
+        $jurnal_kegiatan = JurnalKegiatan::where('id_mahasiswa', $id)
+            ->orderBy('minggu')
+            ->get();
+
+        $grouped = $jurnal_kegiatan->groupBy('minggu')->map(function ($item) {
+            return [
+                'minggu' => $item[0]->minggu,
+                'data_kegiatan' => $item->map(function ($subitem) {
+                    return [
+                        'id_jurnal_kegiatan' => $subitem->id_jurnal_kegiatan,
+                        'id_mahasiswa' => $subitem->id_mahasiswa,
+                        'tanggal' => $subitem->tanggal,
+                        'minggu' => $subitem->minggu,
+                        'bidang_pekerjaan' => $subitem->bidang_pekerjaan,
+                        'keterangan' => $subitem->keterangan,
+                    ];
+                }),
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Jurnal Kegiatan',
+            'data' => $grouped->values(),
         ], 200);
     }
 
