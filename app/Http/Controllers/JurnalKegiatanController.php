@@ -69,6 +69,30 @@ class JurnalKegiatanController extends Controller
         ], 200);
     }
 
+    public function indexByPembimbing()
+    {
+        $id_pembimbing = auth()->user()->id_pembimbing;
+
+        $jurnal_kegiatan = DB::table('tempat_pkl')
+            ->join('pengajuan_pkl', 'tempat_pkl.id_pengajuan', '=', 'pengajuan_pkl.id_pengajuan')
+            ->join('mahasiswa', 'pengajuan_pkl.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+            ->leftJoin('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
+            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+            ->select('tempat_pkl.id_tempat_pkl', 'mahasiswa.id_mahasiswa', 'mahasiswa.nama as nama_mahasiswa', 'prodi.nama_prodi', 'mahasiswa.nim', 'pembimbing.nama as nama_pembimbing', 'pembimbing.nik')
+            ->where('tempat_pkl.id_pembimbing', $id_pembimbing)
+            ->get();
+
+        if (is_null($jurnal_kegiatan)) {
+            return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Jurnal Kegiatan',
+            'data' => $jurnal_kegiatan,
+        ], 200);
+    }
+
     public function showByProdi()
     {
         $id_prodi = auth()->user()->id_prodi;

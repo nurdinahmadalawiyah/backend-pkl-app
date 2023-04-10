@@ -27,9 +27,15 @@ class BiodataIndustriController extends Controller
 
     public function showByPembimbing()
     {
-        $biodata_industri = DB::table('biodata_industri')
-            ->join('mahasiswa', 'biodata_industri.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
-            ->select('biodata_industri.*', 'mahasiswa.nama', 'mahasiswa.nim')
+        $id_pembimbing = auth()->user()->id_pembimbing;
+
+        $biodata_industri = DB::table('tempat_pkl')
+            ->join('pengajuan_pkl', 'tempat_pkl.id_pengajuan', '=', 'pengajuan_pkl.id_pengajuan')
+            ->join('mahasiswa', 'pengajuan_pkl.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+            ->leftJoin('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
+            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+            ->select('tempat_pkl.id_tempat_pkl', 'mahasiswa.id_mahasiswa', 'mahasiswa.nama as nama_mahasiswa', 'prodi.nama_prodi', 'mahasiswa.nim', 'pembimbing.nama as nama_pembimbing', 'pembimbing.nik')
+            ->where('tempat_pkl.id_pembimbing', $id_pembimbing)
             ->get();
 
         if (is_null($biodata_industri)) {
@@ -39,7 +45,7 @@ class BiodataIndustriController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Biodata Industri',
-            'data' => $biodata_industri
+            'data' => $biodata_industri,
         ], 200);
     }
 
