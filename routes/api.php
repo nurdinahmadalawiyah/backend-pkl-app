@@ -131,6 +131,7 @@ Route::prefix('daftar-hadir')->controller(DaftarHadirController::class)->group(f
 
     Route::middleware('auth:pembimbing_api', 'throttle:60,1')->group(function () {
         Route::get('/', 'indexByPembimbing');
+        Route::get('/{id}', 'showByPembimbing');
     });
 });
 

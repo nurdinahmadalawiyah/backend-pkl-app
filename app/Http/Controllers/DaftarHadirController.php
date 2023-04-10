@@ -85,6 +85,34 @@ class DaftarHadirController extends Controller
         ], 200);
     }
 
+    public function showByPembimbing($id)
+    {
+        $daftar_hadir = DaftarHadir::where('id_mahasiswa', $id)
+            ->orderBy('minggu')
+            ->get();
+
+        $grouped = $daftar_hadir->groupBy('minggu')->map(function ($item) {
+            return [
+                'minggu' => $item[0]->minggu,
+                'data_kehadiran' => $item->map(function ($subitem) {
+                    return [
+                        'id_daftar_hadir' => $subitem->id_daftar_hadir,
+                        'id_mahasiswa' => $subitem->id_mahasiswa,
+                        'hari_tanggal' => $subitem->hari_tanggal,
+                        'minggu' => $subitem->minggu,
+                        'tanda_tangan' => asset('/storage/tanda-tangan/' . $subitem->tanda_tangan),
+                    ];
+                }),
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Daftar Hadir',
+            'data' => $grouped->values(),
+        ], 200);
+    }
+
     public function showByProdi($id)
     {
         $daftar_hadir = DaftarHadir::where('id_mahasiswa', $id)
