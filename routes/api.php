@@ -34,56 +34,52 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('pengajuan-pkl')->controller(PengajuanPKLController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api', 'throttle:60,1')->group(function () {
-        Route::post('/', 'store');
-        Route::get('status/', 'showAllByUser');
-        // Route::post('update/{id}', 'update');
-        // Route::delete('/{id}', 'delete');
+        Route::post('/mahasiswa', 'store');
+        Route::get('/mahasiswa/status', 'showAllByUser');
     });
 
     Route::middleware('auth:akademik_api', 'throttle:60,1')->group(function () {
-        Route::get('/', 'index');
-        Route::get('/{id}', 'show');
-        Route::put('approve-pengajuan/{id}', 'setujuiPengajuan');
-        Route::put('reject-pengajuan/{id}', 'tolakPengajuan');
+        Route::get('/akademik', 'index');
+        Route::get('/akademik/{id}', 'show');
+        Route::put('/akademik/approve-pengajuan/{id}', 'setujuiPengajuan');
+        Route::put('/akademik/reject-pengajuan/{id}', 'tolakPengajuan');
     });
 });
 
 Route::prefix('tempat-pkl')->controller(TempatPKLController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api', 'throttle:60,1')->group(function () {
-        Route::post('/', 'store');
+        Route::post('/mahasiswa', 'store');
     });
 
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
-        Route::get('/', 'index');
-        Route::post('/{id}', 'selectMentor');
+        Route::get('/prodi', 'index');
+        Route::post('/prodi/{id}', 'selectMentor');
     });
 });
 
 Route::prefix('lowongan-pkl')->controller(LowonganPKLController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api', 'throttle:60,1')->group(function () {
-        Route::get('/', 'index');
-        Route::get('/search', 'searchByKeyword');
+        Route::get('/mahasiswa', 'index');
+        Route::get('/mahasiswa/search', 'searchByKeyword');
     });
 
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
-        Route::post('/', 'store');
-        Route::put('/{id}', 'update');
+        Route::post('/prodi', 'store');
+        Route::put('/prodi/{id}', 'update');
         Route::get('/prodi', 'showByProdi');
-        Route::delete('/{id}', 'destroy');
+        Route::delete('/prodi/{id}', 'destroy');
         Route::get('/prosple', 'prosple');
         Route::get('/save-prosple', 'prospleStoreDb');
-        Route::get('/glints', 'glints');
     });
 });
 
 Route::prefix('biodata-industri')->controller(BiodataIndustriController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api', 'throttle:60,1')->group(function () {
-        Route::post('/', 'store');
-        Route::get('/', 'index');
-        Route::get('/detail-user', 'detailByUser');
-        Route::post('/{id}', 'update');
-        Route::get('/{id}', 'show');
-        Route::delete('/{id}', 'destroy');
+        Route::post('/mahasiswa', 'store');
+        Route::get('/mahasiswa', 'index');
+        Route::post('/mahasiswa/{id}', 'update');
+        Route::get('/mahasiswa/{id}', 'show');
+        Route::delete('/mahasiswa/{id}', 'destroy');
     });
 
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
@@ -99,10 +95,10 @@ Route::prefix('biodata-industri')->controller(BiodataIndustriController::class)-
 
 Route::prefix('jurnal-kegiatan')->controller(JurnalKegiatanController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api', 'throttle:60,1')->group(function () {
-        Route::post('/', 'store');
-        Route::get('/index-user', 'indexByUser');
-        Route::put('/{id}', 'update');
-        Route::delete('/{id}', 'destroy');
+        Route::post('/mahasiswa', 'store');
+        Route::get('/mahasiswa', 'indexByUser');
+        Route::put('/mahasiswa/{id}', 'update');
+        Route::delete('/mahasiswa/{id}', 'destroy');
     });
 
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
@@ -118,10 +114,10 @@ Route::prefix('jurnal-kegiatan')->controller(JurnalKegiatanController::class)->g
 
 Route::prefix('daftar-hadir')->controller(DaftarHadirController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api', 'throttle:60,1')->group(function () {
-        Route::post('/', 'store');
-        Route::get('/list', 'index');
-        Route::put('/{id}', 'update');
-        Route::delete('/{id}', 'destroy');
+        Route::post('/mahasiswa', 'store');
+        Route::get('/mahasiswa', 'index');
+        Route::put('/mahasiswa/{id}', 'update');
+        Route::delete('/mahasiswa/{id}', 'destroy');
     });
 
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
@@ -130,43 +126,43 @@ Route::prefix('daftar-hadir')->controller(DaftarHadirController::class)->group(f
     });
 
     Route::middleware('auth:pembimbing_api', 'throttle:60,1')->group(function () {
-        Route::get('/', 'indexByPembimbing');
-        Route::get('/{id}', 'showByPembimbing');
+        Route::get('/pembimbing', 'indexByPembimbing');
+        Route::get('/pembimbing/{id}', 'showByPembimbing');
     });
 });
 
 Route::prefix('penilaian-prodi')->controller(PenilaianProdiController::class)->group(function () {
-    Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
-        Route::post('/', 'store');
-        Route::get('/', 'index');
-        Route::get('/{id}', 'show');
-        Route::delete('/{id}', 'destroy');
+    Route::middleware('auth:mahasiswa_api', 'throttle:60,1')->group(function () {
+        Route::get('/mahasiswa', 'showByUser');
     });
 
-    Route::middleware('auth:mahasiswa_api', 'throttle:60,1')->group(function () {
-        Route::get('/show-user', 'showByUser');
+    Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
+        Route::post('/prodi', 'store');
+        Route::get('/prodi', 'index');
+        Route::get('/prodi/{id}', 'show');
+        Route::delete('/prodi/{id}', 'destroy');
     });
 });
 
 Route::prefix('penilaian')->controller(PenilaianController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api', 'throttle:60,1')->group(function () {
-        Route::get('/', 'index');
+        Route::get('/mahasiswa', 'index');
     });
 });
 
 Route::prefix('penilaian-pembimbing')->controller(PenilaianPembimbingController::class)->group(function () {
     Route::middleware('auth:pembimbing_api', 'throttle:60,1')->group(function () {
-        Route::post('/', 'store');
-        Route::get('/', 'index');
-        Route::get('/{id}', 'show');
-        Route::delete('/{id}', 'destroy');
+        Route::post('/pembimbing', 'store');
+        Route::get('/pembimbing', 'index');
+        Route::get('/pembimbing/{id}', 'show');
+        Route::delete('/pembimbing/{id}', 'destroy');
     });
 });
 
-Route::prefix('upload-laporan')->controller(LaporanPKLController::class)->group(function () {
+Route::prefix('laporan')->controller(LaporanPKLController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api', 'throttle:60,1')->group(function () {
-        Route::post('/', 'uploadLaporan');
-        Route::delete('/{id}', 'cancel');
+        Route::post('/mahasiswa', 'uploadLaporan');
+        Route::delete('/mahasiswa/{id}', 'cancel');
     });
 
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {

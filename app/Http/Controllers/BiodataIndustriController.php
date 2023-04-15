@@ -121,22 +121,6 @@ class BiodataIndustriController extends Controller
         ], 200);
     }
 
-    public function detailByUser()
-    {
-
-        $biodata_industri = BiodataIndustri::where('id_mahasiswa', Auth::user()->id_mahasiswa)->first();
-
-        if (is_null($biodata_industri)) {
-            return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
-        }
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Detail Biodata Industri',
-            'data' => $biodata_industri,
-        ], 200);
-    }
-
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
