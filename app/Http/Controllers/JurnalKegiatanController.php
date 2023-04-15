@@ -127,10 +127,9 @@ class JurnalKegiatanController extends Controller
     {
         $id_prodi = auth()->user()->id_prodi;
 
-        $jurnal_kegiatan = DB::table('jurnal_kegiatan')
-            ->join('mahasiswa', 'jurnal_kegiatan.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+        $jurnal_kegiatan = DB::table('mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->select('jurnal_kegiatan.id_jurnal_kegiatan', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
+            ->select( 'mahasiswa.id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
             ->where('mahasiswa.prodi', $id_prodi)
             ->get();
 

@@ -53,10 +53,9 @@ class BiodataIndustriController extends Controller
     {
         $id_prodi = auth()->user()->id_prodi;
 
-        $biodata_industri = DB::table('biodata_industri')
-            ->join('mahasiswa', 'biodata_industri.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+        $biodata_industri = DB::table('mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->select('biodata_industri.id_biodata_industri', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
+            ->select( 'mahasiswa.id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
             ->where('mahasiswa.prodi', $id_prodi)
             ->get();
 

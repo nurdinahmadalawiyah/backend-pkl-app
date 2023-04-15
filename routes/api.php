@@ -87,13 +87,13 @@ Route::prefix('biodata-industri')->controller(BiodataIndustriController::class)-
     });
 
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
-        Route::get('/', 'showByProdi');
-        Route::get('/detail/{id}', 'detailByProdi');
+        Route::get('/prodi/list', 'showByProdi');
+        Route::get('/prodi/detail/{id}', 'detailByProdi');
     });
 
     Route::middleware('auth:pembimbing_api', 'throttle:60,1')->group(function () {
-        Route::get('/', 'showByPembimbing');
-        Route::get('/{id}', 'detailByPembimbing');
+        Route::get('/pembimbing', 'showByPembimbing');
+        Route::get('/pembimbing/{id}', 'detailByPembimbing');
     });
 });
 
@@ -106,20 +106,20 @@ Route::prefix('jurnal-kegiatan')->controller(JurnalKegiatanController::class)->g
     });
 
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
-        Route::get('/', 'showByProdi');
-        Route::get('/index-prodi/{id}', 'indexByProdi');
+        Route::get('/prodi', 'showByProdi');
+        Route::get('/prodi/{id}', 'indexByProdi');
     });
 
     Route::middleware('auth:pembimbing_api', 'throttle:60,1')->group(function () {
-        Route::get('/', 'indexByPembimbing');
-        Route::get('/{id}', 'showByPembimbing');
+        Route::get('/pembimbing', 'indexByPembimbing');
+        Route::get('/pembimbing/{id}', 'showByPembimbing');
     });
 });
 
 Route::prefix('daftar-hadir')->controller(DaftarHadirController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api', 'throttle:60,1')->group(function () {
         Route::post('/', 'store');
-        Route::get('/', 'index');
+        Route::get('/list', 'index');
         Route::put('/{id}', 'update');
         Route::delete('/{id}', 'destroy');
     });
@@ -170,7 +170,7 @@ Route::prefix('upload-laporan')->controller(LaporanPKLController::class)->group(
     });
 
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
-        Route::get('/', 'index');
+        Route::get('/prodi', 'index');
     });
 });
 

@@ -40,7 +40,8 @@ class DaftarHadirController extends Controller
         ], 200);
     }
 
-    public function indexByPembimbing() {
+    public function indexByPembimbing()
+    {
         $id_pembimbing = auth()->user()->id_pembimbing;
 
         $daftar_hadir = DB::table('tempat_pkl')
@@ -67,10 +68,9 @@ class DaftarHadirController extends Controller
     {
         $id_prodi = auth()->user()->id_prodi;
 
-        $daftar_hadir = DB::table('daftar_hadir')
-            ->join('mahasiswa', 'daftar_hadir.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+        $daftar_hadir = DB::table('mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->select('daftar_hadir.id_daftar_hadir', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
+            ->select( 'mahasiswa.id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
             ->where('mahasiswa.prodi', $id_prodi)
             ->get();
 
