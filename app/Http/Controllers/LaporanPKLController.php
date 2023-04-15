@@ -34,7 +34,7 @@ class LaporanPKLController extends Controller
     public function uploadLaporan(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'file' => 'required|mimes:doc,docx,pdf|max:4096'
+            'file' => 'required|mimes:doc,docx,pdf'
         ]);
 
         if ($validator->fails()) {

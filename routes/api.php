@@ -161,7 +161,7 @@ Route::prefix('penilaian-pembimbing')->controller(PenilaianPembimbingController:
 
 Route::prefix('laporan')->controller(LaporanPKLController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api', 'throttle:60,1')->group(function () {
-        Route::post('/mahasiswa', 'uploadLaporan');
+        Route::post('/mahasiswa/upload', 'uploadLaporan');
         Route::delete('/mahasiswa/{id}', 'cancel');
     });
 
