@@ -19,6 +19,7 @@ class JurnalKegiatan extends Model
 
     protected $fillable = [
         'id_mahasiswa',
+        'id_tempat_pkl',
         'tanggal',
         'minggu',
         'bidang_pekerjaan',

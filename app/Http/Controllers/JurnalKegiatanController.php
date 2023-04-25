@@ -8,7 +8,9 @@ use App\Models\PengajuanPKL;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use PDF;
 
 class JurnalKegiatanController extends Controller
 {
@@ -18,9 +20,28 @@ class JurnalKegiatanController extends Controller
             ->orderBy('minggu')
             ->get();
 
+        Storage::deleteDirectory('public/jurnal-kegiatan/');
+
         $grouped = $jurnal_kegiatan->groupBy('minggu')->map(function ($item) {
+
+            $data_jurnal = DB::table('jurnal_kegiatan')
+                ->join('mahasiswa', 'jurnal_kegiatan.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+                ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+                ->join('tempat_pkl', 'jurnal_kegiatan.id_tempat_pkl', '=', 'tempat_pkl.id_tempat_pkl')
+                ->join('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
+                ->join('biodata_industri', 'biodata_industri.id_tempat_pkl', '=', 'biodata_industri.id_biodata_industri')
+                ->select('mahasiswa.nama', 'mahasiswa.nim', 'jurnal_kegiatan.minggu', 'prodi.nama_prodi', 'pembimbing.nama as nama_pembimbing', 'pembimbing.nik', 'biodata_industri.nama_industri', 'biodata_industri.alamat_kantor')
+                ->where('jurnal_kegiatan.id_mahasiswa', Auth::user()->id_mahasiswa)
+                ->first();
+
+            $pdf = PDF::loadView('pdf.jurnal_kegiatan', ['grouped' => $item, 'data_jurnal' => $data_jurnal])->setPaper('a4');
+            $filename = 'jurnal_kegiatan_minggu_' . $item[0]->minggu . '_' . $data_jurnal->nim . '.pdf';
+            Storage::put('public/jurnal-kegiatan/' . $filename, $pdf->output());
+            $pdf_url = asset('/storage/jurnal-kegiatan/' . $filename);
+
             return [
                 'minggu' => $item[0]->minggu,
+                'pdf_url' => $pdf_url,
                 'data_kegiatan' => $item->map(function ($subitem) {
                     return [
                         'id_jurnal_kegiatan' => $subitem->id_jurnal_kegiatan,
@@ -129,7 +150,7 @@ class JurnalKegiatanController extends Controller
 
         $jurnal_kegiatan = DB::table('mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->select( 'mahasiswa.id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
+            ->select('mahasiswa.id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
             ->where('mahasiswa.prodi', $id_prodi)
             ->get();
 
@@ -167,6 +188,7 @@ class JurnalKegiatanController extends Controller
 
         $jurnal_kegiatan = JurnalKegiatan::create([
             'id_mahasiswa' => Auth::id(),
+            'id_tempat_pkl' => $request->id_tempat_pkl,
             'tanggal' => $request->tanggal,
             'minggu' => $request->minggu,
             'bidang_pekerjaan' => $request->bidang_pekerjaan,

@@ -78,7 +78,7 @@ Route::prefix('biodata-industri')->controller(BiodataIndustriController::class)-
         Route::post('/mahasiswa', 'store');
         Route::get('/mahasiswa', 'index');
         Route::post('/mahasiswa/{id}', 'update');
-        Route::get('/mahasiswa/{id}', 'show');
+        Route::get('/mahasiswa/detail', 'show');
         Route::delete('/mahasiswa/{id}', 'destroy');
     });
 

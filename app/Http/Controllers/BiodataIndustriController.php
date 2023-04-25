@@ -7,7 +7,9 @@ use App\Models\PengajuanPKL;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use PDF;
 
 class BiodataIndustriController extends Controller
 {
@@ -55,7 +57,7 @@ class BiodataIndustriController extends Controller
 
         $biodata_industri = DB::table('mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->select( 'mahasiswa.id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
+            ->select('mahasiswa.id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
             ->where('mahasiswa.prodi', $id_prodi)
             ->get();
 
@@ -106,20 +108,56 @@ class BiodataIndustriController extends Controller
         ], 200);
     }
 
-    public function show($id)
+    public function show()
     {
-        $biodata_industri = BiodataIndustri::find($id);
+        $id_mahasiswa = Auth::user()->id_mahasiswa;
 
+        $biodata_industri = DB::table('biodata_industri')
+            ->join('mahasiswa', 'biodata_industri.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+            ->join('tempat_pkl', 'biodata_industri.id_tempat_pkl', '=', 'tempat_pkl.id_tempat_pkl')
+            ->join('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
+            ->select('biodata_industri.*', 'mahasiswa.nama', 'mahasiswa.nim', 'pembimbing.nama as nama_pembimbing', 'pembimbing.nik')
+            ->where('biodata_industri.id_mahasiswa', $id_mahasiswa)
+            ->first();
+    
         if (is_null($biodata_industri)) {
             return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
         }
+    
+        $pdf = PDF::loadView('pdf.biodata_industri', compact('biodata_industri'))
+        ->setPaper('a4');
+    
+        $filename = 'biodata_industri_' . $biodata_industri->id_biodata_industri . '_' . $biodata_industri->nim . '.pdf';
+
+        Storage::put('public/biodata-industri/' . $filename, $pdf->output());
+    
+        $pdf_url = asset('/storage/biodata-industri/' . $filename);
 
         return response()->json([
             'status' => 'success',
             'message' => 'Detail Biodata Industri',
-            'data' => $biodata_industri,
+            'pdf_url' => $pdf_url,
+            'data' => $biodata_industri
         ], 200);
-    }
+    }    
+
+    // public function exportPdf()
+    // {
+    //     $id_mahasiswa = Auth::user()->id_mahasiswa;
+
+    //     $biodata_industri = DB::table('biodata_industri')
+    //         ->join('mahasiswa', 'biodata_industri.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+    //         ->join('tempat_pkl', 'biodata_industri.id_tempat_pkl', '=', 'tempat_pkl.id_tempat_pkl')
+    //         ->join('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
+    //         ->select('biodata_industri.*', 'mahasiswa.nama', 'mahasiswa.nim', 'pembimbing.nama as nama_pembimbing', 'pembimbing.nik')
+    //         ->where('biodata_industri.id_mahasiswa', $id_mahasiswa)
+    //         ->first();
+
+    //     $pdf = PDF::loadView('pdf.biodata_industri', compact('biodata_industri'))
+    //         ->setPaper('a4');
+
+    //     return $pdf->download('biodata_industri.pdf');
+    // }
 
     public function store(Request $request)
     {
@@ -152,6 +190,7 @@ class BiodataIndustriController extends Controller
         if ($biodata_industri) {
             // Jika sudah ada, maka update data biodata industri yang sudah ada
             $biodata_industri->update([
+                'id_tempat_pkl' => $request->id_tempat_pkl,
                 'nama_industri' => $request->nama_industri,
                 'nama_pimpinan' => $request->nama_pimpinan,
                 'alamat_kantor' => $request->alamat_kantor,
@@ -173,6 +212,7 @@ class BiodataIndustriController extends Controller
             // Jika belum ada, maka buat data biodata industri baru
             $biodata_industri = BiodataIndustri::create([
                 'id_mahasiswa' => Auth::id(),
+                'id_tempat_pkl' => $request->id_tempat_pkl,
                 'nama_industri' => $request->nama_industri,
                 'nama_pimpinan' => $request->nama_pimpinan,
                 'alamat_kantor' => $request->alamat_kantor,
@@ -223,6 +263,8 @@ class BiodataIndustriController extends Controller
     public function destroy($id)
     {
         $biodata_industri = BiodataIndustri::findOrFail($id);
+        $filename = 'biodata_industri_' . $biodata_industri->id_biodata_industri . '_' . $biodata_industri->nim . '.pdf';
+        Storage::delete('public/jurnal-kegiatan/' . $filename);
         $biodata_industri->delete();
 
         if ($biodata_industri != null) {
