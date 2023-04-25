@@ -17,5 +17,5 @@ class PenilaianProdi extends Model
         return $this->belongsTo(Mahasiswa::class, 'id_mahasiswa', 'id_mahasiswa');
     }
 
-    protected $fillable = ['presentasi', 'dokumen', 'total_nilai', 'id_mahasiswa'];
+    protected $fillable = ['presentasi', 'dokumen', 'total_nilai', 'id_mahasiswa', 'id_tempat_pkl'];
 }

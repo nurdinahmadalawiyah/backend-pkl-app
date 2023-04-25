@@ -85,6 +85,7 @@ class PenilaianProdiController extends Controller
         if ($penilaian) {
             // Jika sudah ada, maka update data penilaian yang sudah ada
             $penilaian->update([
+                'id_tempat_pkl' => $request->id_tempat_pkl,
                 'presentasi' => $request->presentasi,
                 'dokumen' => $request->dokumen,
                 'total_nilai' => $total_nilai,
@@ -93,6 +94,7 @@ class PenilaianProdiController extends Controller
             // Jika belum ada, maka buat data penilaian baru
             $penilaian = PenilaianProdi::create([
                 'id_mahasiswa' => $request->id_mahasiswa,
+                'id_tempat_pkl' => $request->id_tempat_pkl,
                 'presentasi' => $request->presentasi,
                 'dokumen' => $request->dokumen,
                 'total_nilai' => $total_nilai,

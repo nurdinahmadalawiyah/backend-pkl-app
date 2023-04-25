@@ -19,6 +19,7 @@ class PenilaianPembimbing extends Model
 
     protected $fillable = [
         'id_mahasiswa',
+        'id_tempat_pkl',
         'integritas',
         'profesionalitas',
         'bahasa_inggris',

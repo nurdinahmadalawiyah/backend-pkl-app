@@ -78,6 +78,7 @@ class PenilaianPembimbingController extends Controller
         if ($penilaian) {
             // Jika sudah ada, maka update data penilaian yang sudah ada
             $penilaian->update([
+                'id_tempat_pkl' => $request->id_tempat_pkl,
                 'integritas' => $request->integritas,
                 'profesionalitas' => $request->profesionalitas,
                 'bahasa_inggris' => $request->bahasa_inggris,
@@ -91,6 +92,7 @@ class PenilaianPembimbingController extends Controller
             // Jika belum ada, maka buat data penilaian baru
             $penilaian = PenilaianPembimbing::create([
                 'id_mahasiswa' => $request->id_mahasiswa,
+                'id_tempat_pkl' => $request->id_tempat_pkl,
                 'integritas' => $request->integritas,
                 'profesionalitas' => $request->profesionalitas,
                 'bahasa_inggris' => $request->bahasa_inggris,
