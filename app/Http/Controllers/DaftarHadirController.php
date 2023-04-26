@@ -36,14 +36,13 @@ class DaftarHadirController extends Controller
             ];
         });
 
-        $data_kehadiran = DB::table('daftar_hadir')
-            ->join('mahasiswa', 'daftar_hadir.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+        $data_kehadiran = DB::table('mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->join('tempat_pkl', 'daftar_hadir.id_tempat_pkl', '=', 'tempat_pkl.id_tempat_pkl')
+            ->join('pengajuan_pkl', 'mahasiswa.id_mahasiswa', '=', 'pengajuan_pkl.id_mahasiswa')
+            ->join('tempat_pkl', 'pengajuan_pkl.id_pengajuan', '=', 'tempat_pkl.id_pengajuan')
             ->join('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
-            ->join('biodata_industri', 'biodata_industri.id_tempat_pkl', '=', 'biodata_industri.id_biodata_industri')
-            ->select('mahasiswa.nama', 'mahasiswa.nim', 'daftar_hadir.minggu', 'prodi.nama_prodi', 'pembimbing.nama as nama_pembimbing', 'pembimbing.nik', 'biodata_industri.nama_industri', 'biodata_industri.alamat_kantor')
-            ->where('daftar_hadir.id_mahasiswa', Auth::user()->id_mahasiswa)
+            ->select('mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'pembimbing.nama as nama_pembimbing', 'pembimbing.nik')
+            ->where('mahasiswa.prodi', Auth::user()->id_mahasiswa)
             ->first();
 
         $pdf = PDF::loadView('pdf.daftar_hadir', ['grouped' => $grouped, 'data_kehadiran' => $data_kehadiran])->setPaper('a4');
@@ -172,12 +171,20 @@ class DaftarHadirController extends Controller
             return response()->json($validator->errors());
         }
 
+        // Ambil id tempat pkl
+        $id_tempat_pkl = DB::table('mahasiswa')
+            ->join('pengajuan_pkl', 'mahasiswa.id_mahasiswa', '=', 'pengajuan_pkl.id_mahasiswa')
+            ->join('tempat_pkl', 'pengajuan_pkl.id_pengajuan', '=', 'tempat_pkl.id_pengajuan')
+            ->select('tempat_pkl.id_tempat_pkl',)
+            ->where('mahasiswa.id_mahasiswa', Auth::user()->id_mahasiswa)
+            ->first();
+
         $file = $request->file('tanda_tangan');
         $destinationPath = "public/tanda-tangan";
         $filename = 'tanda-tangan_' . date("Ymd_his") . '_' . $request->user()->nim . '.' . $file->extension();
         $daftar_hadir = DaftarHadir::create([
             'id_mahasiswa' => Auth::id(),
-            'id_tempat_pkl' => $request->id_tempat_pkl,
+            'id_tempat_pkl' => $id_tempat_pkl->id_tempat_pkl,
             'hari_tanggal' => $request->hari_tanggal,
             'minggu' => $request->minggu,
             'tanda_tangan' => $filename

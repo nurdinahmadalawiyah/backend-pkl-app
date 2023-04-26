@@ -79,7 +79,7 @@ Route::prefix('biodata-industri')->controller(BiodataIndustriController::class)-
         Route::get('/mahasiswa', 'index');
         Route::post('/mahasiswa/{id}', 'update');
         Route::get('/mahasiswa/detail', 'show');
-        Route::delete('/mahasiswa/{id}', 'destroy');
+        Route::delete('/mahasiswa', 'destroy');
     });
 
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {

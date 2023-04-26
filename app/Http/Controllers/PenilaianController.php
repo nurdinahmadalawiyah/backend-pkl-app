@@ -13,9 +13,9 @@ class PenilaianController extends Controller
     {
         Storage::deleteDirectory('public/lembar-penilaian/');
 
-        $penilaian = DB::table('penilaian_pembimbing')
-            ->leftJoin('penilaian_prodi', 'penilaian_pembimbing.id_mahasiswa', '=', 'penilaian_prodi.id_mahasiswa')
-            ->join('mahasiswa', 'penilaian_pembimbing.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+        $penilaian = DB::table('mahasiswa')
+            ->leftJoin('penilaian_pembimbing', 'mahasiswa.id_mahasiswa', '=', 'penilaian_pembimbing.id_mahasiswa')
+            ->leftJoin('penilaian_prodi', 'mahasiswa.id_mahasiswa', '=', 'penilaian_prodi.id_mahasiswa')
             ->join('tempat_pkl', 'penilaian_pembimbing.id_tempat_pkl', '=', 'tempat_pkl.id_tempat_pkl')
             ->join('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
@@ -38,7 +38,8 @@ class PenilaianController extends Controller
                 'penilaian_pembimbing.kerja_sama',
                 'penilaian_pembimbing.organisasi',
                 DB::raw('(penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2 AS nilai_akhir'),
-                DB::raw('CASE 
+                DB::raw('CASE
+                    WHEN ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) IS NULL THEN NULL 
                     WHEN ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) >= 85 THEN "A" 
                     WHEN ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) >= 80 AND ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) < 85 THEN "AB" 
                     WHEN ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) >= 75 AND ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) < 80 THEN "B" 

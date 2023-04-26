@@ -29,13 +29,13 @@ class JurnalKegiatanController extends Controller
                 ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
                 ->join('tempat_pkl', 'jurnal_kegiatan.id_tempat_pkl', '=', 'tempat_pkl.id_tempat_pkl')
                 ->join('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
-                ->join('biodata_industri', 'biodata_industri.id_tempat_pkl', '=', 'biodata_industri.id_biodata_industri')
+                ->leftJoin('biodata_industri', 'tempat_pkl.id_tempat_pkl', '=', 'biodata_industri.id_tempat_pkl')
                 ->select('mahasiswa.nama', 'mahasiswa.nim', 'jurnal_kegiatan.minggu', 'prodi.nama_prodi', 'pembimbing.nama as nama_pembimbing', 'pembimbing.nik', 'biodata_industri.nama_industri', 'biodata_industri.alamat_kantor')
                 ->where('jurnal_kegiatan.id_mahasiswa', Auth::user()->id_mahasiswa)
                 ->first();
 
             $pdf = PDF::loadView('pdf.jurnal_kegiatan', ['grouped' => $item, 'data_jurnal' => $data_jurnal])->setPaper('a4');
-            $filename = 'jurnal_kegiatan_minggu_' . $item[0]->minggu . '_' . $data_jurnal->nim . '.pdf';
+            $filename = 'jurnal_kegiatan_minggu_' . $item[0]->minggu . '_' . Auth::user()->nim . '.pdf';
             Storage::put('public/jurnal-kegiatan/' . $filename, $pdf->output());
             $pdf_url = asset('/storage/jurnal-kegiatan/' . $filename);
 
@@ -186,9 +186,17 @@ class JurnalKegiatanController extends Controller
             return response()->json(['message' => 'Pengajuan pkl belum disetujui'], 401);
         }
 
+        // Ambil id tempat pkl
+        $id_tempat_pkl = DB::table('mahasiswa')
+            ->join('pengajuan_pkl', 'mahasiswa.id_mahasiswa', '=', 'pengajuan_pkl.id_mahasiswa')
+            ->join('tempat_pkl', 'pengajuan_pkl.id_pengajuan', '=', 'tempat_pkl.id_pengajuan')
+            ->select('tempat_pkl.id_tempat_pkl',)
+            ->where('mahasiswa.id_mahasiswa', Auth::user()->id_mahasiswa)
+            ->first();
+
         $jurnal_kegiatan = JurnalKegiatan::create([
             'id_mahasiswa' => Auth::id(),
-            'id_tempat_pkl' => $request->id_tempat_pkl,
+            'id_tempat_pkl' => $id_tempat_pkl->id_tempat_pkl,
             'tanggal' => $request->tanggal,
             'minggu' => $request->minggu,
             'bidang_pekerjaan' => $request->bidang_pekerjaan,
