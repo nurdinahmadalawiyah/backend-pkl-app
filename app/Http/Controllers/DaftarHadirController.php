@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use PDF;
 
 class DaftarHadirController extends Controller
 {
@@ -17,6 +18,8 @@ class DaftarHadirController extends Controller
         $daftar_hadir = DaftarHadir::where('id_mahasiswa', $request->user()->id_mahasiswa)
             ->orderBy('minggu')
             ->get();
+
+        Storage::deleteDirectory('public/daftar-hadir/');
 
         $grouped = $daftar_hadir->groupBy('minggu')->map(function ($item) {
             return [
@@ -33,9 +36,25 @@ class DaftarHadirController extends Controller
             ];
         });
 
+        $data_kehadiran = DB::table('daftar_hadir')
+            ->join('mahasiswa', 'daftar_hadir.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+            ->join('tempat_pkl', 'daftar_hadir.id_tempat_pkl', '=', 'tempat_pkl.id_tempat_pkl')
+            ->join('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
+            ->join('biodata_industri', 'biodata_industri.id_tempat_pkl', '=', 'biodata_industri.id_biodata_industri')
+            ->select('mahasiswa.nama', 'mahasiswa.nim', 'daftar_hadir.minggu', 'prodi.nama_prodi', 'pembimbing.nama as nama_pembimbing', 'pembimbing.nik', 'biodata_industri.nama_industri', 'biodata_industri.alamat_kantor')
+            ->where('daftar_hadir.id_mahasiswa', Auth::user()->id_mahasiswa)
+            ->first();
+
+        $pdf = PDF::loadView('pdf.daftar_hadir', ['grouped' => $grouped, 'data_kehadiran' => $data_kehadiran])->setPaper('a4');
+        $filename = 'daftar_hadir_' . $data_kehadiran->nim . '.pdf';
+        Storage::put('public/daftar-hadir/' . $filename, $pdf->output());
+        $pdf_url = asset('storage/daftar-hadir/' . $filename);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Daftar Hadir '  . $request->user()->nama,
+            'pdf_url' => $pdf_url,
             'data' => $grouped->values(),
         ], 200);
     }
@@ -70,7 +89,7 @@ class DaftarHadirController extends Controller
 
         $daftar_hadir = DB::table('mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->select( 'mahasiswa.id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
+            ->select('mahasiswa.id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
             ->where('mahasiswa.prodi', $id_prodi)
             ->get();
 
@@ -158,6 +177,7 @@ class DaftarHadirController extends Controller
         $filename = 'tanda-tangan_' . date("Ymd_his") . '_' . $request->user()->nim . '.' . $file->extension();
         $daftar_hadir = DaftarHadir::create([
             'id_mahasiswa' => Auth::id(),
+            'id_tempat_pkl' => $request->id_tempat_pkl,
             'hari_tanggal' => $request->hari_tanggal,
             'minggu' => $request->minggu,
             'tanda_tangan' => $filename

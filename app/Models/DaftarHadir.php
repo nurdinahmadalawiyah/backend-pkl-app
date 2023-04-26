@@ -19,6 +19,7 @@ class DaftarHadir extends Model
 
     protected $fillable = [
         'id_mahasiswa',
+        'id_tempat_pkl',
         'hari_tanggal',
         'minggu',
         'tanda_tangan'
