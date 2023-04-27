@@ -205,6 +205,7 @@ Route::prefix('mahasiswa')->controller(MahasiswaController::class)->group(functi
 
 Route::prefix('pembimbing')->controller(PembimbingController::class)->group(function () {
     Route::post('login', 'login');
+    Route::post('register', 'register');
     Route::middleware('auth:pembimbing_api', 'throttle:60,1')->group(function () {
         Route::post('logout', 'logout');
         Route::get('me', 'me');

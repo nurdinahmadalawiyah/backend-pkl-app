@@ -42,8 +42,8 @@ class TempatPKLController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'konfirmasi_nama_pembimbing' => 'required',
-            'konfirmasi_nik_pembimbing' => 'required',
+            'id_pengajuan' => 'required',
+            'id_pembimbing' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -53,8 +53,6 @@ class TempatPKLController extends Controller
         $tempat_pkl = TempatPKL::create([
             'id_pengajuan' => $request->id_pengajuan,
             'id_pembimbing' => $request->id_pembimbing,
-            'konfirmasi_nama_pembimbing' => $request->konfirmasi_nama_pembimbing,
-            'konfirmasi_nik_pembimbing' => $request->konfirmasi_nik_pembimbing
         ]);
 
         return response()->json([

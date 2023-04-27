@@ -24,11 +24,27 @@ class PengajuanPKLController extends Controller
 
         $pengajuan = PengajuanPKL::where('id_mahasiswa', $mahasiswa->id_mahasiswa)->orderByDesc('created_at')->get();
 
+        $data_pengajuan = collect();
+        foreach ($pengajuan as $item) {
+            $data_pengajuan->push([
+                'id_pengajuan' => $item->id_pengajuan,
+                'id_mahasiswa' => $item->id_mahasiswa,
+                'nama_perusahaan' => $item->nama_perusahaan,
+                'alamat_perusahaan' => $item->alamat_perusahaan,
+                'tanggal_mulai' => $item->tanggal_mulai,
+                'tanggal_selesai' => $item->tanggal_selesai,
+                'status' => $item->status,
+                'surat' => $item->surat ? asset('/storage/surat-pengantar-pkl/' . $item->surat) : null,
+                'created_at' => $item->created_at,
+                'updated_at' => $item->updated_at
+            ]);
+        }
+
         return response()->json([
             'status' => 'success',
             'message' => 'Status Pengajuan PKL',
             'user' => $prodi,
-            'data' => $pengajuan
+            'data' => $data_pengajuan
         ], 200);
     }
 
@@ -143,11 +159,11 @@ class PengajuanPKLController extends Controller
         $pengajuan_pkl = PengajuanPKL::findOrFail($id);
 
         $data_surat = DB::table('mahasiswa')
-        ->join('pengajuan_pkl', 'mahasiswa.id_mahasiswa', '=', 'pengajuan_pkl.id_mahasiswa')
-        ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-        ->select('mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.semester', 'prodi.nama_ketua_prodi', 'prodi.nidn_ketua_prodi')
-        ->where('pengajuan_pkl.id_pengajuan', '=', $id)
-        ->first();
+            ->join('pengajuan_pkl', 'mahasiswa.id_mahasiswa', '=', 'pengajuan_pkl.id_mahasiswa')
+            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+            ->select('mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.semester', 'prodi.nama_ketua_prodi', 'prodi.nidn_ketua_prodi')
+            ->where('pengajuan_pkl.id_pengajuan', '=', $id)
+            ->first();
 
         $filename = 'surat_pengantar_pkl_' . $data_surat->nim . '.pdf';
         Storage::delete('public/surat-pengantar-pkl/' . $filename);

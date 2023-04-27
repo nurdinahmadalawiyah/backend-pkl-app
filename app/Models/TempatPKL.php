@@ -15,7 +15,5 @@ class TempatPKL extends Model
     protected $fillable = [
         'id_pengajuan',
         'id_pembimbing',
-        'konfirmasi_nama_pembimbing',
-        'konfirmasi_nik_pembimbing',
     ];
 }

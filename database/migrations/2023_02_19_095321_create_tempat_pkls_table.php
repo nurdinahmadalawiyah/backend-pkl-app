@@ -17,8 +17,6 @@ return new class extends Migration
             $table->id('id_tempat_pkl');
             $table->unsignedBigInteger('id_pengajuan');
             $table->unsignedBigInteger('id_pembimbing')->nullable();
-            $table->string('konfirmasi_nama_pembimbing', 50);
-            $table->string('konfirmasi_nik_pembimbing', 50);
             $table->timestamps();
 
             $table->foreign('id_pembimbing')->references('id_pembimbing')->on('pembimbing');
