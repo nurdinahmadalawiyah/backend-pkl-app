@@ -20,12 +20,16 @@ class ProdiTableSeeder extends Seeder
                 'username' => 'prodiIF',
                 'nama_prodi' => 'Teknik Informatika',
                 'kode_prodi' => 'IF',
+                'nama_ketua_prodi' => 'Castaka Agus Sugianto S, M.Kom., MCS',
+                'nidn_ketua_prodi' => '0410048704',
                 'password' => bcrypt('prodiiftedc')
             ],
             [
                 'username' => 'prodiTK',
                 'nama_prodi' => 'Teknik Komputer',
                 'kode_prodi' => 'TK',
+                'nama_ketua_prodi' => 'Castaka Agus Sugianto S, M.Kom., MCS',
+                'nidn_ketua_prodi' => '0410048704',
                 'password' => bcrypt('proditktedc')
             ],
         ];

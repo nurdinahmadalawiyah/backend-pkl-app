@@ -6,7 +6,9 @@ use App\Models\PengajuanPKL;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use PDF;
 
 class PengajuanPKLController extends Controller
 {
@@ -100,19 +102,57 @@ class PengajuanPKLController extends Controller
     public function setujuiPengajuan($id)
     {
         $pengajuan_pkl = PengajuanPKL::findOrFail($id);
+
+        $data_surat = DB::table('mahasiswa')
+            ->join('pengajuan_pkl', 'mahasiswa.id_mahasiswa', '=', 'pengajuan_pkl.id_mahasiswa')
+            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+            ->select('mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.semester', 'prodi.nama_ketua_prodi', 'prodi.nidn_ketua_prodi')
+            ->where('pengajuan_pkl.id_pengajuan', '=', $id)
+            ->first();
+
+        $pdf = PDF::loadView('pdf.surat_pengantar_pkl', compact(['pengajuan_pkl', 'data_surat']))
+            ->setPaper('a4');
+
+        $filename = 'surat_pengantar_pkl_' . $data_surat->nim . '.pdf';
+        Storage::put('public/surat-pengantar-pkl/' . $filename, $pdf->output());
+
+        $pengajuan_pkl->surat = $filename;
         $pengajuan_pkl->status = 'disetujui';
         $pengajuan_pkl->save();
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Pengajuan pkl berhasil disetujui',
-            'data' => $pengajuan_pkl,
+            'message' => 'Pengajuan PKL berhasil disetujui',
+            'data' => [
+                'id_pengajuan' => $pengajuan_pkl->id_pengajuan,
+                'id_mahasiswa' => $pengajuan_pkl->id_mahasiswa,
+                'nama_perusahaan' => $pengajuan_pkl->nama_perusahaan,
+                'alamat_perusahaan' => $pengajuan_pkl->alamat_perusahaan,
+                'tanggal_mulai' => $pengajuan_pkl->tanggal_mulai,
+                'tanggal_selesai' => $pengajuan_pkl->tanggal_selesai,
+                'status' => $pengajuan_pkl->status,
+                'surat' => asset('/storage/surat-pengantar-pkl/' . $pengajuan_pkl->surat),
+                'created_at' => $pengajuan_pkl->created_at,
+                'updated_at' => $pengajuan_pkl->updated_at
+            ]
         ]);
     }
 
     public function tolakPengajuan($id)
     {
         $pengajuan_pkl = PengajuanPKL::findOrFail($id);
+
+        $data_surat = DB::table('mahasiswa')
+        ->join('pengajuan_pkl', 'mahasiswa.id_mahasiswa', '=', 'pengajuan_pkl.id_mahasiswa')
+        ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+        ->select('mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.semester', 'prodi.nama_ketua_prodi', 'prodi.nidn_ketua_prodi')
+        ->where('pengajuan_pkl.id_pengajuan', '=', $id)
+        ->first();
+
+        $filename = 'surat_pengantar_pkl_' . $data_surat->nim . '.pdf';
+        Storage::delete('public/surat-pengantar-pkl/' . $filename);
+
+        $pengajuan_pkl->surat = null;
         $pengajuan_pkl->status = 'ditolak';
         $pengajuan_pkl->save();
 
