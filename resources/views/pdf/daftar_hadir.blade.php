@@ -97,20 +97,31 @@
                 <td class="td-jurnal">
                     {{ $data['minggu'] . ' / ' }}
                     @if (count($data['data_kehadiran']) == 1)
-                        {{ \Carbon\Carbon::parse($data['data_kehadiran']->first()['hari_tanggal'])->format('d F Y') }}
+                        {{ strftime('%e %B %Y', strtotime($data['data_kehadiran']->first()['hari_tanggal'])) }}
                     @else
-                        {{ \Carbon\Carbon::parse($data['data_kehadiran']->first()['hari_tanggal'])->format('d') }}
-                        - {{ \Carbon\Carbon::parse($data['data_kehadiran']->last()['hari_tanggal'])->format('d F Y') }}
+                        {{ strftime('%e', strtotime($data['data_kehadiran']->first()['hari_tanggal'])) }}
+                        - {{ strftime('%e %B %Y', strtotime($data['data_kehadiran']->last()['hari_tanggal'])) }}
                     @endif
                 </td>
                 @for ($i = 0; $i < 6; $i++)
                     <td class="td-jurnal">
-                        @if (isset($data['data_kehadiran'][$i]) && !empty($data['data_kehadiran'][$i]['tanda-tangan']))
+                        @foreach ($data['data_kehadiran'] as $kehadiran)
+                            @if (date('N', strtotime($kehadiran['hari_tanggal'])) == $i + 1)
+                                <img src="{{ $kehadiran['tanda-tangan'] }}" alt="Tanda Tangan"
+                                    style="max-width:100%; max-height:100%;">
+                            @endif
+                        @endforeach
+                    </td>
+                @endfor
+
+                {{-- @for ($i = 0; $i < 6; $i++)
+                    <td class="td-jurnal">
+                        @if (!empty($data['data_kehadiran'][$i]['tanda-tangan']))
                             <img src="{{ $data['data_kehadiran'][$i]['tanda-tangan'] }}" alt="Tanda Tangan"
                                 style="max-width:100%; max-height:100%;">
                         @endif
                     </td>
-                @endfor
+                @endfor --}}
             </tr>
         @endforeach
     </table>
