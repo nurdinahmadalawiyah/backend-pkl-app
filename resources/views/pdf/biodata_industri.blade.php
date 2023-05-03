@@ -36,21 +36,6 @@
             /* Tambahkan empat karakter spasi */
         }
 
-        .custom-ol {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .custom-ol li {
-            counter-increment: custom-counter;
-            margin-bottom: 0px;
-        }
-
-        .custom-ol li::before {
-            content: counter(custom-counter) ")";
-            margin-right: 5px;
-        }
-
         .table-tenaga-kerja {
             border-collapse: collapse;
             width: 100%;
@@ -116,15 +101,14 @@
             <td>:</td>
         </tr>
         <tr>
-            <td style="text-align: center;">
+            <td style="text-align: left; padding-left: 20px">
                 @php
                     $bidang_usaha_jasa = explode("\n", $biodata_industri->bidang_usaha_jasa);
+                    $counter = 1;
                 @endphp
-                <ol class="custom-ol">
                     @foreach ($bidang_usaha_jasa as $item)
-                        <li>{{ $item }}</li>
+                    {{ $counter++ }})  {{ $item }} <br>
                     @endforeach
-                </ol>
             </td>
         </tr>
         <tr>
@@ -205,7 +189,6 @@
             </td>
         </tr>
     </table>
-    <br>
     <table class="table-tenaga-kerja">
         <tr>
             <td> Jumlah Tenaga Kerja
@@ -220,42 +203,46 @@
             </td>
         </tr>
         <tr>
-            <td style="text-align: right">Cimahi, <?php echo date('d F Y'); ?></td>
+            @php
+                setlocale(LC_TIME, 'id');
+                $tanggal = strftime('%e %B %Y');
+            @endphp
+            <td style="text-align: right">Cimahi, <?php echo $tanggal; ?></td>
         </tr>
     </table>
-    <br>
+
     <table class="table-sign">
         <tr>
             <td style="padding-bottom: 10px" colspan="2"> Mengetahui </td>
-          </tr>
+        </tr>
         <tr>
             <td>
                 <div style="text-align: left">
                     <div style="display: inline-block; text-align: center">
-                      Direktur / Pembimbing Industri
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <b><u>{{ $biodata_industri->nama_pembimbing }}</u></b><br>
-                      NIK. {{ $biodata_industri->nik }}
+                        Direktur / Pembimbing Industri
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <b><u>{{ $biodata_industri->nama_pembimbing }}</u></b><br>
+                        NIK. {{ $biodata_industri->nik }}
                     </div>
-                  </div>
+                </div>
             </td>
-            <td >
+            <td>
                 <div style="text-align: right">
                     <div style="display: inline-block; text-align: center">
-                      Mahasiswa PKL
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <b><u>{{ $biodata_industri->nama }}</u></b><br>
-                      NIM. {{ $biodata_industri->nim }}
+                        Mahasiswa PKL
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <b><u>{{ $biodata_industri->nama }}</u></b><br>
+                        NIM. {{ $biodata_industri->nim }}
                     </div>
-                  </div>
+                </div>
             </td>
         </tr>
     </table>

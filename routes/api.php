@@ -217,4 +217,6 @@ Route::prefix('pembimbing')->controller(PembimbingController::class)->group(func
         Route::put('update/{id}', 'update');
         Route::delete('delete/{id}', 'destroy');
     });
+
+    Route::get('/list-pembimbing', 'index');
 });
