@@ -33,6 +33,8 @@ class BiodataIndustri extends Model
         'jumlah_tenaga_kerja_sltp',
         'jumlah_tenaga_kerja_slta',
         'jumlah_tenaga_kerja_smk',
+        'jumlah_tenaga_kerja_smea',
+        'jumlah_tenaga_kerja_smkk',
         'jumlah_tenaga_kerja_sarjana_muda',
         'jumlah_tenaga_kerja_sarjana_magister',
         'jumlah_tenaga_kerja_sarjana_doktor',

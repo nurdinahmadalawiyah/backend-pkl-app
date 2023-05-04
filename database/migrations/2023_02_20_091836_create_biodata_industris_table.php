@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('alamat_kantor');
             $table->string('no_telp_fax', 20);
             $table->string('contact_person', 100);
-            $table->string('bidang_usaha_jasa', 50);
+            $table->text('bidang_usaha_jasa');
             $table->string('spesialisasi_produksi_jasa', 50);
             $table->string('jangkauan_pemasaran', 50);
             $table->unsignedInteger('kapasitas_produksi')->nullable();
@@ -30,6 +30,8 @@ return new class extends Migration
             $table->unsignedInteger('jumlah_tenaga_kerja_sltp')->nullable();
             $table->unsignedInteger('jumlah_tenaga_kerja_slta')->nullable();
             $table->unsignedInteger('jumlah_tenaga_kerja_smk')->nullable();
+            $table->unsignedInteger('jumlah_tenaga_kerja_smea')->nullable();
+            $table->unsignedInteger('jumlah_tenaga_kerja_smkk')->nullable();
             $table->unsignedInteger('jumlah_tenaga_kerja_sarjana_muda')->nullable();
             $table->unsignedInteger('jumlah_tenaga_kerja_sarjana_magister')->nullable();
             $table->unsignedInteger('jumlah_tenaga_kerja_sarjana_doktor')->nullable();

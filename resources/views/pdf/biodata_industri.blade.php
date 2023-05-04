@@ -155,13 +155,13 @@
         <tr>
             <td class="td-tenaga-kerja">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SMEA</td>
             <td class="td-tenaga-kerja">
-                <center></center>
+                <center>{{ $biodata_industri->jumlah_tenaga_kerja_smea }}</center>
             </td>
         </tr>
         <tr>
             <td class="td-tenaga-kerja">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SMKK/SMTK</td>
             <td class="td-tenaga-kerja">
-                <center></center>
+                <center>{{ $biodata_industri->jumlah_tenaga_kerja_smkk }}</center>
             </td>
         </tr>
         <tr>
@@ -195,6 +195,8 @@
                 {{ $biodata_industri->jumlah_tenaga_kerja_sd +
                     $biodata_industri->jumlah_tenaga_kerja_sltp +
                     $biodata_industri->jumlah_tenaga_kerja_smk +
+                    $biodata_industri->jumlah_tenaga_kerja_smea +
+                    $biodata_industri->jumlah_tenaga_kerja_smkk +
                     $biodata_industri->jumlah_tenaga_kerja_slta +
                     $biodata_industri->jumlah_tenaga_kerja_sarjana_muda +
                     $biodata_industri->jumlah_tenaga_kerja_sarjana_magister +
