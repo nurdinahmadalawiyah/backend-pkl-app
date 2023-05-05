@@ -159,7 +159,6 @@ class MahasiswaController extends Controller
 
         if ($disetujui && $disetujui->id_tempat_pkl != null) {
             return response()->json([
-                'status' => 'success',
                 'message' => 'Status Mahasiswa ' . Auth::user()->nama,
                 'data' => [
                     'id_mahasiswa' => $disetujui->id_mahasiswa,
@@ -169,7 +168,6 @@ class MahasiswaController extends Controller
             ]);
         } elseif ($disetujui) {
             return response()->json([
-                'status' => 'success',
                 'message' => 'Status Mahasiswa ' . Auth::user()->nama,
                 'data' => [
                     'id_mahasiswa' => $disetujui->id_mahasiswa,
@@ -179,7 +177,6 @@ class MahasiswaController extends Controller
             ]);
         } elseif ($menunggu && $menunggu->id_tempat_pkl == null) {
             return response()->json([
-                'status' => 'success',
                 'message' => 'Status Mahasiswa ' . Auth::user()->nama,
                 'data' => [
                     'id_mahasiswa' => $menunggu->id_mahasiswa,
@@ -189,7 +186,6 @@ class MahasiswaController extends Controller
             ]);
         } elseif ($ditolak && $menunggu->id_tempat_pkl == null) {
             return response()->json([
-                'status' => 'success',
                 'message' => 'Status Mahasiswa ' . Auth::user()->nama,
                 'data' => [
                     'id_mahasiswa' => $ditolak->id_mahasiswa,
@@ -199,7 +195,6 @@ class MahasiswaController extends Controller
             ]);
         } else {
             return response()->json([
-                'status' => 'success',
                 'message' => 'Status Mahasiswa ' . Auth::user()->nama,
                 'data' => [
                     'id_mahasiswa' => $ditolak->id_mahasiswa,
