@@ -131,6 +131,85 @@ class MahasiswaController extends Controller
         ], 200);
     }
 
+    public function checkStatus()
+    {
+        $disetujui = DB::table('pengajuan_pkl')
+            ->join('mahasiswa', 'mahasiswa.id_mahasiswa', '=', 'pengajuan_pkl.id_mahasiswa')
+            ->leftJoin('tempat_pkl', 'tempat_pkl.id_pengajuan', '=', 'pengajuan_pkl.id_pengajuan')
+            ->select('mahasiswa.id_mahasiswa', 'pengajuan_pkl.status', 'tempat_pkl.id_tempat_pkl',)
+            ->where('mahasiswa.id_mahasiswa', Auth::user()->id_mahasiswa)
+            ->where('pengajuan_pkl.status', 'disetujui')
+            ->first();
+
+        $menunggu = DB::table('pengajuan_pkl')
+            ->join('mahasiswa', 'mahasiswa.id_mahasiswa', '=', 'pengajuan_pkl.id_mahasiswa')
+            ->leftJoin('tempat_pkl', 'tempat_pkl.id_pengajuan', '=', 'pengajuan_pkl.id_pengajuan')
+            ->select('mahasiswa.id_mahasiswa', 'pengajuan_pkl.status', 'tempat_pkl.id_tempat_pkl',)
+            ->where('mahasiswa.id_mahasiswa', Auth::user()->id_mahasiswa)
+            ->where('pengajuan_pkl.status', 'menunggu')
+            ->first();
+
+        $ditolak = DB::table('pengajuan_pkl')
+            ->join('mahasiswa', 'mahasiswa.id_mahasiswa', '=', 'pengajuan_pkl.id_mahasiswa')
+            ->leftJoin('tempat_pkl', 'tempat_pkl.id_pengajuan', '=', 'pengajuan_pkl.id_pengajuan')
+            ->select('mahasiswa.id_mahasiswa', 'pengajuan_pkl.status', 'tempat_pkl.id_tempat_pkl',)
+            ->where('mahasiswa.id_mahasiswa', Auth::user()->id_mahasiswa)
+            ->where('pengajuan_pkl.status', 'ditolak')
+            ->first();
+
+        if ($disetujui && $disetujui->id_tempat_pkl != null) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Status Mahasiswa ' . Auth::user()->nama,
+                'data' => [
+                    'id_mahasiswa' => $disetujui->id_mahasiswa,
+                    'status' => $disetujui->status,
+                    'telah_konfirmasi' => "true",
+                ]
+            ]);
+        } elseif ($disetujui) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Status Mahasiswa ' . Auth::user()->nama,
+                'data' => [
+                    'id_mahasiswa' => $disetujui->id_mahasiswa,
+                    'status' => $disetujui->status,
+                    'telah_konfirmasi' => "false",
+                ]
+            ]);
+        } elseif ($menunggu && $menunggu->id_tempat_pkl == null) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Status Mahasiswa ' . Auth::user()->nama,
+                'data' => [
+                    'id_mahasiswa' => $menunggu->id_mahasiswa,
+                    'status' => $menunggu->status,
+                    'telah_konfirmasi' => "false",
+                ]
+            ]);
+        } elseif ($ditolak && $menunggu->id_tempat_pkl == null) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Status Mahasiswa ' . Auth::user()->nama,
+                'data' => [
+                    'id_mahasiswa' => $ditolak->id_mahasiswa,
+                    'status' => $ditolak->status,
+                    'telah_konfirmasi' => "false",
+                ]
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Status Mahasiswa ' . Auth::user()->nama,
+                'data' => [
+                    'id_mahasiswa' => $ditolak->id_mahasiswa,
+                    'status' => null,
+                    'telah_konfirmasi' => null,
+                ]
+            ]);
+        }
+    }
+
     public function updateProfile(Request $request)
     {
         $mahasiswa = auth('mahasiswa_api')->user();

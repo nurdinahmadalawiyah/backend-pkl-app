@@ -191,6 +191,7 @@ Route::prefix('mahasiswa')->controller(MahasiswaController::class)->group(functi
     Route::middleware('auth:mahasiswa_api', 'throttle:60,1')->group(function () {
         Route::post('logout', 'logout');
         Route::get('me', 'me');
+        Route::get('status', 'checkStatus');
         Route::put('update-password', 'updatePassword');
         Route::put('update-profile', 'updateProfile');
     });
