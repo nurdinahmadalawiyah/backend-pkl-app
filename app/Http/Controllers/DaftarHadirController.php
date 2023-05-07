@@ -118,7 +118,7 @@ class DaftarHadirController extends Controller
                         'id_mahasiswa' => $subitem->id_mahasiswa,
                         'hari_tanggal' => $subitem->hari_tanggal,
                         'minggu' => $subitem->minggu,
-                        'tanda_tangan' => asset('/storage/tanda-tangan/' . $subitem->tanda_tangan),
+                        'tanda-tangan' => asset('/storage/tanda-tangan/' . $subitem->tanda_tangan),
                     ];
                 }),
             ];
