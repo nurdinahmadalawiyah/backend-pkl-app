@@ -209,6 +209,10 @@ Route::prefix('mahasiswa')->controller(MahasiswaController::class)->group(functi
         Route::put('update/prodi/{id}', 'update');
         Route::delete('delete/{id}', 'destroy');
     });
+
+    Route::middleware('auth:pembimbing_api', 'throttle:60,1')->group(function () {
+        Route::get('/list/pembimbing', 'listByPembimbing');
+    });
 });
 
 Route::prefix('pembimbing')->controller(PembimbingController::class)->group(function () {
