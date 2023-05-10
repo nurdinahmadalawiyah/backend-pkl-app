@@ -53,7 +53,6 @@ Route::prefix('tempat-pkl')->controller(TempatPKLController::class)->group(funct
 
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
         Route::get('/prodi', 'index');
-        Route::post('/prodi/{id}', 'selectMentor');
     });
 });
 
@@ -83,7 +82,6 @@ Route::prefix('biodata-industri')->controller(BiodataIndustriController::class)-
     });
 
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
-        Route::get('/prodi/list', 'showByProdi');
         Route::get('/prodi/detail/{id}', 'detailByProdi');
     });
 
@@ -102,7 +100,6 @@ Route::prefix('jurnal-kegiatan')->controller(JurnalKegiatanController::class)->g
     });
 
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
-        Route::get('/prodi', 'showByProdi');
         Route::get('/prodi/{id}', 'indexByProdi');
     });
 
@@ -121,7 +118,6 @@ Route::prefix('daftar-hadir')->controller(DaftarHadirController::class)->group(f
     });
 
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
-        Route::get('/prodi', 'indexByProdi');
         Route::get('/prodi/{id}', 'showByProdi');
     });
 

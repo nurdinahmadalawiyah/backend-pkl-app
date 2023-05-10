@@ -120,27 +120,6 @@ class JurnalKegiatanController extends Controller
         ], 200);
     }
 
-    public function showByProdi()
-    {
-        $id_prodi = auth()->user()->id_prodi;
-
-        $jurnal_kegiatan = DB::table('mahasiswa')
-            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->select('mahasiswa.id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
-            ->where('mahasiswa.prodi', $id_prodi)
-            ->get();
-
-        if (is_null($jurnal_kegiatan)) {
-            return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
-        }
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Jurnal Kegiatan Mahasiswa ' . auth()->user()->nama_prodi,
-            'data' => $jurnal_kegiatan
-        ], 200);
-    }
-
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [

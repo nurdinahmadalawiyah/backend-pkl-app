@@ -27,27 +27,6 @@ class BiodataIndustriController extends Controller
         ], 200);
     }
 
-    public function showByProdi()
-    {
-        $id_prodi = auth()->user()->id_prodi;
-
-        $biodata_industri = DB::table('mahasiswa')
-            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->select('mahasiswa.id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
-            ->where('mahasiswa.prodi', $id_prodi)
-            ->get();
-
-        if (is_null($biodata_industri)) {
-            return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
-        }
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Biodata Industri Mahasiswa ' . auth()->user()->nama_prodi,
-            'data' => $biodata_industri
-        ], 200);
-    }
-
     public function detailByProdi($id)
     {
         $biodata_industri = DB::table('biodata_industri')

@@ -101,27 +101,6 @@ class DaftarHadirController extends Controller
         ], 200);
     }
 
-    public function indexByProdi()
-    {
-        $id_prodi = auth()->user()->id_prodi;
-
-        $daftar_hadir = DB::table('mahasiswa')
-            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->select('mahasiswa.id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.prodi')
-            ->where('mahasiswa.prodi', $id_prodi)
-            ->get();
-
-        if (is_null($daftar_hadir)) {
-            return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
-        }
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Daftar Hadir Mahasiswa ' . auth()->user()->nama_prodi,
-            'data' => $daftar_hadir
-        ], 200);
-    }
-
     public function showByPembimbing($id)
     {
         $daftar_hadir = DaftarHadir::where('id_mahasiswa', $id)
