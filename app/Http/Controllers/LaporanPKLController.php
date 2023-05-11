@@ -18,16 +18,26 @@ class LaporanPKLController extends Controller
             ->join('mahasiswa', 'laporan_pkl.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
             ->select('laporan_pkl.id_laporan', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'laporan_pkl.file', 'laporan_pkl.tanggal_upload')
+            ->where('mahasiswa.prodi', '=', Auth::user()->id_prodi)
             ->get();
 
-        $laporan_pkl_resource = $laporan_pkl->map(function ($laporan) {
-            return new LaporanPKLResource($laporan);
-        });
+        $data = [];
+
+        foreach ($laporan_pkl as $laporan) {
+            $data[] = [
+                'id_laporan' => $laporan->id_laporan,
+                'nama' => $laporan->nama,
+                'nim' => $laporan->nim,
+                'nama_prodi' => $laporan->nama_prodi,
+                'file' => asset('/storage/laporan/' . $laporan->file),
+                'tanggal_upload' => $laporan->tanggal_upload,
+            ];
+        }
 
         return response()->json([
             'status' => 'success',
             'message' => 'Semua Data Laporan PKL',
-            'data' => $laporan_pkl_resource
+            'data' => $data
         ], 200);
     }
 
@@ -41,15 +51,31 @@ class LaporanPKLController extends Controller
             return response()->json($validator->errors());
         }
 
-        $file = $request->file('file');
-        $destinationPath = "public\laporan";
-        $filename = 'laporan_' . date("Ymd_his") . '_' . Auth::user()->nim . '.' . $file->extension();
-        $laporan_pkl = LaporanPKL::create([
-            'id_mahasiswa' => Auth::id(),
-            'file' => $filename,
-            'tanggal_upload' => now(),
-        ]);
-        Storage::putFileAs($destinationPath, $file, $filename);
+        // Cek apakah mahasiswa sudah memiliki laporan
+        $laporan_pkl = LaporanPKL::where('id_mahasiswa', Auth::user()->id_mahasiswa)->first();
+
+        if ($laporan_pkl) {
+            Storage::delete('public/laporan/' . $laporan_pkl->file);
+
+            $file = $request->file('file');
+            $destinationPath = "public\laporan";
+            $filename = 'laporan_' . date("Ymd_his") . '_' . Auth::user()->nim . '.' . $file->extension();
+            $laporan_pkl->update([
+                'file' => $filename,
+                'tanggal_upload' => now(),
+            ]);
+            Storage::putFileAs($destinationPath, $file, $filename);
+        } else {
+            $file = $request->file('file');
+            $destinationPath = "public\laporan";
+            $filename = 'laporan_' . date("Ymd_his") . '_' . Auth::user()->nim . '.' . $file->extension();
+            $laporan_pkl = LaporanPKL::create([
+                'id_mahasiswa' => Auth::id(),
+                'file' => $filename,
+                'tanggal_upload' => now(),
+            ]);
+            Storage::putFileAs($destinationPath, $file, $filename);
+        }
 
         return response()->json([
             'status' => 'success',

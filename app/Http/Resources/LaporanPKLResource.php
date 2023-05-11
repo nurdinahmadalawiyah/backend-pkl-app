@@ -16,9 +16,7 @@ class LaporanPKLResource extends JsonResource
     {
         return [
             'id_laporan' => $this->id_laporan,
-            'nama' => $this->nama,
-            'nim' => $this->nim,
-            'nama_prodi' => $this->nama_prodi,
+            'id_mahasiswa' => $this->id_mahasiswa,
             'file' => asset('/storage/laporan/' . $this->file),
             'tanggal_upload' => $this->tanggal_upload,
         ];
