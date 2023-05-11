@@ -17,7 +17,7 @@ class LowonganPKLController extends Controller
     public function index()
     {
         $lowongan_pkl = LowonganPKL::orderBy('created_at', 'desc')->get();
-    
+
         return response()->json([
             'status' => 'success',
             'message' => 'Semua Data Lowongan PKL',
@@ -28,14 +28,14 @@ class LowonganPKLController extends Controller
     public function showByProdi()
     {
         $prodi = Auth::user();
-    
+
         if (!$prodi) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Data prodi tidak ditemukan'
             ], 404);
         }
-    
+
         $lowongan_pkl = LowonganPKL::where('id_prodi', $prodi->id_prodi)->get();
 
         return response()->json([
@@ -45,20 +45,26 @@ class LowonganPKLController extends Controller
         ], 200);
     }
 
-    public function searchByKeyword(Request $request)
-    {
-        $keyword = $request->query('q');
+public function searchByKeyword(Request $request)
+{
+    $keyword = $request->query('q');
 
+    if (empty($keyword)) {
+        $lowongan_pkl = [];
+    } else {
         $lowongan_pkl = LowonganPKL::where('posisi', 'like', '%' . $keyword . '%')
             ->orWhere('nama_perusahaan', 'like', '%' . $keyword . '%')
             ->get();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Hasil Pencarian',
-            'data' => LowonganPKLResource::collection($lowongan_pkl)
-        ], 200);
     }
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Hasil Pencarian',
+        'data' => LowonganPKLResource::collection($lowongan_pkl)
+    ], 200);
+}
+
+
 
     public function prosple()
     {
@@ -73,7 +79,7 @@ class LowonganPKLController extends Controller
                 'nama_perusahaan' => $node->filter("header[class='Teaser__TeaserHeader-sc-129e2mv-1 JobTeaserstyle__JobTeaserHeader-sc-1p2iccb-1 iBnwQU bycdHT']")->text(),
                 'alamat_perusahaan' => $node->filter("div[class='sc-gsTCUz JobTeaserstyle__JobLocation-sc-1p2iccb-8 hAURsc jOLgFK']")->text(),
                 'gambar' => $node->filter("img[src]")->attr('src'),
-                'url' => 'https://id.prosple.com'.$node->filter("a[href]")->attr('href'),
+                'url' => 'https://id.prosple.com' . $node->filter("a[href]")->attr('href'),
                 'sumber' => 'Prosple'
             ];
         });
@@ -99,13 +105,12 @@ class LowonganPKLController extends Controller
                 'nama_perusahaan' => $node->filter("header[class='Teaser__TeaserHeader-sc-129e2mv-1 JobTeaserstyle__JobTeaserHeader-sc-1p2iccb-1 iBnwQU bycdHT']")->text(),
                 'alamat_perusahaan' => $node->filter("div[class='sc-gsTCUz JobTeaserstyle__JobLocation-sc-1p2iccb-8 hAURsc jOLgFK']")->text(),
                 'gambar' => $node->filter("img[src]")->attr('src'),
-                'url' => 'https://id.prosple.com'.$node->filter("a[href]")->attr('href'),
+                'url' => 'https://id.prosple.com' . $node->filter("a[href]")->attr('href'),
                 'sumber' => 'Prosple'
             ];
         });
 
-        foreach($data as $data)
-        {
+        foreach ($data as $data) {
             LowonganPKL::create($data);
         }
 
@@ -164,7 +169,7 @@ class LowonganPKLController extends Controller
         } else {
             $lowongan_pkl->update($request->all());
         }
-        
+
 
         return response()->json([
             'status' => 'success',
