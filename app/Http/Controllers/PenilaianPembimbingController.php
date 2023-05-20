@@ -36,8 +36,18 @@ class PenilaianPembimbingController extends Controller
             ->first();
 
         if (is_null($penilaian)) {
-            return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
+            return response()->json(['error' => 'Data Tidak Ditemukan.']);
         }
+
+        // Konversi kolom numerik ke format desimal dengan 2 angka di belakang koma
+        $penilaian->integritas = number_format($penilaian->integritas, 2);
+        $penilaian->profesionalitas = number_format($penilaian->profesionalitas, 2);
+        $penilaian->bahasa_inggris = number_format($penilaian->bahasa_inggris, 2);
+        $penilaian->teknologi_informasi = number_format($penilaian->teknologi_informasi, 2);
+        $penilaian->komunikasi = number_format($penilaian->komunikasi, 2);
+        $penilaian->kerja_sama = number_format($penilaian->kerja_sama, 2);
+        $penilaian->organisasi = number_format($penilaian->organisasi, 2);
+        $penilaian->total_nilai = number_format($penilaian->total_nilai, 2);
 
         return response()->json([
             'status' => 'success',
@@ -50,6 +60,7 @@ class PenilaianPembimbingController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id_mahasiswa' => 'required|exists:mahasiswa,id_mahasiswa',
+            'id_tempat_pkl' => 'required',
             'integritas' => 'required|numeric|min:0|max:100',
             'profesionalitas' => 'required|numeric|min:0|max:100',
             'bahasa_inggris' => 'required|numeric|min:0|max:100',

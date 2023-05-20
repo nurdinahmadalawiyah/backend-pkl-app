@@ -20,6 +20,10 @@ class LaporanPKLController extends Controller
             ->select('laporan_pkl.id_laporan', 'mahasiswa.nama', 'mahasiswa.nim', 'laporan_pkl.file', 'laporan_pkl.tanggal_upload')
             ->first();
 
+        if (is_null($laporan_pkl)) {
+            return response()->json(['error' => 'Data Tidak Ditemukan.']);
+        }
+
         return response()->json([
             'status' => 'success',
             'message' => 'Laporan PKL ' . Auth::user()->nama,
