@@ -96,11 +96,26 @@ class PengajuanPKLController extends Controller
         if (is_null($pengajuan_pkl)) {
             return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
         }
+        
 
         return response()->json([
             'status' => 'success',
             'message' => 'Detail Pengajuan PKL id ' . $id,
-            'data' => $pengajuan_pkl,
+            'data' => [
+                'id_pengajuan' => $pengajuan_pkl->id_pengajuan,
+                'id_mahasiswa' => $pengajuan_pkl->id_mahasiswa,
+                'nama_perusahaan' => $pengajuan_pkl->nama_perusahaan,
+                'alamat_perusahaan' => $pengajuan_pkl->alamat_perusahaan,
+                'tanggal_mulai' => $pengajuan_pkl->tanggal_mulai,
+                'tanggal_selesai' => $pengajuan_pkl->tanggal_selesai,
+                'status' => $pengajuan_pkl->status,
+                'surat' => asset('/storage/surat-pengantar-pkl/' . $pengajuan_pkl->surat),
+                'created_at' => $pengajuan_pkl->created_at,
+                'updated_at' => $pengajuan_pkl->updated_at,
+                'nama'=> $pengajuan_pkl->nama,
+                'nim'=> $pengajuan_pkl->nim,
+                'nama_prodi'=> $pengajuan_pkl->nama_prodi,
+            ]
         ], 200);
     }
 
