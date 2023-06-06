@@ -60,6 +60,9 @@ class PengajuanPKLController extends Controller
             return [
                 'id_pengajuan' => $item->id_pengajuan,
                 'id_mahasiswa' => $item->id_mahasiswa,
+                'nama' => $item->nama,
+                'nim' => $item->nim,
+                'nama_prodi' => $item->nama_prodi,
                 'nama_perusahaan' => $item->nama_perusahaan,
                 'alamat_perusahaan' => $item->alamat_perusahaan,
                 'tanggal_mulai' => $item->tanggal_mulai,
