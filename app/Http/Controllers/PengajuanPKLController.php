@@ -56,10 +56,25 @@ class PengajuanPKLController extends Controller
             ->select('pengajuan_pkl.*', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi')
             ->get();
 
+        $data = $pengajuan_pkl->map(function ($item) {
+            return [
+                'id_pengajuan' => $item->id_pengajuan,
+                'id_mahasiswa' => $item->id_mahasiswa,
+                'nama_perusahaan' => $item->nama_perusahaan,
+                'alamat_perusahaan' => $item->alamat_perusahaan,
+                'tanggal_mulai' => $item->tanggal_mulai,
+                'tanggal_selesai' => $item->tanggal_selesai,
+                'status' => $item->status,
+                'surat' => asset('/storage/surat-pengantar-pkl/' . $item->surat),
+                'created_at' => $item->created_at,
+                'updated_at' => $item->updated_at
+            ];
+        });
+
         return response()->json([
             'status' => 'success',
             'message' => 'Semua Data Pengajuan PKL',
-            'data' => $pengajuan_pkl,
+            'data' => $data
         ], 200);
     }
 
