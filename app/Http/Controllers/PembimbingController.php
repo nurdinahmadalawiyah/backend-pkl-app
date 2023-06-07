@@ -34,7 +34,7 @@ class PembimbingController extends Controller
             ], 422);
         }
 
-        if (! $token = auth()->guard('pembimbing_api')->attempt($validator->validated())) {
+        if (!$token = auth()->guard('pembimbing_api')->attempt($validator->validated())) {
             return response()->json([
                 'status' => false,
                 'message' => 'Username atau Password Salah',
@@ -104,19 +104,41 @@ class PembimbingController extends Controller
             'user' => $pembimbing
         ], 201);
     }
-
     public function update(Request $request, $id)
     {
         $pembimbing = Pembimbing::findOrFail($id);
+    
+        if ($request->has('password') && !empty($request->input('password'))) {
+            $validator = Validator::make($request->all(), [
+                'password' => 'required|min:8',
+            ]);
+    
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi gagal',
+                    'errors' => $validator->errors()
+                ], 400);
+            }
 
-        $pembimbing->update($request->all());
+            $password = bcrypt($request->input('password'));
+        } else {
+            $password = $pembimbing->password;
+        }
 
+        $requestData = $request->except('password');
+    
+        $pembimbing->update(array_merge($requestData, [
+            'password' => $password,
+        ]));
+    
         return response()->json([
             'status' => true,
             'message' => 'Berhasil Memperbarui Data Pembimbing',
             'user' => $pembimbing
         ], 201);
     }
+    
 
     public function destroy($id)
     {

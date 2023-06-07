@@ -304,9 +304,31 @@ class MahasiswaController extends Controller
     public function update(Request $request, $id)
     {
         $mahasiswa = Mahasiswa::findOrFail($id);
+    
+        if ($request->has('password') && !empty($request->input('password'))) {
+            $validator = Validator::make($request->all(), [
+                'password' => 'required|min:8',
+            ]);
+    
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi gagal',
+                    'errors' => $validator->errors()
+                ], 400);
+            }
 
-        $mahasiswa->update($request->all());
+            $password = bcrypt($request->input('password'));
+        } else {
+            $password = $mahasiswa->password;
+        }
 
+        $requestData = $request->except('password');
+    
+        $mahasiswa->update(array_merge($requestData, [
+            'password' => $password,
+        ]));
+    
         return response()->json([
             'status' => true,
             'message' => 'Berhasil Memperbarui Data Mahasiswa',
