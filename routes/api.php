@@ -204,7 +204,7 @@ Route::prefix('mahasiswa')->controller(MahasiswaController::class)->group(functi
         Route::get('/list/prodi', 'listByProdi');
         Route::post('add/prodi', 'register');
         Route::put('update/prodi/{id}', 'update');
-        Route::delete('delete/{id}', 'destroy');
+        Route::delete('delete/prodi/{id}', 'destroy');
     });
 
     Route::middleware('auth:pembimbing_api', 'throttle:60,1')->group(function () {
