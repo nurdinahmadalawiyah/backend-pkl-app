@@ -181,6 +181,8 @@ Route::prefix('prodi')->controller(ProdiController::class)->group(function () {
         Route::post('logout', 'logout');
         Route::get('me', 'me');
     });
+
+    Route::get('/list', 'index');
 });
 
 Route::prefix('mahasiswa')->controller(MahasiswaController::class)->group(function () {

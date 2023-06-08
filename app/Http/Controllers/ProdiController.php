@@ -8,6 +8,17 @@ use Illuminate\Support\Facades\Validator;
 
 class ProdiController extends Controller
 {
+    public function index()
+    {
+        $prodi = Prodi::all();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Semua Data Prodi',
+            'data' => $prodi
+        ], 200);
+    }
+
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
