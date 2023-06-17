@@ -164,6 +164,7 @@ Route::prefix('laporan')->controller(LaporanPKLController::class)->group(functio
 
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
         Route::get('/prodi', 'index');
+        Route::get('/prodi/{id}', 'detailByProdi');
     });
 });
 

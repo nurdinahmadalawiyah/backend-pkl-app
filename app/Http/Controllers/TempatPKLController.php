@@ -16,7 +16,8 @@ class TempatPKLController extends Controller
         ->join('mahasiswa', 'pengajuan_pkl.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
         ->leftJoin('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
         ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-        ->select('tempat_pkl.id_tempat_pkl', 'tempat_pkl.id_pengajuan', 'mahasiswa.nama as nama_mahasiswa', 'prodi.nama_prodi', 'mahasiswa.nim', 'pembimbing.nama as nama_pembimbing', 'pembimbing.nik', 'pengajuan_pkl.*')
+        ->leftJoin('biodata_industri', 'tempat_pkl.id_tempat_pkl', '=', 'biodata_industri.id_biodata_industri')
+        ->select('tempat_pkl.id_tempat_pkl', 'tempat_pkl.id_pengajuan', 'mahasiswa.nama as nama_mahasiswa', 'prodi.nama_prodi', 'mahasiswa.nim', 'biodata_industri.id_biodata_industri','pembimbing.nama as nama_pembimbing', 'pembimbing.nik', 'pengajuan_pkl.*')
         ->get();
 
         return response()->json([

@@ -51,7 +51,7 @@ class PenilaianProdiController extends Controller
                     ELSE "E" 
                 END AS nilai_huruf')
                 )
-            ->where('penilaian_prodi.id_penilaian_prodi', '=', $id)
+            ->where('mahasiswa.id_mahasiswa', '=', $id)
             ->first();
         
         if (is_null($penilaian)) {

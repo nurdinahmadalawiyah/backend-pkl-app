@@ -66,6 +66,35 @@ class LaporanPKLController extends Controller
         ], 200);
     }
 
+    public function detailByProdi($id_mahasiswa)
+    {
+        $laporan_pkl = DB::table('laporan_pkl')
+            ->join('mahasiswa', 'laporan_pkl.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+            ->select('laporan_pkl.id_laporan', 'mahasiswa.id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'laporan_pkl.file', 'laporan_pkl.tanggal_upload')
+            ->where('mahasiswa.prodi', '=', Auth::user()->id_prodi)
+            ->where('mahasiswa.id_mahasiswa', '=', $id_mahasiswa)
+            ->first();
+    
+        if (is_null($laporan_pkl)) {
+            return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
+        }
+    
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Detail Laporan PKL',
+            'data' => [
+                'id_laporan' => $laporan_pkl->id_laporan,
+                'id_mahasiswa' => $laporan_pkl->id_mahasiswa,
+                'nama' => $laporan_pkl->nama,
+                'nim' => $laporan_pkl->nim,
+                'nama_prodi' => $laporan_pkl->nama_prodi,
+                'file' => asset('/storage/laporan/' . $laporan_pkl->file),
+                'tanggal_upload' => $laporan_pkl->tanggal_upload,
+            ]
+        ], 200);
+    }    
+    
     public function uploadLaporan(Request $request)
     {
         $validator = Validator::make($request->all(), [
