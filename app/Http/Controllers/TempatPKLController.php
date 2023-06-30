@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TempatPKL;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -18,6 +19,7 @@ class TempatPKLController extends Controller
         ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
         ->leftJoin('biodata_industri', 'tempat_pkl.id_tempat_pkl', '=', 'biodata_industri.id_biodata_industri')
         ->select('tempat_pkl.id_tempat_pkl', 'tempat_pkl.id_pengajuan', 'mahasiswa.nama as nama_mahasiswa', 'prodi.nama_prodi', 'mahasiswa.nim', 'biodata_industri.id_biodata_industri','pembimbing.nama as nama_pembimbing', 'pembimbing.nik', 'pengajuan_pkl.*')
+        ->where('mahasiswa.prodi', '=', Auth::user()->id_prodi)
         ->get();
 
         return response()->json([
