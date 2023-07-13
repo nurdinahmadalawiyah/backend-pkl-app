@@ -17,17 +17,24 @@ class PembimbingTableSeeder extends Seeder
     {
         $pembimbings = [
             [
-                'username' => 'alian',
-                'nama' => 'Alian Hakim',
-                'nik' => '87127572',
+                'username' => 'agussetiawan',
+                'nama' => 'Agus Setiawan',
+                'nik' => '32452233',
                 'password' => bcrypt('123456789')
             ],
             [
-                'username' => 'ilham',
-                'nama' => 'Ilham Ramdan Pratama',
-                'nik' => '324523',
+                'username' => 'ahmadyusuf',
+                'nama' => 'Ahmad Yusuf',
+                'nik' => '98765432',
                 'password' => bcrypt('123456789')
             ],
+            [
+                'username' => 'budisantoso',
+                'nama' => 'Budi Santoso',
+                'nik' => '76543210',
+                'password' => bcrypt('123456789')
+            ],
+                        
         ];
 
         foreach ($pembimbings as $pembimbing) {
