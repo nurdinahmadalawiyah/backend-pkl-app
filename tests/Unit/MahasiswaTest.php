@@ -636,6 +636,8 @@ class MahasiswaTest extends TestCase
     {
         $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
 
+        $jurnal_kegiatan = JurnalKegiatan::first();
+
         $newData = [
             'tanggal' => '2023-03-09',
             'minggu' => 1,
@@ -643,7 +645,7 @@ class MahasiswaTest extends TestCase
             'keterangan' => 'New Description',
         ];
 
-        $response = $this->withHeaders($headers)->put("api/jurnal-kegiatan/mahasiswa/1", $newData);
+        $response = $this->withHeaders($headers)->put("api/jurnal-kegiatan/mahasiswa/{$jurnal_kegiatan->id_jurnal_kegiatan}", $newData);
 
         $response->assertStatus(200)
             ->assertJson([
@@ -652,6 +654,33 @@ class MahasiswaTest extends TestCase
             ])
             ->assertJsonStructure([
                 'status',
+                'message',
+                'data' => [
+                    'id_mahasiswa',
+                    'id_tempat_pkl',
+                    'tanggal',
+                    'minggu',
+                    'bidang_pekerjaan',
+                    'keterangan',
+                    'updated_at',
+                    'created_at',
+                ]
+            ]);
+    }
+
+    public function test_delete_jurnal_kegiatan()
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
+
+        $jurnal_kegiatan = JurnalKegiatan::first();
+
+        $response = $this->withHeaders($headers)->delete("api/jurnal-kegiatan/mahasiswa/{$jurnal_kegiatan->id_jurnal_kegiatan}");
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'message' => 'Jurnal Kegiatan Dihapus',
+            ])
+            ->assertJsonStructure([
                 'message',
                 'data' => [
                     'id_mahasiswa',
