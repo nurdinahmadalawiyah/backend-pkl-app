@@ -417,4 +417,66 @@ class MahasiswaTest extends TestCase
                 ]
             ]);
     }
+
+    public function test_post_biodata_industri()
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
+
+        $data = [
+            'nama_industri' => 'Company Test',
+            'nama_pimpinan' => 'John Doe',
+            'alamat_kantor' => 'Jl. Test 123',
+            'no_telp_fax' => '08123456789',
+            'contact_person' => 'Jane Smith',
+            'bidang_usaha_jasa' => 'IT Services',
+            'spesialisasi_produksi_jasa' => 'Web Development',
+            'kapasitas_produksi' => '1000',
+            'jangkauan_pemasaran' => 'Nasional',
+            'jumlah_tenaga_kerja_sd' => '10',
+            'jumlah_tenaga_kerja_sltp' => '20',
+            'jumlah_tenaga_kerja_slta' => '30',
+            'jumlah_tenaga_kerja_smk' => '40',
+            'jumlah_tenaga_kerja_smea' => '50',
+            'jumlah_tenaga_kerja_smkk' => '60',
+            'jumlah_tenaga_kerja_sarjana_muda' => '70',
+            'jumlah_tenaga_kerja_sarjana_magister' => '80',
+            'jumlah_tenaga_kerja_sarjana_doktor' => '90',
+        ];
+
+        $response = $this->withHeaders($headers)->post('api/biodata-industri/mahasiswa', $data);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Biodata Industri Berhasil Disimpan',
+            ])
+            ->assertJsonStructure([
+                'status',
+                'message',
+                'data' => [
+                    'id_mahasiswa',
+                    'id_tempat_pkl',
+                    'nama_industri',
+                    'nama_pimpinan',
+                    'alamat_kantor',
+                    'no_telp_fax',
+                    'contact_person',
+                    'bidang_usaha_jasa',
+                    'spesialisasi_produksi_jasa',
+                    'kapasitas_produksi',
+                    'jangkauan_pemasaran',
+                    'jumlah_tenaga_kerja_sd',
+                    'jumlah_tenaga_kerja_sltp',
+                    'jumlah_tenaga_kerja_slta',
+                    'jumlah_tenaga_kerja_smk',
+                    'jumlah_tenaga_kerja_smea',
+                    'jumlah_tenaga_kerja_smkk',
+                    'jumlah_tenaga_kerja_sarjana_muda',
+                    'jumlah_tenaga_kerja_sarjana_magister',
+                    'jumlah_tenaga_kerja_sarjana_doktor',
+                    'created_at',
+                    'updated_at',
+                ]
+            ]);
+    }
 }
