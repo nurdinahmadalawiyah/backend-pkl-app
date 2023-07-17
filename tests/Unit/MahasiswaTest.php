@@ -3,9 +3,11 @@
 namespace Tests\Unit;
 
 use App\Models\Akademik;
+use App\Models\JurnalKegiatan;
 use App\Models\Mahasiswa;
 use App\Models\Pembimbing;
 use App\Models\Prodi;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -558,6 +560,108 @@ class MahasiswaTest extends TestCase
                     'jumlah_tenaga_kerja_sarjana_doktor',
                     'created_at',
                     'updated_at',
+                ]
+            ]);
+    }
+
+    public function test_post_jurnal_kegiatan()
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
+
+        $data = [
+            'tanggal' => '2023-03-09',
+            'minggu' => '1',
+            'bidang_pekerjaan' => 'Multi Platform Developer',
+            'keterangan' => 'Membuat rancangan websiteMembuat desain Database',
+        ];
+
+        $response = $this->withHeaders($headers)->post('api/jurnal-kegiatan/mahasiswa', $data);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Jurnal Kegiatan Berhasil Ditambahkan',
+            ])
+            ->assertJsonStructure([
+                'status',
+                'message',
+                'data' => [
+                    'id_mahasiswa',
+                    'id_tempat_pkl',
+                    'tanggal',
+                    'minggu',
+                    'bidang_pekerjaan',
+                    'keterangan',
+                    'updated_at',
+                    'created_at',
+                    'id_jurnal_kegiatan'
+                ]
+            ]);
+    }
+
+    public function test_get_jurnal_kegiatan()
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
+
+        $response = $this->withHeaders($headers)->get('api/jurnal-kegiatan/mahasiswa');
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Jurnal Kegiatan Nurdin A. Alawiyah',
+            ])
+            ->assertJsonStructure([
+                'status',
+                'message',
+                'data' => [
+                    [
+                        'minggu',
+                        'pdf_url',
+                        'data_kegiatan' => [
+                            [
+                                'id_jurnal_kegiatan',
+                                'id_mahasiswa',
+                                'tanggal',
+                                'minggu',
+                                'bidang_pekerjaan',
+                                'keterangan',
+                            ]
+                        ]
+                    ]
+                ]
+            ]);
+    }
+
+    public function test_put_jurnal_kegiatan()
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
+
+        $newData = [
+            'tanggal' => '2023-03-09',
+            'minggu' => 1,
+            'bidang_pekerjaan' => 'New Field',
+            'keterangan' => 'New Description',
+        ];
+
+        $response = $this->withHeaders($headers)->put("api/jurnal-kegiatan/mahasiswa/1", $newData);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Jurnal Kegiatan Berhasil Diperbarui',
+            ])
+            ->assertJsonStructure([
+                'status',
+                'message',
+                'data' => [
+                    'id_mahasiswa',
+                    'id_tempat_pkl',
+                    'tanggal',
+                    'minggu',
+                    'bidang_pekerjaan',
+                    'keterangan',
+                    'updated_at',
+                    'created_at',
                 ]
             ]);
     }
