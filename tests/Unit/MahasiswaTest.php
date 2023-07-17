@@ -3,13 +3,17 @@
 namespace Tests\Unit;
 
 use App\Models\Akademik;
+use App\Models\DaftarHadir;
 use App\Models\JurnalKegiatan;
+use App\Models\LaporanPKL;
 use App\Models\Mahasiswa;
 use App\Models\Pembimbing;
 use App\Models\Prodi;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 use function PHPSTORM_META\map;
@@ -696,38 +700,238 @@ class MahasiswaTest extends TestCase
     }
 
     public function test_get_nilai_pkl()
-{
-    $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
 
-    $response = $this->withHeaders($headers)->get('api/penilaian/mahasiswa');
+        $response = $this->withHeaders($headers)->get('api/penilaian/mahasiswa');
 
-    $response->assertStatus(200)
-        ->assertJsonStructure([
-            'status',
-            'message',
-            'pdf_url',
-            'data' => [
-                'id_mahasiswa',
-                'nama',
-                'nama_prodi',
-                'nim',
-                'nama_pembimbing',
-                'nik',
-                'id_penilaian_prodi',
-                'id_penilaian_pembimbing',
-                'presentasi',
-                'dokumen',
-                'integritas',
-                'profesionalitas',
-                'bahasa_inggris',
-                'teknologi_informasi',
-                'komunikasi',
-                'kerja_sama',
-                'organisasi',
-                'nilai_akhir',
-                'nilai_huruf',
-            ]
-        ]);
-}
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'status',
+                'message',
+                'pdf_url',
+                'data' => [
+                    'id_mahasiswa',
+                    'nama',
+                    'nama_prodi',
+                    'nim',
+                    'nama_pembimbing',
+                    'nik',
+                    'id_penilaian_prodi',
+                    'id_penilaian_pembimbing',
+                    'presentasi',
+                    'dokumen',
+                    'integritas',
+                    'profesionalitas',
+                    'bahasa_inggris',
+                    'teknologi_informasi',
+                    'komunikasi',
+                    'kerja_sama',
+                    'organisasi',
+                    'nilai_akhir',
+                    'nilai_huruf',
+                ]
+            ]);
+    }
 
+    public function test_post_daftar_hadir()
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
+
+        $file = UploadedFile::fake()->image('TTD.png');
+        
+        $data = [
+            'hari_tanggal' => '2023-04-10',
+            'minggu' => '1',
+            'tanda_tangan' => $file,
+        ];
+
+        $response = $this->withHeaders($headers)->post('api/daftar-hadir/mahasiswa', $data);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Daftar Hadir Berhasil Ditambahkan',
+            ])
+            ->assertJsonStructure([
+                'status',
+                'message',
+                'data' => [
+                    'id_daftar_hadir',
+                    'id_mahasiswa',
+                    'hari_tanggal',
+                    'minggu',
+                    'tanda_tangan',
+                ]
+            ]);    
+    }
+
+    public function test_get_daftar_hadir()
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
+
+        $response = $this->withHeaders($headers)->get('api/daftar-hadir/mahasiswa');
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Daftar Hadir Nurdin A. Alawiyah',
+            ])
+            ->assertJsonStructure([
+                'status',
+                'message',
+                'pdf_url',
+                'data' => [
+                    [
+                        'minggu',
+                        'data_kehadiran' => [
+                            [
+                                'id_daftar_hadir',
+                                'id_mahasiswa',
+                                'hari_tanggal',
+                                'minggu',
+                                'tanda-tangan',
+                            ]
+                        ]
+                    ]
+                ]
+            ]);
+    }
+
+    public function test_put_daftar_hadir()
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
+
+        $file = UploadedFile::fake()->image('TTD.png');
+        $daftar_hadir = DaftarHadir::first();
+
+        $data = [
+            'hari_tanggal' => '2023-04-10',
+            'minggu' => '1',
+            'tanda_tangan' => $file,
+        ];
+
+        $response = $this->withHeaders($headers)->put("api/daftar-hadir/mahasiswa/{$daftar_hadir->id_daftar_hadir}", $data);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Daftar Hadir Berhasil Diperbarui',
+            ])
+            ->assertJsonStructure([
+                'status',
+                'message',
+                'data' => [
+                    'id_daftar_hadir',
+                    'id_mahasiswa',
+                    'hari_tanggal',
+                    'minggu',
+                    'tanda_tangan',
+                ]
+            ]);    
+    }
+
+    public function test_delete_daftar_hadir()
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
+
+        $daftar_hadir = DaftarHadir::first();
+
+        $response = $this->withHeaders($headers)->delete("api/daftar-hadir/mahasiswa/{$daftar_hadir->id_daftar_hadir}");
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'message' => 'Daftar Hadir Terhapus',
+            ])
+            ->assertJsonStructure([
+                'message',
+                'data' => [
+                    'id_daftar_hadir',
+                    'id_mahasiswa',
+                    'hari_tanggal',
+                    'minggu',
+                    'tanda_tangan',
+                    'created_at',
+                    'updated_at'
+                ]
+            ]);    
+    }
+
+    public function test_upload_laporan()
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
+
+        $file = UploadedFile::fake()->create("laporan.pdf", 500);
+        
+        $data = [
+            'file' => $file
+        ];
+
+        $response = $this->withHeaders($headers)->post('api/laporan/mahasiswa/upload', $data);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Laporan berhasil diunggah',
+            ])
+            ->assertJsonStructure([
+                'status',
+                'message',
+                'data' => [
+                    'id_laporan',
+                    'id_mahasiswa',
+                    'file',
+                    'tanggal_upload',
+                ]
+            ]);    
+    }
+
+    public function test_get_laporan()
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
+
+        $response = $this->withHeaders($headers)->get('api/laporan/mahasiswa');
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Laporan PKL Nurdin A. Alawiyah',
+            ])
+            ->assertJsonStructure([
+                'status',
+                'message',
+                'data' => [
+                    'id_laporan',
+                    'nama',
+                    'nim',
+                    'file',
+                    'tanggal_upload',
+                ]
+            ]);    
+    }
+
+    public function test_cancel_send_laporan()
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
+
+        $laporan = LaporanPKL::first();
+
+        $response = $this->withHeaders($headers)->delete("api/laporan/mahasiswa/{$laporan->id_laporan}");
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'message' => 'Laporan dibatalkan',
+            ])
+            ->assertJsonStructure([
+                'message',
+                'data' => [
+                    'id_laporan',
+                    'id_mahasiswa',
+                    'file',
+                    'tanggal_upload',
+                    'created_at',
+                    'updated_at'
+                ]
+            ]);    
+    }
 }
