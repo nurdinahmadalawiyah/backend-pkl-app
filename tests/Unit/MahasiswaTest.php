@@ -479,4 +479,86 @@ class MahasiswaTest extends TestCase
                 ]
             ]);
     }
+
+    public function test_get_biodata_industri()
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
+
+        $response = $this->withHeaders($headers)->get('api/biodata-industri/mahasiswa/detail');
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Detail Biodata Industri',
+            ])
+            ->assertJsonStructure([
+                'status',
+                'message',
+                'data' => [
+                    'id_mahasiswa',
+                    'id_tempat_pkl',
+                    'nama_industri',
+                    'nama_pimpinan',
+                    'alamat_kantor',
+                    'no_telp_fax',
+                    'contact_person',
+                    'bidang_usaha_jasa',
+                    'spesialisasi_produksi_jasa',
+                    'kapasitas_produksi',
+                    'jangkauan_pemasaran',
+                    'jumlah_tenaga_kerja_sd',
+                    'jumlah_tenaga_kerja_sltp',
+                    'jumlah_tenaga_kerja_slta',
+                    'jumlah_tenaga_kerja_smk',
+                    'jumlah_tenaga_kerja_smea',
+                    'jumlah_tenaga_kerja_smkk',
+                    'jumlah_tenaga_kerja_sarjana_muda',
+                    'jumlah_tenaga_kerja_sarjana_magister',
+                    'jumlah_tenaga_kerja_sarjana_doktor',
+                    'created_at',
+                    'updated_at',
+                ]
+            ]);
+    }
+
+    public function test_delete_biodata_industri()
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
+
+        $response = $this->withHeaders($headers)->delete('api/biodata-industri/mahasiswa');
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Biodata Industri Dihapus',
+            ])
+            ->assertJsonStructure([
+                'status',
+                'message',
+                'data' => [
+                    'id_mahasiswa',
+                    'id_tempat_pkl',
+                    'nama_industri',
+                    'nama_pimpinan',
+                    'alamat_kantor',
+                    'no_telp_fax',
+                    'contact_person',
+                    'bidang_usaha_jasa',
+                    'spesialisasi_produksi_jasa',
+                    'kapasitas_produksi',
+                    'jangkauan_pemasaran',
+                    'jumlah_tenaga_kerja_sd',
+                    'jumlah_tenaga_kerja_sltp',
+                    'jumlah_tenaga_kerja_slta',
+                    'jumlah_tenaga_kerja_smk',
+                    'jumlah_tenaga_kerja_smea',
+                    'jumlah_tenaga_kerja_smkk',
+                    'jumlah_tenaga_kerja_sarjana_muda',
+                    'jumlah_tenaga_kerja_sarjana_magister',
+                    'jumlah_tenaga_kerja_sarjana_doktor',
+                    'created_at',
+                    'updated_at',
+                ]
+            ]);
+    }
 }
