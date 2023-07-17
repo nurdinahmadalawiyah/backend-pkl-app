@@ -694,4 +694,40 @@ class MahasiswaTest extends TestCase
                 ]
             ]);
     }
+
+    public function test_get_nilai_pkl()
+{
+    $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
+
+    $response = $this->withHeaders($headers)->get('api/penilaian/mahasiswa');
+
+    $response->assertStatus(200)
+        ->assertJsonStructure([
+            'status',
+            'message',
+            'pdf_url',
+            'data' => [
+                'id_mahasiswa',
+                'nama',
+                'nama_prodi',
+                'nim',
+                'nama_pembimbing',
+                'nik',
+                'id_penilaian_prodi',
+                'id_penilaian_pembimbing',
+                'presentasi',
+                'dokumen',
+                'integritas',
+                'profesionalitas',
+                'bahasa_inggris',
+                'teknologi_informasi',
+                'komunikasi',
+                'kerja_sama',
+                'organisasi',
+                'nilai_akhir',
+                'nilai_huruf',
+            ]
+        ]);
+}
+
 }
