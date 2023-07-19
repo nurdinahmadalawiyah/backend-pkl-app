@@ -17,85 +17,15 @@ use function PHPSTORM_META\map;
 
 class MahasiswaTest extends TestCase
 {
-    private $tokenAkademik;
-    private $tokenProdi;
-    private $tokenPembimbing;
     private $tokenMahasiswa;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $akademik = Akademik::first();
-        $this->tokenAkademik = JWTAuth::fromUser($akademik);
-
-        $prodi = Prodi::first();
-        $this->tokenProdi = JWTAuth::fromUser($prodi);
-
-        $pembimbing = Pembimbing::first();
-        $this->tokenPembimbing = JWTAuth::fromUser($pembimbing);
-
         $mahasiswa = Mahasiswa::first();
         $this->tokenMahasiswa = JWTAuth::fromUser($mahasiswa);
     }
-
-    // public function test_list_data_mahasiswa_by_akademik()
-    // {
-    //     $headers = ['Authorization' => 'Bearer ' . $this->tokenAkademik];
-    //     $response = $this->withHeaders($headers)->get('api/mahasiswa/list');
-
-    //     $response->assertStatus(200)
-    //         ->assertJson([
-    //             'status' => 'success',
-    //             'message' => 'Semua Data Mahasiswa Politeknik TEDC Bandung',
-    //         ])
-    //         ->assertJsonStructure([
-    //             'status',
-    //             'message',
-    //             'data' => [
-    //                 '*' => [
-    //                     'id_mahasiswa',
-    //                     'nama',
-    //                     'nim',
-    //                     'nama_prodi',
-    //                     'id_prodi',
-    //                     'semester',
-    //                     'email',
-    //                     'username',
-    //                     'nomor_hp',
-    //                 ]
-    //             ]
-    //         ]);
-    // }
-
-    // public function test_list_data_mahasiswa_by_prodi()
-    // {
-    //     $headers = ['Authorization' => 'Bearer ' . $this->tokenProdi];
-    //     $response = $this->withHeaders($headers)->get('api/mahasiswa/list/prodi');
-
-    //     $response->assertStatus(200)
-    //         ->assertJson([
-    //             'status' => 'success',
-    //             'message' => 'Semua Data Mahasiswa Politeknik TEDC Bandung',
-    //         ])
-    //         ->assertJsonStructure([
-    //             'status',
-    //             'message',
-    //             'data' => [
-    //                 '*' => [
-    //                     'id_mahasiswa',
-    //                     'nama',
-    //                     'nim',
-    //                     'nama_prodi',
-    //                     'id_prodi',
-    //                     'semester',
-    //                     'email',
-    //                     'username',
-    //                     'nomor_hp',
-    //                 ]
-    //             ]
-    //         ]);
-    // }
 
     public function test_login_mahasiswa()
     {

@@ -9,7 +9,6 @@ use App\Models\PengajuanPKL;
 use Tests\TestCase;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-use function PHPSTORM_META\map;
 
 class AkademikTest extends TestCase
 {
