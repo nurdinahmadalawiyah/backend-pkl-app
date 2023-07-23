@@ -194,6 +194,7 @@ Route::prefix('mahasiswa')->controller(MahasiswaController::class)->group(functi
         Route::get('status', 'checkStatus');
         Route::put('update-password', 'updatePassword');
         Route::put('update-profile', 'updateProfile');
+        Route::put('save-player-id', 'savePlayerId');
     });
 
     Route::middleware('auth:akademik_api', 'throttle:60,1')->group(function () {

@@ -304,12 +304,12 @@ class MahasiswaController extends Controller
     public function update(Request $request, $id)
     {
         $mahasiswa = Mahasiswa::findOrFail($id);
-    
+
         if ($request->has('password') && !empty($request->input('password'))) {
             $validator = Validator::make($request->all(), [
                 'password' => 'required|min:8',
             ]);
-    
+
             if ($validator->fails()) {
                 return response()->json([
                     'status' => false,
@@ -324,11 +324,11 @@ class MahasiswaController extends Controller
         }
 
         $requestData = $request->except('password');
-    
+
         $mahasiswa->update(array_merge($requestData, [
             'password' => $password,
         ]));
-    
+
         return response()->json([
             'status' => true,
             'message' => 'Berhasil Memperbarui Data Mahasiswa',
@@ -352,5 +352,14 @@ class MahasiswaController extends Controller
                 'message' => 'Data Mahasiswa',
             ], 404);
         }
+    }
+
+    public function savePlayerId(Request $request)
+    {    
+        $mahasiswa_id = Auth::user()->id_mahasiswa;
+        $notification_id = $request->input('notification_id');
+        DB::table('mahasiswa')->where('id_mahasiswa', $mahasiswa_id)->update(['notification_id' => $notification_id]);
+    
+        return response()->json(['message' => 'Player ID berhasil disimpan'], 200);
     }
 }

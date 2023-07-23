@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('email', 50)->nullable();
             $table->string('nomor_hp', 20)->nullable();
             $table->string('password', 100);
+            $table->string('notification_id', 255)->nullable();
             $table->timestamps();
 
             $table->foreign('prodi')->references('id_prodi')->on('prodi');

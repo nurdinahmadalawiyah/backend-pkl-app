@@ -49,7 +49,8 @@ class Mahasiswa extends Authenticatable implements JWTSubject
         'semester',
         'email',
         'nomor_hp',
-        'password'
+        'password',
+        'notification_id'
     ];
 
     /**
