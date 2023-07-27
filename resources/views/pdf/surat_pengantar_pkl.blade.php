@@ -150,7 +150,7 @@
         </tr>
         <tr>
             <td style="width: 10%">Hal </td>
-            <td>: Permohonan Peraktik Kerja Lapangan (PKL)</td>
+            <td>: Permohonan Praktik Kerja Lapangan (PKL)</td>
         </tr>
     </table>
     <br>
