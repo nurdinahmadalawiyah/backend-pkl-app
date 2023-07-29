@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AkademikController;
 use App\Http\Controllers\BiodataIndustriController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\DaftarHadirController;
 use App\Http\Controllers\JurnalKegiatanController;
 use App\Http\Controllers\LaporanPKLController;
@@ -31,6 +32,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('check-token', [ProdiController::class, 'checkToken']);
 
 Route::prefix('pengajuan-pkl')->controller(PengajuanPKLController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api', 'throttle:60,1')->group(function () {
