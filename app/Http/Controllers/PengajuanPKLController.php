@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Akademik;
 use App\Models\PengajuanPKL;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -97,7 +98,7 @@ class PengajuanPKLController extends Controller
         if (is_null($pengajuan_pkl)) {
             return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
         }
-        
+
 
         return response()->json([
             'status' => 'success',
@@ -113,15 +114,17 @@ class PengajuanPKLController extends Controller
                 'surat' => asset('/storage/surat-pengantar-pkl/' . $pengajuan_pkl->surat),
                 'created_at' => $pengajuan_pkl->created_at,
                 'updated_at' => $pengajuan_pkl->updated_at,
-                'nama'=> $pengajuan_pkl->nama,
-                'nim'=> $pengajuan_pkl->nim,
-                'nama_prodi'=> $pengajuan_pkl->nama_prodi,
+                'nama' => $pengajuan_pkl->nama,
+                'nim' => $pengajuan_pkl->nim,
+                'nama_prodi' => $pengajuan_pkl->nama_prodi,
             ]
         ], 200);
     }
 
     public function store(Request $request)
     {
+        $akademik = Akademik::first();
+
         $validator = Validator::make($request->all(), [
             'nama_perusahaan' => 'required',
             'alamat_perusahaan' => 'required',
@@ -142,11 +145,29 @@ class PengajuanPKLController extends Controller
             'status' => 'menunggu'
         ]);
 
+        $this->sendNotificationToAdmin($akademik->notification_id);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Pengajuan Berhasil Terkirim',
             'data' => $pengajuan
         ], 200);
+    }
+
+    public function sendNotificationToAdmin($notificationId)
+    {
+        $app_id = '87cf8313-c7f7-420a-b2dd-fbf5a3e29513';
+        $api_key = 'NjUzNjgyYWItOTE0Zi00NGQ4LTg1NWUtMzdmNjIwZjFmZDYw';
+
+        Http::withHeaders([
+            'Authorization' => 'Basic ' . $api_key,
+            'Content-Type' => 'application/json',
+        ])->post('https://onesignal.com/api/v1/notifications', [
+            'app_id' => $app_id,
+            'include_player_ids' => [$notificationId],
+            'contents' => ['en' => "Ada Pengajuan PKL Baru dari Mahasiswa"],
+            'headings' => ['en' => "Pengajuan Masuk"],
+        ]);
     }
 
     public function setujuiPengajuan($id)
