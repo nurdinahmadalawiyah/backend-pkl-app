@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id('id_akademik');
             $table->string('username', 30)->unique();
             $table->string('password', 100);
+            $table->string('notification_id', 255)->nullable();
             $table->timestamps();
         });
     }

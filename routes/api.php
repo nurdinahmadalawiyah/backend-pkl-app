@@ -177,6 +177,7 @@ Route::prefix('akademik')->controller(AkademikController::class)->group(function
         Route::post('logout', 'logout');
         Route::get('me', 'me');
     });
+    Route::put('save-player-id', 'savePlayerId');
 });
 
 Route::prefix('prodi')->controller(ProdiController::class)->group(function () {

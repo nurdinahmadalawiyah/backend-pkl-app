@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Akademik;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class AkademikController extends Controller
@@ -64,6 +65,20 @@ class AkademikController extends Controller
             'expires_at' => $expires_at
         ], 200);
     }
+
+    public function savePlayerId(Request $request)
+    {    
+        $akademik = Akademik::first();
+        if (!$akademik) {
+            return response()->json(['message' => 'Data Akademik tidak ditemukan'], 404);
+        }
+        
+        $notification_id = $request->input('notification_id');
+        DB::table('akademik')->where('id_akademik', $akademik->id_akademik)->update(['notification_id' => $notification_id]);
+    
+        return response()->json(['message' => 'Player ID berhasil disimpan'], 200);
+    }
+    
 
     // public function register(Request $request)
     // {

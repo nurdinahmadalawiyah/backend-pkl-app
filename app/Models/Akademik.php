@@ -24,6 +24,7 @@ class Akademik extends Authenticatable implements JWTSubject
     protected $fillable = [
         'username',
         'password',
+        'notification_id'
     ];
 
     /**
