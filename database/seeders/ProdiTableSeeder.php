@@ -65,14 +65,6 @@ class ProdiTableSeeder extends Seeder
                 'password' => bcrypt('prodiaktedc')
             ],
             [
-                'username' => 'prodiTE',
-                'nama_prodi' => 'Teknik Elektronika',
-                'kode_prodi' => 'TE',
-                'nama_ketua_prodi' => '',
-                'nidn_ketua_prodi' => '',
-                'password' => bcrypt('proditetedc')
-            ],
-            [
                 'username' => 'prodiRM',
                 'nama_prodi' => 'Rekam Medik dan Informasi Kesehatan',
                 'kode_prodi' => 'RM',
