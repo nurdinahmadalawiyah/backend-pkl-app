@@ -234,7 +234,7 @@ class PengajuanPKLController extends Controller
         $data_surat = DB::table('mahasiswa')
             ->join('pengajuan_pkl', 'mahasiswa.id_mahasiswa', '=', 'pengajuan_pkl.id_mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->select('mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.semester', 'prodi.nama_ketua_prodi', 'prodi.nidn_ketua_prodi')
+            ->select('mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.semester', 'prodi.nama_ketua_prodi', 'prodi.nidn_ketua_prodi', 'mahasiswa.notification_id')
             ->where('pengajuan_pkl.id_pengajuan', '=', $id)
             ->first();
 
@@ -245,10 +245,28 @@ class PengajuanPKLController extends Controller
         $pengajuan_pkl->status = 'ditolak';
         $pengajuan_pkl->save();
 
+        $this->sendRejectNotification($data_surat->notification_id);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Pengajuan pkl berhasil ditolak',
             'data' => $pengajuan_pkl,
+        ]);
+    }
+
+    public function sendRejectNotification($notificationId)
+    {
+        $app_id = 'f8bc8286-9b49-4347-995c-1885262c4dc3';
+        $api_key = 'ZjlkZGM5ZDktOTNkOS00ZGVlLTgwY2YtNDJjMWZlMjQwOTBj';
+
+        Http::withHeaders([
+            'Authorization' => 'Basic ' . $api_key,
+            'Content-Type' => 'application/json',
+        ])->post('https://onesignal.com/api/v1/notifications', [
+            'app_id' => $app_id,
+            'include_player_ids' => [$notificationId],
+            'contents' => ['en' => "Mohon maaf pengajuan PKL kamu di tolak oleh bagian Akademik"],
+            'headings' => ['en' => "Maaf!"],
         ]);
     }
 }
