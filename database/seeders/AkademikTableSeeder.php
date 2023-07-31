@@ -17,12 +17,8 @@ class AkademikTableSeeder extends Seeder
     {
         $akademiks = [
             [
-                'username' => 'akademik1',
-                'password' => bcrypt('akademiktedc1')
-            ],
-            [
-                'username' => 'akademik2',
-                'password' => bcrypt('akademiktedc2')
+                'username' => 'akademik',
+                'password' => bcrypt('akademiktedc')
             ],
         ];
 

@@ -50,7 +50,7 @@ class ProdiTableSeeder extends Seeder
             ],
             [
                 'username' => 'prodiMO',
-                'nama_prodi' => 'Mekanik Otomotif',
+                'nama_prodi' => 'Mesin Otomotif',
                 'kode_prodi' => 'MO',
                 'nama_ketua_prodi' => 'Didid Dwi Santoso, SST., MT',
                 'nidn_ketua_prodi' => '',
@@ -73,14 +73,6 @@ class ProdiTableSeeder extends Seeder
                 'password' => bcrypt('proditetedc')
             ],
             [
-                'username' => 'prodiTKM',
-                'nama_prodi' => 'Teknik Kimia',
-                'kode_prodi' => 'TKM',
-                'nama_ketua_prodi' => '',
-                'nidn_ketua_prodi' => '',
-                'password' => bcrypt('proditkmtedc')
-            ],
-            [
                 'username' => 'prodiRM',
                 'nama_prodi' => 'Rekam Medik dan Informasi Kesehatan',
                 'kode_prodi' => 'RM',
@@ -89,7 +81,7 @@ class ProdiTableSeeder extends Seeder
                 'password' => bcrypt('prodirmtedc')
             ],
             [
-                'username' => 'prodiKB',
+                'username' => 'prodiTE',
                 'nama_prodi' => 'Teknik Elektronika',
                 'kode_prodi' => 'TE',
                 'nama_ketua_prodi' => 'Reni Listiana, MT',
