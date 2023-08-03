@@ -40,9 +40,9 @@ class DaftarHadirController extends Controller
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
             ->join('pengajuan_pkl', 'mahasiswa.id_mahasiswa', '=', 'pengajuan_pkl.id_mahasiswa')
             ->join('tempat_pkl', 'pengajuan_pkl.id_pengajuan', '=', 'tempat_pkl.id_pengajuan')
-            ->join('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
+            ->leftJoin('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
             ->select('mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'pembimbing.nama as nama_pembimbing', 'pembimbing.nik')
-            ->where('mahasiswa.prodi', Auth::user()->id_mahasiswa)
+            ->where('mahasiswa.id_mahasiswa', Auth::user()->id_mahasiswa)
             ->first();
 
         $pdf = PDF::loadView('pdf.daftar_hadir', ['grouped' => $grouped, 'data_kehadiran' => $data_kehadiran])->setPaper('a4');
@@ -83,7 +83,7 @@ class DaftarHadirController extends Controller
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
             ->join('pengajuan_pkl', 'mahasiswa.id_mahasiswa', '=', 'pengajuan_pkl.id_mahasiswa')
             ->join('tempat_pkl', 'pengajuan_pkl.id_pengajuan', '=', 'tempat_pkl.id_pengajuan')
-            ->join('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
+            ->leftJoin('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
             ->select('mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'pembimbing.nama as nama_pembimbing', 'pembimbing.nik')
             ->where('mahasiswa.prodi', Auth::user()->id_mahasiswa)
             ->first();

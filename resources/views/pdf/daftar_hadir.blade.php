@@ -64,16 +64,15 @@
     <table>
         <tr>
             <td class="table-cell">Nama Mahasiswa</td>
-            <td>: {{ $data_kehadiran->nama }} </td>
+            <td>: @if($data_kehadiran){{ $data_kehadiran->nama }}@endif </td>
         </tr>
         <tr>
             <td class="table-cell">NIM</td>
-            <td>: {{ $data_kehadiran->nim }}</td>
-
+            <td>: @if($data_kehadiran){{ $data_kehadiran->nim }}@endif</td>
         </tr>
         <tr>
             <td class="table-cell">Program Studi</td>
-            <td>: {{ $data_kehadiran->nama_prodi }} </td>
+            <td>: @if($data_kehadiran){{ $data_kehadiran->nama_prodi }}@endif </td>
         </tr>
     </table>
     <br>
@@ -137,8 +136,8 @@
                         <br>
                         <br>
                         <br>
-                        <b><u>{{ $data_kehadiran->nama_pembimbing }}</u></b><br>
-                        NIK. {{ $data_kehadiran->nik }}
+                        <b><u>@if($data_kehadiran){{ $data_kehadiran->nama_pembimbing }}@endif</u></b><br>
+                        NIK. @if($data_kehadiran){{ $data_kehadiran->nik }}@endif
                     </div>
                 </div>
             </td>
@@ -151,8 +150,8 @@
                         <br>
                         <br>
                         <br>
-                        <b><u>{{ $data_kehadiran->nama }}</u></b><br>
-                        NIM. {{ $data_kehadiran->nim }}
+                        <b><u>@if($data_kehadiran){{ $data_kehadiran->nama }}@endif</u></b><br>
+                        NIM. @if($data_kehadiran){{ $data_kehadiran->nim }}@endif
                     </div>
                 </div>
             </td>
