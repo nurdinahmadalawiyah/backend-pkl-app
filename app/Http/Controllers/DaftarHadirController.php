@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\DaftarHadirResource;
 use App\Models\DaftarHadir;
+use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -37,9 +38,9 @@ class DaftarHadirController extends Controller
         });
 
         $data_kehadiran = DB::table('mahasiswa')
-            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->join('pengajuan_pkl', 'mahasiswa.id_mahasiswa', '=', 'pengajuan_pkl.id_mahasiswa')
-            ->join('tempat_pkl', 'pengajuan_pkl.id_pengajuan', '=', 'tempat_pkl.id_pengajuan')
+            ->leftJoin('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+            ->leftJoin('pengajuan_pkl', 'mahasiswa.id_mahasiswa', '=', 'pengajuan_pkl.id_mahasiswa')
+            ->leftJoin('tempat_pkl', 'pengajuan_pkl.id_pengajuan', '=', 'tempat_pkl.id_pengajuan')
             ->leftJoin('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
             ->select('mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'pembimbing.nama as nama_pembimbing', 'pembimbing.nik')
             ->where('mahasiswa.id_mahasiswa', Auth::user()->id_mahasiswa)
