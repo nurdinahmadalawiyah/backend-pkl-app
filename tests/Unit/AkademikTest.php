@@ -27,7 +27,7 @@ class AkademikTest extends TestCase
         $akademik = Akademik::first();
         $credentials = [
             'username' => $akademik->username,
-            'password' => 'akademiktedc1',
+            'password' => 'akademiktedc',
         ];
 
         $response = $this->postJson('api/akademik/login', $credentials);
