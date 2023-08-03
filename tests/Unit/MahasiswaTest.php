@@ -2,18 +2,13 @@
 
 namespace Tests\Unit;
 
-use App\Models\Akademik;
 use App\Models\DaftarHadir;
 use App\Models\JurnalKegiatan;
 use App\Models\LaporanPKL;
 use App\Models\Mahasiswa;
-use App\Models\Pembimbing;
-use App\Models\Prodi;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 use Tymon\JWTAuth\Facades\JWTAuth;
-
-use function PHPSTORM_META\map;
 
 class MahasiswaTest extends TestCase
 {
@@ -32,7 +27,7 @@ class MahasiswaTest extends TestCase
         $mahasiswa = Mahasiswa::first();
         $credentials = [
             'username' => $mahasiswa->username,
-            'password' => '123456789',
+            'password' => 'D111911004',
         ];
 
         $response = $this->postJson('api/mahasiswa/login', $credentials);
@@ -100,8 +95,8 @@ class MahasiswaTest extends TestCase
         $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
 
         $data = [
-            'password_lama' => '123456789',
-            'password_baru' => '123456789',
+            'password_lama' => 'D111911004',
+            'password_baru' => 'D111911004',
         ];
 
         $response = $this->withHeaders($headers)->put('api/mahasiswa/update-password/', $data);
@@ -117,10 +112,10 @@ class MahasiswaTest extends TestCase
         $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
 
         $data = [
-            'email' => 'nurdinahmada@gmail.com',
-            'username' => 'nurdin',
+            'email' => 'ahmadyusuf@mail.com',
+            'username' => 'D111911004',
             'semester' => '8 (Delapan)',
-            'nomor_hp' => '0897762607'
+            'nomor_hp' => '08965367282'
         ];
 
         $response = $this->withHeaders($headers)->put('api/mahasiswa/update-profile/', $data);
@@ -150,10 +145,11 @@ class MahasiswaTest extends TestCase
     {
         $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
         $response = $this->withHeaders($headers)->get('api/mahasiswa/status');
+        $mahasiswa = Mahasiswa::first();
 
         $response->assertStatus(200)
             ->assertJson([
-                'message' => 'Status Mahasiswa Nurdin A. Alawiyah',
+                'message' => 'Status Mahasiswa '. $mahasiswa->nama,
             ])
             ->assertJsonStructure([
                 'message',
@@ -259,15 +255,16 @@ class MahasiswaTest extends TestCase
     {
         $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
         $response = $this->withHeaders($headers)->get('api/pengajuan-pkl/mahasiswa/status');
-
+        $mahasiswa = Mahasiswa::first();
+        
         $response->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
                 'message' => 'Status Pengajuan PKL',
                 'user' => [
-                    'nama' => 'Nurdin A. Alawiyah',
+                    'nama' => $mahasiswa->nama,
                     'nama_prodi' => 'Teknik Informatika',
-                    'nim' => 'D119111068'
+                    'nim' => $mahasiswa->nim
                 ],
             ])
             ->assertJsonStructure([
@@ -506,13 +503,13 @@ class MahasiswaTest extends TestCase
     public function test_get_jurnal_kegiatan()
     {
         $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
-
         $response = $this->withHeaders($headers)->get('api/jurnal-kegiatan/mahasiswa');
+        $mahasiswa = Mahasiswa::first();
 
         $response->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
-                'message' => 'Jurnal Kegiatan Nurdin A. Alawiyah',
+                'message' => 'Jurnal Kegiatan ' . $mahasiswa->nama,
             ])
             ->assertJsonStructure([
                 'status',
@@ -669,13 +666,13 @@ class MahasiswaTest extends TestCase
     public function test_get_daftar_hadir()
     {
         $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
-
         $response = $this->withHeaders($headers)->get('api/daftar-hadir/mahasiswa');
+        $mahasiswa = Mahasiswa::first();
 
         $response->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
-                'message' => 'Daftar Hadir Nurdin A. Alawiyah',
+                'message' => 'Daftar Hadir ' . $mahasiswa->nama,
             ])
             ->assertJsonStructure([
                 'status',
@@ -789,13 +786,13 @@ class MahasiswaTest extends TestCase
     public function test_get_laporan()
     {
         $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
-
         $response = $this->withHeaders($headers)->get('api/laporan/mahasiswa');
+        $mahasiswa = Mahasiswa::first();
 
         $response->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
-                'message' => 'Laporan PKL Nurdin A. Alawiyah',
+                'message' => 'Laporan PKL ' . $mahasiswa->nama,
             ])
             ->assertJsonStructure([
                 'status',

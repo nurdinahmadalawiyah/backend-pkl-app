@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('username', 30)->unique();
             $table->string('nama_prodi', 50);
             $table->string('kode_prodi', 10);
-            $table->string('nama_ketua_prodi', 100);
-            $table->string('nidn_ketua_prodi', 30);
+            $table->string('nama_ketua_prodi', 50);
+            $table->string('nidn_ketua_prodi', 50);
             $table->string('password', 100);
             $table->timestamps();
         });
