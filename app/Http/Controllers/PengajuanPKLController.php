@@ -222,8 +222,8 @@ class PengajuanPKLController extends Controller
         ])->post('https://onesignal.com/api/v1/notifications', [
             'app_id' => $app_id,
             'include_player_ids' => [$notificationId],
-            'contents' => ['en' => "Selamat pengajuan PKL kamu telah disetujui bagian Akademik"],
-            'headings' => ['en' => "Pengajuanmu Disetujui"],
+            'contents' => ['en' => "Selamat pengajuan PKL anda telah disetujui"],
+            'headings' => ['en' => "Selamat"],
         ]);
     }
 
@@ -265,8 +265,8 @@ class PengajuanPKLController extends Controller
         ])->post('https://onesignal.com/api/v1/notifications', [
             'app_id' => $app_id,
             'include_player_ids' => [$notificationId],
-            'contents' => ['en' => "Mohon maaf pengajuan PKL kamu di tolak oleh bagian Akademik"],
-            'headings' => ['en' => "Maaf!"],
+            'contents' => ['en' => "Mohon maaf pengajuan PKL anda ditolak, periksa kembali data pengajuan PKL anda"],
+            'headings' => ['en' => "Maaf"],
         ]);
     }
 }

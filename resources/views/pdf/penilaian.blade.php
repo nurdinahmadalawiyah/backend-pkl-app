@@ -98,11 +98,11 @@
             
             if ($integritas >= 85 && $integritas <= 100) {
                 $resultIntegritas['SB'] = $integritas;
-            } elseif ($integritas >= 70 && $integritas <= 84) {
+            } elseif ($integritas >= 70 && $integritas < 85) {
                 $resultIntegritas['B'] = $integritas;
-            } elseif ($integritas >= 56 && $integritas <= 69) {
+            } elseif ($integritas >= 56 && $integritas < 70) {
                 $resultIntegritas['C'] = $integritas;
-            } elseif ($integritas >= 0 && $integritas <= 55) {
+            } elseif ($integritas >= 0 && $integritas < 56) {
                 $resultIntegritas['K'] = $integritas;
             }
         @endphp
@@ -121,11 +121,11 @@
             
             if ($profesionalitas >= 85 && $profesionalitas <= 100) {
                 $resultProfesionalitas['SB'] = $profesionalitas;
-            } elseif ($profesionalitas >= 70 && $profesionalitas <= 84) {
+            } elseif ($profesionalitas >= 70 && $profesionalitas < 85) {
                 $resultProfesionalitas['B'] = $profesionalitas;
-            } elseif ($profesionalitas >= 56 && $profesionalitas <= 69) {
+            } elseif ($profesionalitas >= 56 && $profesionalitas < 70) {
                 $resultProfesionalitas['C'] = $profesionalitas;
-            } elseif ($profesionalitas >= 0 && $profesionalitas <= 55) {
+            } elseif ($profesionalitas >= 0 && $profesionalitas < 56) {
                 $resultProfesionalitas['K'] = $profesionalitas;
             }
         @endphp
@@ -144,11 +144,11 @@
             
             if ($bahasa_inggris >= 85 && $bahasa_inggris <= 100) {
                 $resultBahasaInggris['SB'] = $bahasa_inggris;
-            } elseif ($bahasa_inggris >= 70 && $bahasa_inggris <= 84) {
+            } elseif ($bahasa_inggris >= 70 && $bahasa_inggris < 85) {
                 $resultBahasaInggris['B'] = $bahasa_inggris;
-            } elseif ($bahasa_inggris >= 56 && $bahasa_inggris <= 69) {
+            } elseif ($bahasa_inggris >= 56 && $bahasa_inggris < 70) {
                 $resultBahasaInggris['C'] = $bahasa_inggris;
-            } elseif ($bahasa_inggris >= 0 && $bahasa_inggris <= 55) {
+            } elseif ($bahasa_inggris >= 0 && $bahasa_inggris < 56) {
                 $resultBahasaInggris['K'] = $bahasa_inggris;
             }
         @endphp
@@ -167,11 +167,11 @@
             
             if ($teknologi_informasi >= 85 && $teknologi_informasi <= 100) {
                 $resultTeknologiInformasi['SB'] = $teknologi_informasi;
-            } elseif ($teknologi_informasi >= 70 && $teknologi_informasi <= 84) {
+            } elseif ($teknologi_informasi >= 70 && $teknologi_informasi < 85) {
                 $resultTeknologiInformasi['B'] = $teknologi_informasi;
-            } elseif ($teknologi_informasi >= 56 && $teknologi_informasi <= 69) {
+            } elseif ($teknologi_informasi >= 56 && $teknologi_informasi < 70) {
                 $resultTeknologiInformasi['C'] = $teknologi_informasi;
-            } elseif ($teknologi_informasi >= 0 && $teknologi_informasi <= 55) {
+            } elseif ($teknologi_informasi >= 0 && $teknologi_informasi < 56) {
                 $resultTeknologiInformasi['K'] = $teknologi_informasi;
             }
         @endphp
@@ -190,11 +190,11 @@
             
             if ($komunikasi >= 85 && $komunikasi <= 100) {
                 $resultKomunikasi['SB'] = $komunikasi;
-            } elseif ($komunikasi >= 70 && $komunikasi <= 84) {
+            } elseif ($komunikasi >= 70 && $komunikasi < 85) {
                 $resultKomunikasi['B'] = $komunikasi;
-            } elseif ($komunikasi >= 56 && $komunikasi <= 69) {
+            } elseif ($komunikasi >= 56 && $komunikasi < 70) {
                 $resultKomunikasi['C'] = $komunikasi;
-            } elseif ($komunikasi >= 0 && $komunikasi <= 55) {
+            } elseif ($komunikasi >= 0 && $komunikasi < 56) {
                 $resultKomunikasi['K'] = $komunikasi;
             }
         @endphp
@@ -213,11 +213,11 @@
             
             if ($kerja_sama >= 85 && $kerja_sama <= 100) {
                 $resultKerjaSama['SB'] = $kerja_sama;
-            } elseif ($kerja_sama >= 70 && $kerja_sama <= 84) {
+            } elseif ($kerja_sama >= 70 && $kerja_sama < 85) {
                 $resultKerjaSama['B'] = $kerja_sama;
-            } elseif ($kerja_sama >= 56 && $kerja_sama <= 69) {
+            } elseif ($kerja_sama >= 56 && $kerja_sama < 70) {
                 $resultKerjaSama['C'] = $kerja_sama;
-            } elseif ($kerja_sama >= 0 && $kerja_sama <= 55) {
+            } elseif ($kerja_sama >= 0 && $kerja_sama < 56) {
                 $resultKerjaSama['K'] = $kerja_sama;
             }
         @endphp
@@ -236,11 +236,11 @@
             
             if ($organisasi >= 85 && $organisasi <= 100) {
                 $resultOrganisasi['SB'] = $organisasi;
-            } elseif ($organisasi >= 70 && $organisasi <= 84) {
+            } elseif ($organisasi >= 70 && $organisasi < 85) {
                 $resultOrganisasi['B'] = $organisasi;
-            } elseif ($organisasi >= 56 && $organisasi <= 69) {
+            } elseif ($organisasi >= 56 && $organisasi < 70) {
                 $resultOrganisasi['C'] = $organisasi;
-            } elseif ($organisasi >= 0 && $organisasi <= 55) {
+            } elseif ($organisasi >= 0 && $organisasi < 56) {
                 $resultOrganisasi['K'] = $organisasi;
             }
         @endphp
