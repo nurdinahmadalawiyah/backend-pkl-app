@@ -23,8 +23,10 @@ class PenilaianPembimbingController extends Controller
             ->get();
 
         return response()->json([
-            'error' => 'Data tidak ditemukan',
-        ], 404);
+            'status' => 'success',
+            'message' => 'Penilaian dari Pembimbing',
+            'data' => $penilaian
+        ], 200);
     }
 
     public function show($id_mahasiswa)
@@ -35,10 +37,8 @@ class PenilaianPembimbingController extends Controller
 
         if (is_null($penilaian)) {
             return response()->json([
-                'status' => 'success',
-                'message' => 'Data Tidak Ditemukan.',
-                'data' => []
-            ]);
+                'error' => 'Data tidak ditemukan',
+            ], 404);
         }
 
         // Konversi kolom numerik ke format desimal dengan 2 angka di belakang koma
