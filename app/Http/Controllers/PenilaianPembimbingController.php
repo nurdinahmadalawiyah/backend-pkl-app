@@ -23,10 +23,8 @@ class PenilaianPembimbingController extends Controller
             ->get();
 
         return response()->json([
-            'status' => 'success',
-            'message' => 'Penilaian dari Pembimbing',
-            'data' => $penilaian
-        ], 200);
+            'error' => 'Data tidak ditemukan',
+        ], 404);
     }
 
     public function show($id_mahasiswa)
