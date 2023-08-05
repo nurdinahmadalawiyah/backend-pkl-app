@@ -59,49 +59,6 @@ class DaftarHadirController extends Controller
         ], 200);
     }
 
-    public function indexByUser(Request $request)
-    {
-        $daftar_hadir = DaftarHadir::where('id_mahasiswa', $request->user()->id_mahasiswa)
-            ->orderBy('minggu')
-            ->get();
-
-        $grouped = $daftar_hadir->groupBy('minggu')->map(function ($item) {
-            return [
-                'minggu' => $item[0]->minggu,
-                'data_kehadiran' => $item->map(function ($subitem) {
-                    return [
-                        'id_daftar_hadir' => $subitem->id_daftar_hadir,
-                        'id_mahasiswa' => $subitem->id_mahasiswa,
-                        'hari_tanggal' => $subitem->hari_tanggal,
-                        'minggu' => $subitem->minggu,
-                        'tanda-tangan' => asset('/storage/tanda-tangan/' . $subitem->tanda_tangan),
-                    ];
-                }),
-            ];
-        });
-
-        $data_kehadiran = DB::table('mahasiswa')
-            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->join('pengajuan_pkl', 'mahasiswa.id_mahasiswa', '=', 'pengajuan_pkl.id_mahasiswa')
-            ->join('tempat_pkl', 'pengajuan_pkl.id_pengajuan', '=', 'tempat_pkl.id_pengajuan')
-            ->leftJoin('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
-            ->select('mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'pembimbing.nama as nama_pembimbing', 'pembimbing.nik')
-            ->where('mahasiswa.prodi', Auth::user()->id_mahasiswa)
-            ->first();
-
-        $pdf = PDF::loadView('pdf.daftar_hadir', ['grouped' => $grouped, 'data_kehadiran' => $data_kehadiran])->setPaper('a4');
-        $filename = 'daftar_hadir_' . $data_kehadiran->nim . '.pdf';
-        Storage::put('public/daftar-hadir/' . $filename, $pdf->output());
-        $pdf_url = asset('storage/daftar-hadir/' . $filename);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Daftar Hadir ' . $request->user()->nama,
-            'pdf_url' => $pdf_url,
-            'data' => $grouped->values(),
-        ], 200);
-    }
-
     public function showByPembimbing($id)
     {
         $daftar_hadir = DaftarHadir::where('id_mahasiswa', $id)
