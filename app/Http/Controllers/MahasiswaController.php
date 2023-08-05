@@ -68,7 +68,7 @@ class MahasiswaController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required',
-            'password' => 'required|string|min:8'
+            'password' => 'required|string'
         ]);
 
         if ($validator->fails()) {
@@ -278,7 +278,7 @@ class MahasiswaController extends Controller
             'semester' => 'required|string',
             'email' => 'nullable|string',
             'nomor_hp' => 'nullable',
-            'password' => 'required|string|min:8',
+            'password' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -307,7 +307,7 @@ class MahasiswaController extends Controller
 
         if ($request->has('password') && !empty($request->input('password'))) {
             $validator = Validator::make($request->all(), [
-                'password' => 'required|min:8',
+                'password' => 'required',
             ]);
 
             if ($validator->fails()) {

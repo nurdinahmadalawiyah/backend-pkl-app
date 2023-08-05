@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AkademikController;
 use App\Http\Controllers\BiodataIndustriController;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\DaftarHadirController;
 use App\Http\Controllers\JurnalKegiatanController;
 use App\Http\Controllers\LaporanPKLController;

@@ -37,10 +37,8 @@ class PenilaianPembimbingController extends Controller
 
         if (is_null($penilaian)) {
             return response()->json([
-                'status' => 'success',
-                'message' => 'Data Tidak Ditemukan.',
-                'data' => []
-            ]);
+                'error' => 'Data tidak ditemukan',
+            ], 404);
         }
 
         // Konversi kolom numerik ke format desimal dengan 2 angka di belakang koma

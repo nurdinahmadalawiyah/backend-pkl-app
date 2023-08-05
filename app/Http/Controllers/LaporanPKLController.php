@@ -16,7 +16,7 @@ class LaporanPKLController extends Controller
     {
         $laporan_pkl = DB::table('laporan_pkl')
             ->join('mahasiswa', 'laporan_pkl.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
-            ->where('mahasiswa.prodi', '=', Auth::user()->id_mahasiswa)
+            ->where('mahasiswa.id_mahasiswa', '=', Auth::user()->id_mahasiswa)
             ->select('laporan_pkl.id_laporan', 'mahasiswa.nama', 'mahasiswa.nim', 'laporan_pkl.file', 'laporan_pkl.tanggal_upload')
             ->first();
 
