@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('nama_pimpinan', 50);
             $table->text('alamat_kantor');
             $table->string('no_telp_fax', 20);
-            $table->string('contact_person', 100);
+            $table->string('contact_person', 50);
             $table->text('bidang_usaha_jasa');
             $table->string('spesialisasi_produksi_jasa', 50);
             $table->string('jangkauan_pemasaran', 50);

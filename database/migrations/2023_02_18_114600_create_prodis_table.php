@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('nama_prodi', 50);
             $table->string('kode_prodi', 10);
             $table->string('nama_ketua_prodi', 50);
-            $table->string('nidn_ketua_prodi', 50);
+            $table->string('nidn_ketua_prodi', 12);
             $table->string('password', 100);
             $table->timestamps();
         });
