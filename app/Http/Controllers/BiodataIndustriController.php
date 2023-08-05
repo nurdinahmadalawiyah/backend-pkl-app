@@ -32,7 +32,7 @@ class BiodataIndustriController extends Controller
         $biodata_industri = DB::table('biodata_industri')
             ->join('mahasiswa', 'biodata_industri.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
             ->select('biodata_industri.*', 'mahasiswa.nama', 'mahasiswa.nim')
-            ->where('biodata_industri.id_biodata_industri', '=', $id)
+            ->where('biodata_industri.id_mahasiswa', '=', $id)
             ->first();
 
         if (is_null($biodata_industri)) {
