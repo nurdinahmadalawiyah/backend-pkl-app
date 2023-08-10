@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -90,43 +89,13 @@
             <td style="text-align: right;" colspan="2">Cimahi, <?php echo strftime('%e %B %Y'); ?></td>
         </tr>
         <tr>
+            @php
+                use App\Helpers\SuratHelper;
+
+                $nomorSurat = SuratHelper::generateNomorSurat();
+            @endphp
             <td style="width: 10%">Nomor </td>
-            <td>: 299.7/PKL/TEDC-BAA/<?php
-            function romanNumerals($num)
-            {
-                $n = intval($num);
-                $result = '';
-                // Define a lookup array that contains all of the Roman numerals.
-                $lookup = [
-                    'M' => 1000,
-                    'CM' => 900,
-                    'D' => 500,
-                    'CD' => 400,
-                    'C' => 100,
-                    'XC' => 90,
-                    'L' => 50,
-                    'XL' => 40,
-                    'X' => 10,
-                    'IX' => 9,
-                    'V' => 5,
-                    'IV' => 4,
-                    'I' => 1,
-                ];
-                foreach ($lookup as $roman => $value) {
-                    // Determine the number of matches.
-                    $matches = intval($n / $value);
-                    // Add the same number of characters to the result.
-                    $result .= str_repeat($roman, $matches);
-                    // Subtract the current value from the number.
-                    $n = $n % $value;
-                }
-                // The Roman numeral should be built.
-                return $result;
-            }
-            $bulan = date('m');
-            $romawi = romanNumerals($bulan);
-            echo $romawi; // Output: bulan dalam angka Romawi
-            ?>/<?php echo date('Y'); ?></td>
+            <td>: <?php echo  $nomorSurat; ?></td>
         </tr>
         <tr>
             <td style="width: 10%">Hal </td>
