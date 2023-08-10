@@ -74,26 +74,6 @@
 </head>
 
 <body>
-    {{-- <table border="1" style="width: 100%">
-        <tr>
-            <td style="text-align: right;" rowspan="3">
-                <img src="{{ asset('assets/images/logo_tedc.png') }}" alt="Logo TEDC"
-                    style="max-width:65; max-height:65;">
-            </td>
-        </tr>
-        <tr>
-            <td class="text-header">
-                <img src="{{ asset('assets/images/text-header.png') }}" alt="Logo TEDC"
-                    style="max-width:100%; max-height:100%;">
-            </td>
-        </tr>
-        <tr>
-            <td class="text-header-2">Jl. Politeknik - Pesantren Km 2 Cibabat - Cimahi Utara 40513 Telp/Fax. (022)
-                6645951 <br>
-                Email: info@poltektedc.ac.id / public@poltektedc.ac.id Website: http://www.poltektedc.ac.id</td>
-        </tr>
-    </table>
-    <hr> --}}
     <table style="width: 100%">
         <tr>
             <td style="text-align: right;">
