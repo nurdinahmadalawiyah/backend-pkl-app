@@ -10,41 +10,41 @@ class SuratHelper
     {
         $cacheKey = 'daily_serial_number_' . date('Ymd');
         $lastGeneratedDate = Cache::get($cacheKey . '_last_generated');
-        $currentDate = date('Ymd');
 
-        if ($lastGeneratedDate === null || $currentDate !== date('Ymd', strtotime($lastGeneratedDate))) {
+        if ($lastGeneratedDate === null) {
             Cache::put($cacheKey, 1, now()->endOfDay());
+        } else {
+            Cache::increment($cacheKey);
         }
 
-        $dailySerialNumber = Cache::increment($cacheKey);
-
+        $dailySerialNumber = Cache::get($cacheKey);
         Cache::put($cacheKey . '_last_generated', now(), now()->endOfDay());
 
-        return str_pad($dailySerialNumber, 3, '0', STR_PAD_LEFT);
+        return $dailySerialNumber;
     }
 
     public static function generateDailyNumberForSpecificDay()
     {
         $cacheKey = 'daily_number_for_specific_day_' . date('Ymd');
         $lastGeneratedDate = Cache::get($cacheKey . '_last_generated');
-        $currentDate = date('Ymd');
 
-        if ($lastGeneratedDate === null || $currentDate !== date('Ymd', strtotime($lastGeneratedDate))) {
+        if ($lastGeneratedDate === null || $lastGeneratedDate !== date('Ymd')) {
             Cache::put($cacheKey, 1, now()->endOfDay());
+        } else {
+            Cache::increment($cacheKey);
         }
 
         $dailyNumberForSpecificDay = Cache::get($cacheKey);
-
         Cache::put($cacheKey . '_last_generated', now(), now()->endOfDay());
 
-        return $dailyNumberForSpecificDay;
+        return str_pad($dailyNumberForSpecificDay, 3, '0', STR_PAD_LEFT);
     }
 
     public static function generateNomorSurat()
     {
         $romawi = self::romanNumerals(date('m'));
 
-        return self::generateDailySerialNumber() . "." . self::generateDailyNumberForSpecificDay(). " /PKL/TEDC-BAA/{$romawi}/" . date('Y');
+        return self::generateDailyNumberForSpecificDay() . "." .  self::generateDailySerialNumber() . "/PKL/TEDC-BAA/{$romawi}/" . date('Y');
     }
 
     public static function romanNumerals($num)
