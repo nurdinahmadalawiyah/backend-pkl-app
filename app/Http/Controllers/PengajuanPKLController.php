@@ -56,6 +56,7 @@ class PengajuanPKLController extends Controller
             ->join('mahasiswa', 'pengajuan_pkl.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
             ->select('pengajuan_pkl.*', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi')
+            ->orderByDesc('pengajuan_pkl.updated_at')
             ->get();
 
         $data = $pengajuan_pkl->map(function ($item) {
