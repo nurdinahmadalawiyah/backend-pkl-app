@@ -16,6 +16,7 @@ class MahasiswaController extends Controller
         $mahasiswa = DB::table('mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
             ->select('id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'prodi.id_prodi', 'mahasiswa.semester', 'mahasiswa.email', 'mahasiswa.username', 'mahasiswa.nomor_hp')
+            ->orderByDesc('mahasiswa.updated_at')
             ->get();
 
         return response()->json([
