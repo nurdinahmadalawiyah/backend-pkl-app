@@ -21,6 +21,7 @@ class PengajuanPKL extends Model
         'id_mahasiswa',
         'nama_perusahaan',
         'alamat_perusahaan',
+        'ditujukan',
         'tanggal_mulai',
         'tanggal_selesai',
         'status',

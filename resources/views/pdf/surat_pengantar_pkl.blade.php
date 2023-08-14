@@ -107,7 +107,7 @@
     <table style="width: 90%">
         <td style="font-weight: bold;">
             Kepada Yth,<br>
-            Direktur / Pimpinan {{ $pengajuan_pkl->nama_perusahaan }} <br>
+            {{ $pengajuan_pkl->ditujukan }} {{ $pengajuan_pkl->nama_perusahaan }} <br>
             Di <br>
             {{ $pengajuan_pkl->alamat_perusahaan }} <br>
         </td>

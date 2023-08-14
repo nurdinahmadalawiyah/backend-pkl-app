@@ -128,6 +128,7 @@ class PengajuanPKLController extends Controller
         $validator = Validator::make($request->all(), [
             'nama_perusahaan' => 'required',
             'alamat_perusahaan' => 'required',
+            'ditujukan' => 'required',
             'tanggal_mulai' => 'required',
             'tanggal_selesai' => 'required',
         ]);
@@ -140,6 +141,7 @@ class PengajuanPKLController extends Controller
             'id_mahasiswa' => Auth::id(),
             'nama_perusahaan' => $request->nama_perusahaan,
             'alamat_perusahaan' => $request->alamat_perusahaan,
+            'ditujukan' => $request->ditujukan,
             'tanggal_mulai' => $request->tanggal_mulai,
             'tanggal_selesai' => $request->tanggal_selesai,
             'status' => 'menunggu'

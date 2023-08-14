@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_mahasiswa');
             $table->string('nama_perusahaan', 50);
             $table->text('alamat_perusahaan');
+            $table->string('ditujukan', 100)->after('alamat_perusahaan');
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai');
             $table->enum('status', ['menunggu', 'disetujui', 'ditolak']);
