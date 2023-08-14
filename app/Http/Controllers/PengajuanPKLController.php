@@ -187,7 +187,7 @@ class PengajuanPKLController extends Controller
         $pdf = PDF::loadView('pdf.surat_pengantar_pkl', compact(['pengajuan_pkl', 'data_surat']))
             ->setPaper('a4');
 
-        $filename = 'surat_pengantar_pkl_' . $data_surat->nim . '.pdf';
+        $filename = 'surat_pengantar_pkl_' . $data_surat->nim .  $data_surat->id_pengajuan . '.pdf';
         Storage::put('public/surat-pengantar-pkl/' . $filename, $pdf->output());
 
         $pengajuan_pkl->surat = $filename;
