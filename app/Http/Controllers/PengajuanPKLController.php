@@ -180,14 +180,14 @@ class PengajuanPKLController extends Controller
         $data_surat = DB::table('mahasiswa')
             ->join('pengajuan_pkl', 'mahasiswa.id_mahasiswa', '=', 'pengajuan_pkl.id_mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->select('pengajuan_pkl.id_pengajuan, mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.semester', 'prodi.nama_ketua_prodi', 'prodi.nidn_ketua_prodi', 'mahasiswa.notification_id')
+            ->select('mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'mahasiswa.semester', 'prodi.nama_ketua_prodi', 'prodi.nidn_ketua_prodi', 'mahasiswa.notification_id')
             ->where('pengajuan_pkl.id_pengajuan', '=', $id)
             ->first();
 
         $pdf = PDF::loadView('pdf.surat_pengantar_pkl', compact(['pengajuan_pkl', 'data_surat']))
             ->setPaper('a4');
 
-        $filename = 'surat_pengantar_pkl_' . $data_surat->nim .  $data_surat->id_pengajuan . '.pdf';
+        $filename = 'surat_pengantar_pkl_' . $data_surat->nim .  $pengajuan_pkl->id_pengajuan . '.pdf';
         Storage::put('public/surat-pengantar-pkl/' . $filename, $pdf->output());
 
         $pengajuan_pkl->surat = $filename;
