@@ -44,7 +44,7 @@ class ProdiTableSeeder extends Seeder
                 'username' => 'prodiTM',
                 'nama_prodi' => 'Teknik Mesin',
                 'kode_prodi' => 'TM',
-                'nama_ketua_prodi' => 'Agus Saleh,M.T',
+                'nama_ketua_prodi' => 'Agus Saleh, M.T',
                 'nidn_ketua_prodi' => '0407087804',
                 'password' => bcrypt('proditmtedc')
             ],

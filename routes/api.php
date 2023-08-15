@@ -184,6 +184,7 @@ Route::prefix('prodi')->controller(ProdiController::class)->group(function () {
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
         Route::post('logout', 'logout');
         Route::get('me', 'me');
+        Route::get('/list-by-prodi', 'indexByProdi');
     });
 
     Route::get('/list', 'index');

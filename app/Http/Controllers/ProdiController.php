@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 
 class ProdiController extends Controller
 {
@@ -18,6 +19,17 @@ class ProdiController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Semua Data Prodi',
+            'data' => $prodi
+        ], 200);
+    }
+
+    public function indexByProdi()
+    {
+        $prodi = Prodi::where('id_prodi', Auth::id())->get();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data Prodi',
             'data' => $prodi
         ], 200);
     }
