@@ -36,40 +36,40 @@ class ProdiTableSeeder extends Seeder
                 'username' => 'prodiAB',
                 'nama_prodi' => 'Alat Berat',
                 'kode_prodi' => 'AB',
-                'nama_ketua_prodi' => '',
-                'nidn_ketua_prodi' => '',
+                'nama_ketua_prodi' => 'Yoddy Agung Nuhgraha, M.T.',
+                'nidn_ketua_prodi' => '0424117602',
                 'password' => bcrypt('prodiabtedc')
             ],
             [
                 'username' => 'prodiTM',
                 'nama_prodi' => 'Teknik Mesin',
                 'kode_prodi' => 'TM',
-                'nama_ketua_prodi' => 'Firdani Fauziah, ST.,MT',
-                'nidn_ketua_prodi' => '',
+                'nama_ketua_prodi' => 'Agus Saleh,M.T',
+                'nidn_ketua_prodi' => '0407087804',
                 'password' => bcrypt('proditmtedc')
             ],
             [
                 'username' => 'prodiMO',
                 'nama_prodi' => 'Mesin Otomotif',
                 'kode_prodi' => 'MO',
-                'nama_ketua_prodi' => 'Didid Dwi Santoso, SST., MT',
-                'nidn_ketua_prodi' => '',
+                'nama_ketua_prodi' => 'Yoddy Agung Nuhgraha, M.T.',
+                'nidn_ketua_prodi' => '0424117602',
                 'password' => bcrypt('prodimotedc')
             ],
             [
                 'username' => 'prodiAK',
                 'nama_prodi' => 'Akuntansi',
                 'kode_prodi' => 'AK',
-                'nama_ketua_prodi' => 'Apit Yuliman Ermaya, Drs.,M.Ak.Ak.,CA',
-                'nidn_ketua_prodi' => '',
+                'nama_ketua_prodi' => 'Ari Sudrajat, M.Kom',
+                'nidn_ketua_prodi' => '0407028808',
                 'password' => bcrypt('prodiaktedc')
             ],
             [
                 'username' => 'prodiRM',
                 'nama_prodi' => 'Rekam Medik dan Informasi Kesehatan',
                 'kode_prodi' => 'RM',
-                'nama_ketua_prodi' => 'Srimara Soemitra, Dra.,M.M.Kes',
-                'nidn_ketua_prodi' => '',
+                'nama_ketua_prodi' => 'Rizqy Dimas Monica, S.Pd., M.Kes.',
+                'nidn_ketua_prodi' => '0411089201',
                 'password' => bcrypt('prodirmtedc')
             ],
             [
@@ -84,8 +84,8 @@ class ProdiTableSeeder extends Seeder
                 'username' => 'prodiKIM',
                 'nama_prodi' => 'Teknik Kimia',
                 'kode_prodi' => 'KIM',
-                'nama_ketua_prodi' => 'Ina Yulianti, M.PKim',
-                'nidn_ketua_prodi' => '',
+                'nama_ketua_prodi' => 'Lusi Marlina, Ir, M.M',
+                'nidn_ketua_prodi' => '0403026804',
                 'password' => bcrypt('prodikimtedc')
             ],
             [
@@ -100,16 +100,16 @@ class ProdiTableSeeder extends Seeder
                 'username' => 'prodiKA',
                 'nama_prodi' => 'Komputerisasi Akutansi',
                 'kode_prodi' => 'KA',
-                'nama_ketua_prodi' => 'Dedy Suryadi, SE., M.Ak, Ak.,CA',
-                'nidn_ketua_prodi' => '',
+                'nama_ketua_prodi' => 'Ari Sudrajat, M.Kom',
+                'nidn_ketua_prodi' => '0407028808',
                 'password' => bcrypt('prodikatedc')
             ],
             [
                 'username' => 'prodiMID',
                 'nama_prodi' => 'Mekanik Industri dan Desain (Teknik Mesin)',
                 'kode_prodi' => 'MID',
-                'nama_ketua_prodi' => 'Agus Saleh, S.ST.,M.T',
-                'nidn_ketua_prodi' => '',
+                'nama_ketua_prodi' => 'Agus Saleh,M.T',
+                'nidn_ketua_prodi' => '0407087804',
                 'password' => bcrypt('prodimidtedc')
             ],
             [
