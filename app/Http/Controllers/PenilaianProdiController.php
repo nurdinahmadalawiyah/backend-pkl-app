@@ -54,14 +54,14 @@ class PenilaianProdiController extends Controller
                 'penilaian_pembimbing.organisasi',
                 DB::raw('(penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2 AS nilai_akhir'),
                 DB::raw('CASE
-                    WHEN (nilai_akhir) IS NULL THEN NULL 
-                    WHEN (nilai_akhir) >= 85 THEN "A" 
-                    WHEN (nilai_akhir) >= 80 AND (nilai_akhir) < 85 THEN "AB" 
-                    WHEN (nilai_akhir) >= 75 AND (nilai_akhir) < 80 THEN "B" 
-                    WHEN (nilai_akhir) >= 70 AND (nilai_akhir) < 75 THEN "BC" 
-                    WHEN (nilai_akhir) >= 60 AND (nilai_akhir) < 70 THEN "C" 
-                    WHEN (nilai_akhir) >= 50 AND (nilai_akhir) < 60 THEN "CD" 
-                    WHEN (nilai_akhir) >= 40 AND (nilai_akhir) < 50 THEN "D" 
+                    WHEN ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) IS NULL THEN NULL 
+                    WHEN ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) >= 85 THEN "A" 
+                    WHEN ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) >= 80 AND ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) < 85 THEN "AB" 
+                    WHEN ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) >= 75 AND ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) < 80 THEN "B" 
+                    WHEN ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) >= 70 AND ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) < 75 THEN "BC" 
+                    WHEN ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) >= 60 AND ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) < 70 THEN "C" 
+                    WHEN ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) >= 50 AND ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) < 60 THEN "CD" 
+                    WHEN ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) >= 40 AND ((penilaian_prodi.total_nilai + penilaian_pembimbing.total_nilai) / 2) < 50 THEN "D" 
                     ELSE "E" 
                 END AS nilai_huruf')
             )
