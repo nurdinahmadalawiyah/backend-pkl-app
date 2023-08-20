@@ -14,6 +14,7 @@ use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\PenilaianPembimbingController;
 use App\Http\Controllers\PenilaianProdiController;
 use App\Http\Controllers\TempatPKLController;
+use App\Http\Controllers\CatatanKhususController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -154,6 +155,14 @@ Route::prefix('penilaian-pembimbing')->controller(PenilaianPembimbingController:
         Route::get('/pembimbing', 'index');
         Route::get('/pembimbing/{id}', 'show');
         Route::delete('/pembimbing/{id}', 'destroy');
+    });
+});
+
+Route::prefix('catatan-khusus')->controller(CatatanKhususController::class)->group(function () {
+    Route::middleware('auth:mahasiswa_api', 'throttle:60,1')->group(function () {
+        Route::get('/mahasiswa', 'show');
+        Route::post('/mahasiswa', 'store');
+        Route::delete('/mahasiswa', 'destroy');
     });
 });
 
