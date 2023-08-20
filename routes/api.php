@@ -164,6 +164,14 @@ Route::prefix('catatan-khusus')->controller(CatatanKhususController::class)->gro
         Route::post('/mahasiswa', 'store');
         Route::delete('/mahasiswa', 'destroy');
     });
+
+    Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
+        Route::get('/prodi/{id}', 'showByProdi');
+    });
+
+    Route::middleware('auth:pembimbing_api', 'throttle:60,1')->group(function () {
+        Route::get('/pembimbing/{id}', 'showByPembimbing');
+    });
 });
 
 Route::prefix('laporan')->controller(LaporanPKLController::class)->group(function () {

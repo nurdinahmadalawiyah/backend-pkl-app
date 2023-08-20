@@ -13,32 +13,6 @@ use PDF;
 
 class CatatanKhususController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -86,12 +60,6 @@ class CatatanKhususController extends Controller
         ], 200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\CatatanKhusus  $catatanKhusus
-     * @return \Illuminate\Http\Response
-     */
     public function show()
     {
         $id_mahasiswa = Auth::user()->id_mahasiswa;
@@ -123,35 +91,42 @@ class CatatanKhususController extends Controller
         ], 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\CatatanKhusus  $catatanKhusus
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(CatatanKhusus $catatanKhusus)
+    public function showByProdi($id)
     {
-        //
+        $catatan_khusus = DB::table('catatan_khusus')
+            ->join('mahasiswa', 'catatan_khusus.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+            ->select('catatan_khusus.*', 'mahasiswa.nama', 'mahasiswa.nim')
+            ->where('catatan_khusus.id_mahasiswa', '=', $id)
+            ->first();
+
+        if (is_null($catatan_khusus)) {
+            return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Catatan Khusus',
+            'data' => $catatan_khusus
+        ], 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CatatanKhusus  $catatanKhusus
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, CatatanKhusus $catatanKhusus)
+    public function showByPembimbing($id_mahasiswa)
     {
-        //
+        $catatan_khusus = DB::table('catatan_khusus')
+            ->where('id_mahasiswa', $id_mahasiswa)
+            ->first();
+
+        if (is_null($catatan_khusus)) {
+            return response()->json(['error' => 'Data Tidak Ditemukan.'], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Catatan Khusus',
+            'data' => $catatan_khusus
+        ], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\CatatanKhusus  $catatanKhusus
-     * @return \Illuminate\Http\Response
-     */
     public function destroy()
     {
         $catatan_khusus = CatatanKhusus::where('id_mahasiswa', Auth::user()->id_mahasiswa)->first();
