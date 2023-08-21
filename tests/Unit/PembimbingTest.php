@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Models\Mahasiswa;
 use App\Models\Pembimbing;
 use Tests\TestCase;
+use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class PembimbingTest extends TestCase
@@ -15,7 +16,7 @@ class PembimbingTest extends TestCase
     {
         parent::setUp();
 
-        $pembimbing = Pembimbing::first();
+        $pembimbing = Pembimbing::where('username', 'anto')->first();
         $this->tokenPembimbing = JWTAuth::fromUser($pembimbing);
     }
 
@@ -65,7 +66,7 @@ class PembimbingTest extends TestCase
         $data = [
             'nama' => 'Jhon Doe',
             'nik' => '72367843',
-            'username' => "usertest",
+            'username' => Str::random(8),
             'password' => "123456789"
         ];
 
@@ -222,7 +223,7 @@ class PembimbingTest extends TestCase
     public function test_get_biodata_industri_mahasiswa()
     {
         $headers = ['Authorization' => 'Bearer ' . $this->tokenPembimbing];
-        $mahasiswa = Mahasiswa::first();
+        $mahasiswa = Mahasiswa::where('nim', 'D111911068')->first();
         $response = $this->withHeaders($headers)->get("api/biodata-industri/pembimbing/{$mahasiswa->id_mahasiswa}");
 
         $response->assertStatus(200)
@@ -264,7 +265,7 @@ class PembimbingTest extends TestCase
     public function test_get_jurnal_kegiatan_mahasiswa()
     {
         $headers = ['Authorization' => 'Bearer ' . $this->tokenPembimbing];
-        $mahasiswa = Mahasiswa::first();
+        $mahasiswa = Mahasiswa::where('nim', 'D111911068')->first();
         $response = $this->withHeaders($headers)->get("api/jurnal-kegiatan/pembimbing/{$mahasiswa->id_mahasiswa}");
 
         $response->assertStatus(200)
@@ -296,7 +297,7 @@ class PembimbingTest extends TestCase
     public function test_get_daftar_hadir_mahasiswa()
     {
         $headers = ['Authorization' => 'Bearer ' . $this->tokenPembimbing];
-        $mahasiswa = Mahasiswa::first();
+        $mahasiswa = Mahasiswa::where('nim', 'D111911068')->first();
         $response = $this->withHeaders($headers)->get("api/daftar-hadir/pembimbing/{$mahasiswa->id_mahasiswa}");
 
         $response->assertStatus(200)
@@ -320,6 +321,29 @@ class PembimbingTest extends TestCase
                             ]
                         ]
                     ]
+                ]
+            ]);
+    }
+
+    public function test_get_catatan_khusus_mahasiswa()
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenPembimbing];
+        $mahasiswa = Mahasiswa::where('nim', 'D111911068')->first();
+        $response = $this->withHeaders($headers)->get("api/catatan-khusus/pembimbing/{$mahasiswa->id_mahasiswa}");
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Catatan Khusus',
+            ])
+            ->assertJsonStructure([
+                'status',
+                'message',
+                'data' => [
+                    'id_catatan_khusus',
+                    'id_mahasiswa',
+                    'id_tempat_pkl',
+                    'catatan',
                 ]
             ]);
     }

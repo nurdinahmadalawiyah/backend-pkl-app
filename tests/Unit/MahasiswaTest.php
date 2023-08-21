@@ -6,6 +6,7 @@ use App\Models\DaftarHadir;
 use App\Models\JurnalKegiatan;
 use App\Models\LaporanPKL;
 use App\Models\Mahasiswa;
+use App\Models\CatatanKhusus;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -18,16 +19,16 @@ class MahasiswaTest extends TestCase
     {
         parent::setUp();
 
-        $mahasiswa = Mahasiswa::first();
+        $mahasiswa = Mahasiswa::where('nim', 'D111911068')->first();
         $this->tokenMahasiswa = JWTAuth::fromUser($mahasiswa);
     }
 
     public function test_login_mahasiswa()
     {
-        $mahasiswa = Mahasiswa::first();
+        $mahasiswa = Mahasiswa::where('nim', 'D111911068')->first();
         $credentials = [
             'username' => $mahasiswa->username,
-            'password' => 'D111911004',
+            'password' => '123456789',
         ];
 
         $response = $this->postJson('api/mahasiswa/login', $credentials);
@@ -95,8 +96,8 @@ class MahasiswaTest extends TestCase
         $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
 
         $data = [
-            'password_lama' => 'D111911004',
-            'password_baru' => 'D111911004',
+            'password_lama' => '123456789',
+            'password_baru' => '123456789',
         ];
 
         $response = $this->withHeaders($headers)->put('api/mahasiswa/update-password/', $data);
@@ -112,8 +113,8 @@ class MahasiswaTest extends TestCase
         $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
 
         $data = [
-            'email' => 'ahmadyusuf@mail.com',
-            'username' => 'D111911004',
+            'email' => 'nurdin@mail.com',
+            'username' => 'D111911068',
             'semester' => '8 (Delapan)',
             'nomor_hp' => '08965367282'
         ];
@@ -145,7 +146,7 @@ class MahasiswaTest extends TestCase
     {
         $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
         $response = $this->withHeaders($headers)->get('api/mahasiswa/status');
-        $mahasiswa = Mahasiswa::first();
+        $mahasiswa = Mahasiswa::where('nim', 'D111911068')->first();
 
         $response->assertStatus(200)
             ->assertJson([
@@ -224,6 +225,7 @@ class MahasiswaTest extends TestCase
         $data = [
             'nama_perusahaan' => 'company test',
             'alamat_perusahaan' => 'alamat test',
+            'ditujukan' => 'ditujuan test',
             'tanggal_mulai' => '2023-02-19 08:42:23',
             'tanggal_selesai' => '2023-02-19 08:42:23'
         ];
@@ -255,7 +257,7 @@ class MahasiswaTest extends TestCase
     {
         $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
         $response = $this->withHeaders($headers)->get('api/pengajuan-pkl/mahasiswa/status');
-        $mahasiswa = Mahasiswa::first();
+        $mahasiswa = Mahasiswa::where('nim', 'D111911068')->first();
         
         $response->assertStatus(200)
             ->assertJson([
@@ -504,7 +506,7 @@ class MahasiswaTest extends TestCase
     {
         $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
         $response = $this->withHeaders($headers)->get('api/jurnal-kegiatan/mahasiswa');
-        $mahasiswa = Mahasiswa::first();
+        $mahasiswa = Mahasiswa::where('nim', 'D111911068')->first();
 
         $response->assertStatus(200)
             ->assertJson([
@@ -667,7 +669,7 @@ class MahasiswaTest extends TestCase
     {
         $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
         $response = $this->withHeaders($headers)->get('api/daftar-hadir/mahasiswa');
-        $mahasiswa = Mahasiswa::first();
+        $mahasiswa = Mahasiswa::where('nim', 'D111911068')->first();
 
         $response->assertStatus(200)
             ->assertJson([
@@ -753,6 +755,85 @@ class MahasiswaTest extends TestCase
                 ]
             ]);    
     }
+    
+    public function test_post_catatan_khusus()
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
+
+        $data = [
+            'catatan' => 'Test Catatan Khusus PKL',
+        ];
+
+        $response = $this->withHeaders($headers)->post('api/catatan-khusus/mahasiswa', $data);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Catatan Khusus Berhasil Disimpan',
+            ])
+            ->assertJsonStructure([
+                'status',
+                'message',
+                'data' => [
+                    'id_catatan_khusus',
+                    'id_mahasiswa',
+                    'id_tempat_pkl',
+                    'catatan',
+                    'created_at',
+                    'updated_at'
+                ]
+            ]);    
+    }
+
+    public function test_get_catatan_khusus()
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
+
+        $response = $this->withHeaders($headers)->get('api/catatan-khusus/mahasiswa');
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Detail catatan-khusus',
+            ])
+            ->assertJsonStructure([
+                'status',
+                'message',
+                'data' => [
+                    'id_catatan_khusus',
+                    'id_mahasiswa',
+                    'id_tempat_pkl',
+                    'catatan',
+                    'created_at',
+                    'updated_at'
+                ]
+            ]);    
+    }
+
+    public function test_delete_catatan_khusus()
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
+
+        $response = $this->withHeaders($headers)->delete("api/catatan-khusus/mahasiswa");
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Catatan Khusus Dihapus',
+            ])
+            ->assertJsonStructure([
+                'status',
+                'message',
+                'data' => [
+                    'id_catatan_khusus',
+                    'id_mahasiswa',
+                    'id_tempat_pkl',
+                    'catatan',
+                    'created_at',
+                    'updated_at'
+                ]
+            ]);  
+    }
 
     public function test_upload_laporan()
     {
@@ -787,7 +868,7 @@ class MahasiswaTest extends TestCase
     {
         $headers = ['Authorization' => 'Bearer ' . $this->tokenMahasiswa];
         $response = $this->withHeaders($headers)->get('api/laporan/mahasiswa');
-        $mahasiswa = Mahasiswa::first();
+        $mahasiswa = Mahasiswa::where('nim', 'D111911068')->first();
 
         $response->assertStatus(200)
             ->assertJson([

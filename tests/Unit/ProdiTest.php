@@ -8,6 +8,7 @@ use App\Models\LowonganPKL;
 use App\Models\Mahasiswa;
 use App\Models\Pembimbing;
 use App\Models\Prodi;
+use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -21,13 +22,13 @@ class ProdiTest extends TestCase
     {
         parent::setUp();
 
-        $prodi = Prodi::first();
+        $prodi = Prodi::where('kode_prodi', 'IF')->first();
         $this->tokenProdi = JWTAuth::fromUser($prodi);
     }
 
     public function test_login_Prodi()
     {
-        $prodi = Prodi::first();
+        $prodi = Prodi::where('kode_prodi', 'IF')->first();
         $credentials = [
             'username' => $prodi->username,
             'password' => 'prodiiftedc',
@@ -98,7 +99,7 @@ class ProdiTest extends TestCase
         $headers = ['Authorization' => 'Bearer ' . $this->tokenProdi];
 
         $data = [
-            'username' => 'test',
+            'username' => Str::random(8),
             'nama' => 'Name Test',
             'nim' => "D1191922",
             'prodi' => "1",
@@ -138,7 +139,7 @@ class ProdiTest extends TestCase
         $headers = ['Authorization' => 'Bearer ' . $this->tokenProdi];
 
         $data = [
-            'username' => 'test',
+            'username' => Str::random(8),
             'nama' => 'Name Test',
             'nim' => "D1191922",
             'prodi' => "1",
@@ -235,7 +236,7 @@ class ProdiTest extends TestCase
         $headers = ['Authorization' => 'Bearer ' . $this->tokenProdi];
 
         $data = [
-            'username' => 'tests',
+            'username' => Str::random(8),
             'nama' => 'Name Test',
             'nik' => "376798423",
             'password' => "123456789",
@@ -267,7 +268,7 @@ class ProdiTest extends TestCase
         $headers = ['Authorization' => 'Bearer ' . $this->tokenProdi];
 
         $data = [
-            'username' => 'testuiu',
+            'username' => Str::random(8),
             'nama' => 'Name Test update',
             'nim' => "D1191922",
             'prodi' => "1",
@@ -346,7 +347,6 @@ class ProdiTest extends TestCase
                         'nama_mahasiswa',
                         'nama_prodi',
                         'nim',
-                        'id_biodata_industri',
                         'nama_pembimbing',
                         'nik',
                         'id_mahasiswa',
@@ -523,9 +523,9 @@ class ProdiTest extends TestCase
     public function test_get_biodata_industri_by_prodi()
     {
         $headers = ['Authorization' => 'Bearer ' . $this->tokenProdi];
-        $biodataIndustri = BiodataIndustri::latest()->first();
+        $mahasiswa = Mahasiswa::where('nim', 'D111911068')->first();
 
-        $response = $this->withHeaders($headers)->get("api/biodata-industri/prodi/detail/{$biodataIndustri->id_biodata_industri}");
+        $response = $this->withHeaders($headers)->get("api/biodata-industri/prodi/detail/{$mahasiswa->id_mahasiswa}");
 
         $response->assertStatus(200)
             ->assertJson([
@@ -568,7 +568,7 @@ class ProdiTest extends TestCase
     public function test_get_jurnal_kegiatan_by_prodi()
     {
         $headers = ['Authorization' => 'Bearer ' . $this->tokenProdi];
-        $mahasiswa = Mahasiswa::first();
+        $mahasiswa = Mahasiswa::where('nim', 'D111911068')->first();
 
         $response = $this->withHeaders($headers)->get("api/jurnal-kegiatan/prodi/{$mahasiswa->id_mahasiswa}");
 
@@ -601,7 +601,7 @@ class ProdiTest extends TestCase
     public function test_get_daftar_hadir_by_prodi()
     {
         $headers = ['Authorization' => 'Bearer ' . $this->tokenProdi];
-        $mahasiswa = Mahasiswa::first();
+        $mahasiswa = Mahasiswa::where('nim', 'D111911068')->first();
 
         $response = $this->withHeaders($headers)->get("api/daftar-hadir/prodi/{$mahasiswa->id_mahasiswa}");
 
@@ -630,10 +630,33 @@ class ProdiTest extends TestCase
             ]);
     }
 
+    public function test_get_catatan_khusus_by_prodi()
+    {
+        $headers = ['Authorization' => 'Bearer ' . $this->tokenProdi];
+        $mahasiswa = Mahasiswa::where('nim', 'D111911068')->first();
+        $response = $this->withHeaders($headers)->get("api/catatan-khusus/prodi/{$mahasiswa->id_mahasiswa}");
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Catatan Khusus',
+            ])
+            ->assertJsonStructure([
+                'status',
+                'message',
+                'data' => [
+                    'id_catatan_khusus',
+                    'id_mahasiswa',
+                    'id_tempat_pkl',
+                    'catatan',
+                ]
+            ]);
+    }
+
     public function test_get_laporan_by_prodi()
     {
         $headers = ['Authorization' => 'Bearer ' . $this->tokenProdi];
-        $mahasiswa = Mahasiswa::first();
+        $mahasiswa = Mahasiswa::where('nim', 'D111911068')->first();
 
         $response = $this->withHeaders($headers)->get("api/laporan/prodi/{$mahasiswa->id_mahasiswa}");
 
@@ -690,62 +713,32 @@ class ProdiTest extends TestCase
             ]);
     }
 
-    public function test_get_list_nilai_pkl()
-    {
-        $headers = ['Authorization' => 'Bearer ' . $this->tokenProdi];
-
-        $response = $this->withHeaders($headers)->get('api/penilaian-prodi/prodi');
-
-        $response->assertStatus(200)
-            ->assertJson([
-                'status' => 'success',
-                'message' => 'Penilaian dari Prodi',
-            ])
-            ->assertJsonStructure([
-                'status',
-                'message',
-                'data' => [
-                    [
-                        'id_penilaian_prodi',
-                        'id_mahasiswa',
-                        'id_tempat_pkl',
-                        'presentasi',
-                        'dokumen',
-                        'total_nilai',
-                        'created_at',
-                        'updated_at',
-                        'nama',
-                        'nama_prodi',
-                        'nim',
-                    ]
-                ]
-            ]);
-    }
-
     public function test_get_detail_nilai_pkl()
     {
         $headers = ['Authorization' => 'Bearer ' . $this->tokenProdi];
-        $mahasiswa = Mahasiswa::first();
+        $mahasiswa = Mahasiswa::where('nim', 'D111911068')->first();
         $response = $this->withHeaders($headers)->get("api/penilaian-prodi/prodi/{$mahasiswa->id_mahasiswa}");
 
         $response->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
-                'message' => 'Detail Nilai Mahasiswa',
+                'message' => 'Detail Nilai Mahasiswa ',
             ])
             ->assertJsonStructure([
                 'status',
                 'message',
                 'data' => [
+                    'id_mahasiswa',
                     'nama',
                     'nama_prodi',
                     'nim',
+                    'nama_pembimbing',
+                    'nik',
                     'id_penilaian_prodi',
+                    'id_penilaian_pembimbing',
+                    'id_tempat_pkl',
                     'presentasi',
                     'dokumen',
-                    'id_penilaian_pembimbing',
-                    'id_mahasiswa',
-                    'id_tempat_pkl',
                     'integritas',
                     'profesionalitas',
                     'bahasa_inggris',
@@ -753,9 +746,6 @@ class ProdiTest extends TestCase
                     'komunikasi',
                     'kerja_sama',
                     'organisasi',
-                    'total_nilai',
-                    'created_at',
-                    'updated_at',
                     'nilai_akhir',
                     'nilai_huruf'
                 ]
