@@ -15,14 +15,31 @@ class MahasiswaController extends Controller
     {
         $mahasiswa = DB::table('mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->select('id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'prodi.id_prodi', 'mahasiswa.semester', 'mahasiswa.email', 'mahasiswa.username', 'mahasiswa.nomor_hp')
+            ->select('id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'prodi.id_prodi', 'mahasiswa.tahun_masuk', 'mahasiswa.email', 'mahasiswa.username', 'mahasiswa.nomor_hp')
             ->orderByDesc('mahasiswa.updated_at')
             ->get();
+
+
+        $mahasiswaData = [];
+        foreach ($mahasiswa as $data) {
+            $semester = $this->hitungSemester($data->tahun_masuk);
+            $mahasiswaData[] = [
+                "id_mahasiswa" => $data->id_mahasiswa,
+                "nama" => $data->nama,
+                "nim" => $data->nim,
+                "nama_prodi" => $data->nama_prodi,
+                "id_prodi" => $data->id_prodi,
+                "semester" => $semester,
+                "email" => $data->email,
+                "username" => $data->username,
+                "nomor_hp" => $data->nomor_hp
+            ];
+        }
 
         return response()->json([
             'status' => 'success',
             'message' => 'Semua Data Mahasiswa Politeknik TEDC Bandung',
-            'data' => $mahasiswa
+            'data' => $mahasiswaData
         ], 200);
     }
 
@@ -30,14 +47,30 @@ class MahasiswaController extends Controller
     {
         $mahasiswa = DB::table('mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-            ->select('id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'prodi.id_prodi', 'mahasiswa.semester', 'mahasiswa.email', 'mahasiswa.username', 'mahasiswa.nomor_hp')
+            ->select('id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'prodi.id_prodi', 'mahasiswa.tahun_masuk', 'mahasiswa.email', 'mahasiswa.username', 'mahasiswa.nomor_hp')
             ->where('mahasiswa.prodi', Auth::user()->id_prodi)
             ->get();
+
+        $mahasiswaData = [];
+        foreach ($mahasiswa as $data) {
+            $semester = $this->hitungSemester($data->tahun_masuk);
+            $mahasiswaData[] = [
+                "id_mahasiswa" => $data->id_mahasiswa,
+                "nama" => $data->nama,
+                "nim" => $data->nim,
+                "nama_prodi" => $data->nama_prodi,
+                "id_prodi" => $data->id_prodi,
+                "semester" => $semester,
+                "email" => $data->email,
+                "username" => $data->username,
+                "nomor_hp" => $data->nomor_hp
+            ];
+        }
 
         return response()->json([
             'status' => 'success',
             'message' => 'Semua Data Mahasiswa Politeknik TEDC Bandung',
-            'data' => $mahasiswa
+            'data' => $mahasiswaData
         ], 200);
     }
 
@@ -97,12 +130,55 @@ class MahasiswaController extends Controller
             ->where('mahasiswa.id_mahasiswa', auth('mahasiswa_api')->user()->id_mahasiswa)
             ->first();
 
+        $semester = $this->hitungSemester($mahasiswa->tahun_masuk);
 
         return response()->json([
             'status' => 'success',
             'message' => 'Profile',
-            'data' => $mahasiswa
+            'data' => [
+                "id_mahasiswa" => $mahasiswa->id_mahasiswa,
+                "username" => $mahasiswa->username,
+                "nama" => $mahasiswa->nama,
+                "nim" => $mahasiswa->nim,
+                "prodi" => $mahasiswa->prodi,
+                "semester" => $semester,
+                "email" => $mahasiswa->email,
+                "nomor_hp" => $mahasiswa->nomor_hp,
+                "notification_id" => $mahasiswa->notification_id,
+                "created_at" => $mahasiswa->created_at,
+                "updated_at" => $mahasiswa->updated_at,
+                "nama_prodi" => $mahasiswa->nama_prodi,
+            ]
         ], 200);
+    }
+
+    public function hitungSemester($tahunMasuk)
+    {
+        $tahunSekarang = date("Y");
+
+        $selisihTahun = $tahunSekarang - $tahunMasuk;
+
+        if ($selisihTahun < 0) {
+            echo "Tahun masuk di masa depan";
+        } else {
+            $semester = $selisihTahun * 2;
+
+            if (date("n") >= 9) {
+                $semester++;
+            }
+
+            $angkaSemester = [
+                "Satu", "Dua", "Tiga", "Empat", "Lima",
+                "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh",
+                "Sebelas", "Dua Belas", "Tiga Belas", "Empat Belas",
+            ];
+
+            if ($semester >= 1 && $semester <= count($angkaSemester)) {
+                return $semester . " (" . $angkaSemester[$semester - 1] . ")";
+            } else {
+                return "Semester tidak valid";
+            }
+        }
     }
 
 
@@ -237,7 +313,7 @@ class MahasiswaController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'nullable|email|unique:mahasiswa,email,' . $mahasiswa->id_mahasiswa . ',id_mahasiswa',
             'username' => 'nullable|unique:mahasiswa,username,' . $mahasiswa->id_mahasiswa . ',id_mahasiswa',
-            'semester' => 'nullable',
+            'tahun_masuk' => 'nullable',
             'nomor_hp' => 'nullable|numeric',
         ]);
 
@@ -253,8 +329,8 @@ class MahasiswaController extends Controller
             $mahasiswa->username = $request->username;
         }
 
-        if ($request->has('semester')) {
-            $mahasiswa->semester = $request->semester;
+        if ($request->has('tahun_masuk')) {
+            $mahasiswa->tahun_masuk = $request->tahun_masuk;
         }
 
         if ($request->has('nomor_hp')) {
@@ -356,11 +432,11 @@ class MahasiswaController extends Controller
     }
 
     public function savePlayerId(Request $request)
-    {    
+    {
         $mahasiswa_id = Auth::user()->id_mahasiswa;
         $notification_id = $request->input('notification_id');
         DB::table('mahasiswa')->where('id_mahasiswa', $mahasiswa_id)->update(['notification_id' => $notification_id]);
-    
+
         return response()->json(['message' => 'Player ID berhasil disimpan'], 200);
     }
 }

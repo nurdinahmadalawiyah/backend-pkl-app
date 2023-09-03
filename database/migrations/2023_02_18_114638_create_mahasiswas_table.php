@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('nama', 50);
             $table->string('nim', 30)->unique();
             $table->unsignedBigInteger('prodi');
-            $table->string('semester', 20);
+            $table->year('tahun_masuk');
             $table->string('email', 50)->nullable();
             $table->string('nomor_hp', 20)->nullable();
             $table->string('password', 100);

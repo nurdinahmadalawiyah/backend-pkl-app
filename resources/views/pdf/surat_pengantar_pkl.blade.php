@@ -149,7 +149,8 @@
             <td class="td-mahasiswa">{{ $data_surat->nim }}</td>
             <td class="td-mahasiswa">{{ $data_surat->nama }}</td>
             <td class="td-mahasiswa">{{ $data_surat->nama_prodi }}</td>
-            <td class="td-mahasiswa">{{ $data_surat->semester }}</td>
+            <td class="td-mahasiswa">{{ app('App\Http\Controllers\MahasiswaController')->hitungSemester($data_surat->tahun_masuk) }}
+            </td>
         </tr>
     </table>
     <br>
