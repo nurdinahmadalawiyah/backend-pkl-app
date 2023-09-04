@@ -142,6 +142,7 @@ class MahasiswaController extends Controller
                 "nim" => $mahasiswa->nim,
                 "prodi" => $mahasiswa->prodi,
                 "semester" => $semester,
+                "tahun_masuk" => $mahasiswa->tahun_masuk,
                 "email" => $mahasiswa->email,
                 "nomor_hp" => $mahasiswa->nomor_hp,
                 "notification_id" => $mahasiswa->notification_id,
