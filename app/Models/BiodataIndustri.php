@@ -18,7 +18,7 @@ class BiodataIndustri extends Model
     }
 
     protected $fillable = [
-        'id_mahasiswa',
+        'id_pembimbing',
         'id_tempat_pkl',
         'nama_industri',
         'nama_pimpinan',

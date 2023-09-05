@@ -241,8 +241,8 @@
                         <br>
                         <br>
                         <br>
-                        <b><u>{{ $biodata_industri->nama }}</u></b><br>
-                        NIM. {{ $biodata_industri->nim }}
+                        <b><u>{{ $mahasiswa->nama }}</u></b><br>
+                        NIM. {{ $mahasiswa->nim }}
                     </div>
                 </div>
             </td>

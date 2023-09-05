@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('biodata_industri', function (Blueprint $table) {
             $table->id('id_biodata_industri');
-            $table->unsignedBigInteger('id_mahasiswa');
+            $table->unsignedBigInteger('id_pembimbing');
             $table->unsignedBigInteger('id_tempat_pkl');
             $table->string('nama_industri', 50);
             $table->string('nama_pimpinan', 50);
@@ -38,7 +38,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('id_tempat_pkl')->references('id_tempat_pkl')->on('tempat_pkl');
-            $table->foreign('id_mahasiswa')->references('id_mahasiswa')->on('mahasiswa');
+            $table->foreign('id_pembimbing')->references('id_pembimbing')->on('pembimbing');
         });
     }
 

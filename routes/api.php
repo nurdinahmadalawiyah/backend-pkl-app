@@ -56,6 +56,7 @@ Route::prefix('tempat-pkl')->controller(TempatPKLController::class)->group(funct
 
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
         Route::get('/prodi', 'index');
+        Route::get('/prodi/data', 'dashboardDataProdi');
     });
 });
 
@@ -77,20 +78,19 @@ Route::prefix('lowongan-pkl')->controller(LowonganPKLController::class)->group(f
 
 Route::prefix('biodata-industri')->controller(BiodataIndustriController::class)->group(function () {
     Route::middleware('auth:mahasiswa_api', 'throttle:60,1')->group(function () {
-        Route::post('/mahasiswa', 'store');
         Route::get('/mahasiswa', 'index');
         Route::post('/mahasiswa/{id}', 'update');
         Route::get('/mahasiswa/detail', 'show');
-        Route::delete('/mahasiswa', 'destroy');
     });
-
+    
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
         Route::get('/prodi/detail/{id}', 'detailByProdi');
     });
-
+    
     Route::middleware('auth:pembimbing_api', 'throttle:60,1')->group(function () {
-        Route::get('/pembimbing', 'showByPembimbing');
-        Route::get('/pembimbing/{id}', 'detailByPembimbing');
+        Route::get('/pembimbing', 'detailByPembimbing');
+        Route::post('/pembimbing', 'store');
+        Route::delete('/pembimbing', 'destroy');
     });
 });
 
