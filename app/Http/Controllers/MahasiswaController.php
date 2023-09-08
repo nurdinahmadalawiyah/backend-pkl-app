@@ -384,7 +384,7 @@ class MahasiswaController extends Controller
             'nama' => 'required',
             'nim' => 'required|string',
             'prodi' => 'required',
-            'semester' => 'required|string',
+            'tahun_masuk' => 'required|string',
             'email' => 'nullable|string',
             'nomor_hp' => 'nullable',
             'password' => 'required|string',
