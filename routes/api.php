@@ -57,6 +57,7 @@ Route::prefix('tempat-pkl')->controller(TempatPKLController::class)->group(funct
     Route::middleware('auth:prodi_api', 'throttle:60,1')->group(function () {
         Route::get('/prodi', 'index');
         Route::get('/prodi/data', 'dashboardDataProdi');
+        Route::get('/prodi/tahun-akademik', 'lovTahunAkademik');
     });
 
     Route::middleware('auth:akademik_api', 'throttle:60,1')->group(function () {

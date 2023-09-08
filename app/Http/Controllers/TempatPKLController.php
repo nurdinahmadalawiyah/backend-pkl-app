@@ -13,16 +13,25 @@ use Illuminate\Support\Carbon;
 
 class TempatPKLController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tempat_pkl = DB::table('tempat_pkl')
+        $tahunAkademik = $request->input('tahun_akademik');
+
+        $query = DB::table('tempat_pkl')
             ->join('pengajuan_pkl', 'tempat_pkl.id_pengajuan', '=', 'pengajuan_pkl.id_pengajuan')
             ->join('mahasiswa', 'pengajuan_pkl.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
             ->leftJoin('pembimbing', 'tempat_pkl.id_pembimbing', '=', 'pembimbing.id_pembimbing')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
             ->select('tempat_pkl.*', 'mahasiswa.nama as nama_mahasiswa', 'prodi.nama_prodi', 'prodi.id_prodi', 'mahasiswa.nim', 'pembimbing.nama as nama_pembimbing', 'pembimbing.nik', 'pengajuan_pkl.*', 'tempat_pkl.created_at as tahun_pkl')
-            ->where('mahasiswa.prodi', '=', Auth::user()->id_prodi)
-            ->get();
+            ->where('mahasiswa.prodi', '=', Auth::user()->id_prodi);
+
+        if ($tahunAkademik) {
+            $query->where(function ($query) use ($tahunAkademik) {
+                $query->orWhere(DB::raw('IF(MONTH(tempat_pkl.created_at) < 9, CONCAT(YEAR(tempat_pkl.created_at) - 1, "/", YEAR(tempat_pkl.created_at)), CONCAT(YEAR(tempat_pkl.created_at), "/", YEAR(tempat_pkl.created_at) + 1))'), '=', $tahunAkademik);
+            });
+        }
+
+        $tempat_pkl = $query->get();
 
         $tempatPklData = [];
         foreach ($tempat_pkl as $data) {
@@ -56,6 +65,37 @@ class TempatPKLController extends Controller
             'data' => $tempatPklData,
         ], 200);
     }
+
+    public function lovTahunAkademik()
+    {
+        $tahunAkademikValues = DB::table('tempat_pkl')
+            ->selectRaw('
+                CONCAT(
+                    (CASE WHEN MONTH(created_at) >= 9 THEN YEAR(created_at) ELSE YEAR(created_at) - 1 END),
+                    "/",
+                    (CASE WHEN MONTH(created_at) >= 9 THEN YEAR(created_at) + 1 ELSE YEAR(created_at) END)
+                ) as tahun_akademik'
+            )
+            ->distinct()
+            ->pluck('tahun_akademik');
+    
+        $tahunAkademikArray = $tahunAkademikValues->toArray();
+    
+        $dataTahunAkademik = [];
+        foreach ($tahunAkademikArray as $tahun) {
+            $dataTahunAkademik[] = [
+                'tahun_akademik' => $tahun,
+            ];
+        }
+    
+        return response()->json([
+            'status' => 'success',
+            'message' => 'List of Tahun Akademik',
+            'data' => $dataTahunAkademik,
+        ], 200);
+    }
+    
+    
 
     function getTahunAkademik($tahunPKLTimestamp)
     {
@@ -93,18 +133,18 @@ class TempatPKLController extends Controller
             ->count();
         $totalMahasiswaMengajuakanPKL = PengajuanPKL::distinct('id_mahasiswa')->count();
         $totalMahasiswaSedangPKL = TempatPKL::join('pengajuan_pkl', 'tempat_pkl.id_pengajuan', '=', 'pengajuan_pkl.id_pengajuan')
-        ->join('mahasiswa', 'pengajuan_pkl.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
-        ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
-        ->whereYear('tempat_pkl.created_at', '=', explode('/', $tahunAkademik)[0])
-        ->where(function ($query) use ($tahunAkademik) {
-            $query->whereYear('tempat_pkl.created_at', '>', explode('/', $tahunAkademik)[0])
-                ->orWhere(function ($query) use ($tahunAkademik) {
-                    $query->whereYear('tempat_pkl.created_at', '=', explode('/', $tahunAkademik)[0])
-                        ->whereMonth('tempat_pkl.created_at', '>=', 9); // September
-                });
-        })
-        ->where('prodi.id_prodi', '=', Auth::user()->id_prodi)
-        ->count();
+            ->join('mahasiswa', 'pengajuan_pkl.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+            ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
+            ->whereYear('tempat_pkl.created_at', '=', explode('/', $tahunAkademik)[0])
+            ->where(function ($query) use ($tahunAkademik) {
+                $query->whereYear('tempat_pkl.created_at', '>', explode('/', $tahunAkademik)[0])
+                    ->orWhere(function ($query) use ($tahunAkademik) {
+                        $query->whereYear('tempat_pkl.created_at', '=', explode('/', $tahunAkademik)[0])
+                            ->whereMonth('tempat_pkl.created_at', '>=', 9); // September
+                    });
+            })
+            ->where('prodi.id_prodi', '=', Auth::user()->id_prodi)
+            ->count();
 
 
         return response()->json([
