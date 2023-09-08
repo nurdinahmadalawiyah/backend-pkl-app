@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mahasiswa;
+use App\Models\PengajuanPKL;
 use App\Models\TempatPKL;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -85,16 +86,17 @@ class TempatPKLController extends Controller
         $tahunAkademik = $this->getTahunAkademik(date("Y"));
         $totalMahasiswa = Mahasiswa::where('prodi', Auth::user()->id_prodi)->count();
         $totalMahasiswaTelahPKL = TempatPKL::all()->count();
-
+        $totalMahasiswaMengajuakanPKL = PengajuanPKL::distinct('id_mahasiswa')->count();
         $totalMahasiswaSedangPKL = TempatPKL::whereYear('created_at', '=', explode('/', $tahunAkademik)[0])->count();
 
         return response()->json([
             'status' => 'success',
             'message' => 'Data Dashboard Prodi',
             'data' => [
+                "prodi" => Auth::user()->nama_prodi,
                 "total_mahasiswa" =>  $totalMahasiswa,
                 "tahun_akademik" => $tahunAkademik,
-                "mahasiswa_telah_pkl" => $totalMahasiswaTelahPKL,
+                "mahasiswa_sudah_mengajukan" => $totalMahasiswaMengajuakanPKL,
                 "mahasiwa_belum_pkl" => $totalMahasiswa - $totalMahasiswaTelahPKL,
                 "mahasiswa_sedang_pkl" => $totalMahasiswaSedangPKL
             ]
