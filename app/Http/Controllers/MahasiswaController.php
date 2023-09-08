@@ -95,16 +95,18 @@ class MahasiswaController extends Controller
             ->select('tahun_masuk')
             ->distinct()
             ->pluck('tahun_masuk');
-
+    
         $tahunMasukArray = $tahunMasukValues->toArray();
-
+    
         return response()->json([
             'status' => 'success',
             'message' => 'List of Tahun Masuk',
-            'data' => $tahunMasukArray,
+            'data' => array_map(function ($tahun) {
+                return ['tahun_masuk' => $tahun];
+            }, $tahunMasukArray),
         ], 200);
     }
-
+    
     public function listByPembimbing()
     {
         $id_pembimbing = auth()->user()->id_pembimbing;
