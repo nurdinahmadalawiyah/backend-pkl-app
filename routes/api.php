@@ -58,6 +58,10 @@ Route::prefix('tempat-pkl')->controller(TempatPKLController::class)->group(funct
         Route::get('/prodi', 'index');
         Route::get('/prodi/data', 'dashboardDataProdi');
     });
+
+    Route::middleware('auth:akademik_api', 'throttle:60,1')->group(function () {
+        Route::get('/akademik/data', 'dashboardDataAkademik');
+    });
 });
 
 Route::prefix('lowongan-pkl')->controller(LowonganPKLController::class)->group(function () {
