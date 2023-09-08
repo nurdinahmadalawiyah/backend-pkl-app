@@ -240,6 +240,7 @@ Route::prefix('mahasiswa')->controller(MahasiswaController::class)->group(functi
     Route::middleware('auth:pembimbing_api', 'throttle:60,1')->group(function () {
         Route::get('/list/pembimbing', 'listByPembimbing');
     });
+    Route::get('/tahun_masuk', 'lovTahunMasuk');
 });
 
 Route::prefix('pembimbing')->controller(PembimbingController::class)->group(function () {

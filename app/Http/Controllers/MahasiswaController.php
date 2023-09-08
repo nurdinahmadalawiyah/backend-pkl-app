@@ -11,14 +11,20 @@ use Illuminate\Support\Facades\Hash;
 
 class MahasiswaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $mahasiswa = DB::table('mahasiswa')
+        $tahunMasuk = $request->input('tahun_masuk');
+
+        $query = DB::table('mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
             ->select('id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'prodi.id_prodi', 'mahasiswa.tahun_masuk', 'mahasiswa.email', 'mahasiswa.username', 'mahasiswa.nomor_hp')
-            ->orderByDesc('mahasiswa.updated_at')
-            ->get();
+            ->orderByDesc('mahasiswa.updated_at');
 
+        if (!empty($tahunMasuk)) {
+            $query->where('mahasiswa.tahun_masuk', '=', $tahunMasuk);
+        }
+
+        $mahasiswa = $query->get();
 
         $mahasiswaData = [];
         foreach ($mahasiswa as $data) {
@@ -43,13 +49,20 @@ class MahasiswaController extends Controller
         ], 200);
     }
 
-    public function listByProdi()
+    public function listByProdi(Request $request)
     {
-        $mahasiswa = DB::table('mahasiswa')
+        $tahunMasuk = $request->input('tahun_masuk');
+
+        $query = DB::table('mahasiswa')
             ->join('prodi', 'mahasiswa.prodi', '=', 'prodi.id_prodi')
             ->select('id_mahasiswa', 'mahasiswa.nama', 'mahasiswa.nim', 'prodi.nama_prodi', 'prodi.id_prodi', 'mahasiswa.tahun_masuk', 'mahasiswa.email', 'mahasiswa.username', 'mahasiswa.nomor_hp')
-            ->where('mahasiswa.prodi', Auth::user()->id_prodi)
-            ->get();
+            ->where('mahasiswa.prodi', Auth::user()->id_prodi);
+
+        if (!empty($tahunMasuk)) {
+            $query->where('mahasiswa.tahun_masuk', '=', $tahunMasuk);
+        }
+
+        $mahasiswa = $query->get();
 
         $mahasiswaData = [];
         foreach ($mahasiswa as $data) {
@@ -71,6 +84,22 @@ class MahasiswaController extends Controller
             'status' => 'success',
             'message' => 'Semua Data Mahasiswa Politeknik TEDC Bandung',
             'data' => $mahasiswaData
+        ], 200);
+    }
+
+    public function lovTahunMasuk()
+    {
+        $tahunMasukValues = DB::table('mahasiswa')
+            ->select('tahun_masuk')
+            ->distinct()
+            ->pluck('tahun_masuk');
+
+        $tahunMasukArray = $tahunMasukValues->toArray();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'List of Tahun Masuk',
+            'data' => $tahunMasukArray,
         ], 200);
     }
 
