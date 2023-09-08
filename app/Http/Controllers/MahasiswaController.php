@@ -35,6 +35,7 @@ class MahasiswaController extends Controller
                 "nim" => $data->nim,
                 "nama_prodi" => $data->nama_prodi,
                 "id_prodi" => $data->id_prodi,
+                "tahun_masuk" => $data->tahun_masuk,
                 "semester" => $semester,
                 "email" => $data->email,
                 "username" => $data->username,
@@ -74,6 +75,7 @@ class MahasiswaController extends Controller
                 "nama_prodi" => $data->nama_prodi,
                 "id_prodi" => $data->id_prodi,
                 "semester" => $semester,
+                "tahun_masuk" => $data->tahun_masuk,
                 "email" => $data->email,
                 "username" => $data->username,
                 "nomor_hp" => $data->nomor_hp
